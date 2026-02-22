@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreeAI — Sign In</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #080b12;
+            --surface: #0e1320;
+            --border: rgba(255,255,255,0.07);
+            --accent: #4f8eff;
+            --accent2: #a78bfa;
+            --text: #f0f4ff;
+            --muted: #8892a4;
+            --glow: rgba(79,142,255,0.18);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            color: var(--text);
+        }
+
+        /* Animated background */
+        .bg-orbs {
+            position: fixed; inset: 0; pointer-events: none; z-index: 0;
+        }
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.25;
+            animation: drift 12s ease-in-out infinite;
+        }
+        .orb1 { width: 500px; height: 500px; background: #4f8eff; top: -150px; left: -100px; animation-delay: 0s; }
+        .orb2 { width: 400px; height: 400px; background: #a78bfa; bottom: -100px; right: -100px; animation-delay: -5s; }
+        .orb3 { width: 300px; height: 300px; background: #06d6a0; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: -3s; opacity: 0.12; }
+
+        @keyframes drift {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -20px) scale(1.05); }
+            66% { transform: translate(-20px, 30px) scale(0.95); }
+        }
+
+        /* Grid overlay */
+        .grid-overlay {
+            position: fixed; inset: 0; pointer-events: none; z-index: 0;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .container {
+            position: relative; z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            width: 100%;
+        }
+
+        .card {
+            background: rgba(14,19,32,0.85);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 52px 48px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.03), 0 40px 80px rgba(0,0,0,0.5), 0 0 60px var(--glow);
+            animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo-area {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo-mark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border-radius: 18px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(79,142,255,0.35);
+            position: relative;
+        }
+
+        .logo-mark::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 19px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+            pointer-events: none;
+        }
+
+        .logo-mark svg {
+            width: 30px; height: 30px;
+            color: white;
+        }
+
+        .brand-name {
+            font-family: 'Syne', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #fff 40%, var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-tagline {
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 300;
+            margin-top: 6px;
+            letter-spacing: 0.3px;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+            margin: 32px 0;
+        }
+
+        .signin-label {
+            font-size: 13px;
+            color: var(--muted);
+            text-align: center;
+            margin-bottom: 16px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        #google-signin-button {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+
+        /* Override Google button style */
+        #google-signin-button iframe {
+            border-radius: 12px !important;
+        }
+
+        .terms-text {
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.6;
+            margin-top: 24px;
+        }
+
+        .terms-text a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .features-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .feature-chip {
+            flex: 1;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 10px;
+            text-align: center;
+        }
+
+        .feature-chip .icon { font-size: 18px; margin-bottom: 4px; }
+        .feature-chip .label { font-size: 11px; color: var(--muted); font-weight: 400; }
+
+        /* Error */
+        .error-msg {
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.25);
+            color: #fca5a5;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            margin-bottom: 16px;
+            display: none;
+            text-align: center;
+        }
+        .error-msg.show { display: block; animation: shake 0.3s ease; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        /* Loading overlay */
+        .loading-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(8,11,18,0.85);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .loading-overlay.show { display: flex; }
+
+        .loader-ring {
+            width: 48px; height: 48px;
+            border: 3px solid rgba(255,255,255,0.08);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loader-text {
+            font-size: 14px;
+            color: var(--muted);
+            font-family: 'DM Sans', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-orbs">
+        <div class="orb orb1"></div>
+        <div class="orb orb2"></div>
+        <div class="orb orb3"></div>
+    </div>
+    <div class="grid-overlay"></div>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader-ring"></div>
+        <div class="loader-text">Signing you in...</div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="logo-area">
+                <div class="logo-mark">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                        <path d="M2 17l10 5 10-5"/>
+                        <path d="M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <div class="brand-name">FreeAI</div>
+                <div class="brand-tagline">Powered by GPT-5 Nano · Aasai Tech</div>
+            </div>
+
+            <div class="features-row">
+                <div class="feature-chip">
+                    <div class="icon">⚡</div>
+                    <div class="label">Fast</div>
+                </div>
+                <div class="feature-chip">
+                    <div class="icon">🔒</div>
+                    <div class="label">Secure</div>
+                </div>
+                <div class="feature-chip">
+                    <div class="icon">🆓</div>
+                    <div class="label">Free</div>
+                </div>
+            </div>
+
+            <div class="error-msg" id="errorMsg"></div>
+
+            <div class="signin-label">Continue with</div>
+            <div id="google-signin-button"></div>
+
+            <div class="divider"></div>
+
+            <div class="terms-text">
+                By signing in, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+                Your conversations are private and secure.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const CONFIG = {
+            CLIENT_ID: '37355855536-n1pdonbkg3lb3s6psq938jk81hgjnebe.apps.googleusercontent.com',
+            API_URL: 'https://YOUR_NEW_BACKEND_API_URL' // ← update this when backend is ready
+        };
+
+        // Check existing session
+        function checkSession() {
+            const token = localStorage.getItem('freeai_token');
+            if (token) {
+                window.location.href = 'chat.html';
+                return true;
+            }
+            return false;
+        }
+
+        // Init Google Sign-In
+        function initGoogle() {
+            if (typeof google === 'undefined') {
+                setTimeout(initGoogle, 100);
+                return;
+            }
+            google.accounts.id.initialize({
+                client_id: CONFIG.CLIENT_ID,
+                callback: handleSignIn
+            });
+            google.accounts.id.renderButton(
+                document.getElementById('google-signin-button'),
+                { theme: 'filled_black', size: 'large', width: 324, shape: 'rectangular' }
+            );
+        }
+
+        async function handleSignIn(response) {
+            showLoading();
+            try {
+                const userInfo = parseJwt(response.credential);
+
+                const res = await fetch(`${CONFIG.API_URL}/auth/google`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        googleUserData: {
+                            id: userInfo.sub,
+                            email: userInfo.email,
+                            name: userInfo.name,
+                            picture: userInfo.picture
+                        }
+                    })
+                });
+
+                const data = await res.json();
+                if (data.error) { hideLoading(); showError(data.error); return; }
+
+                localStorage.setItem('freeai_token', data.sessionToken);
+                localStorage.setItem('freeai_user', JSON.stringify({
+                    id: data.user.id,
+                    name: data.user.name,
+                    email: data.user.email,
+                    picture: data.user.picture
+                }));
+
+                window.location.href = 'chat.html';
+            } catch (e) {
+                hideLoading();
+                showError('Sign in failed. Please try again.');
+            }
+        }
+
+        function parseJwt(token) {
+            const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+            return JSON.parse(decodeURIComponent(atob(base64).split('').map(c =>
+                '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+            ).join('')));
+        }
+
+        function showError(msg) {
+            const el = document.getElementById('errorMsg');
+            el.textContent = msg;
+            el.classList.add('show');
+            setTimeout(() => el.classList.remove('show'), 5000);
+        }
+
+        function showLoading() { document.getElementById('loadingOverlay').classList.add('show'); }
+        function hideLoading() { document.getElementById('loadingOverlay').classList.remove('show'); }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (!checkSession()) initGoogle();
+        });
+    </script>
+</body>
+</html>
