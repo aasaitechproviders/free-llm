@@ -34,16 +34,23 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
 .brand-logo svg{width:16px;height:16px;color:white;}
 .brand-name{font-size:15px;font-weight:800;letter-spacing:-0.02em;}
 .brand-badge{margin-left:auto;font-size:9px;font-family:var(--mono);background:var(--accent-l);color:var(--accent);padding:2px 7px;border-radius:4px;border:1px solid var(--accent-b);font-weight:600;}
+
 .new-chat-btn{width:100%;display:flex;align-items:center;gap:9px;padding:9px 12px;background:var(--surface);border:1px solid var(--border2);border-radius:9px;color:var(--text);font-family:var(--font);font-size:13.5px;font-weight:500;cursor:pointer;transition:all 0.15s;box-shadow:var(--shadow);}
 .new-chat-btn:hover{border-color:var(--accent);color:var(--accent);}
 .new-chat-btn svg{width:14px;height:14px;}
 .new-chat-btn kbd{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--text3);background:var(--surface2);padding:1px 5px;border-radius:3px;border:1px solid var(--border);}
+
+/* NAV — auth-gated items hidden for guests */
 .sb-nav{padding:10px 14px;border-bottom:1px solid var(--border);}
 .nav-btn{width:100%;display:flex;align-items:center;gap:10px;padding:9px 10px;background:transparent;border:none;border-radius:8px;color:var(--text2);font-family:var(--font);font-size:13.5px;cursor:pointer;transition:all 0.12s;text-align:left;margin-bottom:2px;}
 .nav-btn:hover{background:rgba(0,0,0,0.05);color:var(--text);}
 .nav-btn.active{background:var(--accent-l);color:var(--accent);font-weight:600;}
 .nav-btn svg{width:15px;height:15px;flex-shrink:0;}
-.sb-history{flex:1;overflow-y:auto;padding:12px 14px;}
+/* Items only visible when logged in */
+.auth-only{display:none;}
+
+/* HISTORY — only for logged in */
+.sb-history{flex:1;overflow-y:auto;padding:12px 14px;display:none;}
 .sb-history::-webkit-scrollbar{width:3px;}
 .sb-history::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
 .hist-label{font-size:10.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;padding:0 6px;margin-bottom:6px;}
@@ -55,11 +62,16 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
 .hist-item:hover .del{opacity:1;}
 .hist-item .del:hover{color:var(--red);}
 .hist-item .del svg{width:11px;height:11px;}
+
+/* Guest spacer — fills space when history hidden */
+.sb-spacer{flex:1;}
+
+/* FOOTER */
 .sb-footer{padding:12px 14px;border-top:1px solid var(--border);}
-.sb-footer-loggedout{padding:12px 14px;border-top:1px solid var(--border);}
-.sb-signin-prompt{background:var(--accent-l);border:1px solid var(--accent-b);border-radius:9px;padding:13px;}
+.sb-footer-guest{padding:14px;border-top:1px solid var(--border);}
+.sb-signin-prompt{background:var(--accent-l);border:1px solid var(--accent-b);border-radius:9px;padding:14px;}
 .sb-signin-prompt p{font-size:12.5px;color:var(--accent);line-height:1.55;font-weight:500;margin-bottom:9px;}
-.sb-signin-btn{width:100%;background:var(--accent);color:white;border:none;border-radius:7px;padding:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);transition:background 0.15s;}
+.sb-signin-btn{width:100%;background:var(--accent);color:white;border:none;border-radius:7px;padding:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);transition:background 0.15s;}
 .sb-signin-btn:hover{background:#245079;}
 .sb-brand-foot{margin-top:10px;text-align:center;}
 .sb-brand-foot a{font-size:11px;color:var(--text3);text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px;}
@@ -143,6 +155,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
 .profile-email{font-size:13px;color:var(--text3);margin-bottom:9px;}
 .profile-plan{font-size:11px;font-family:var(--mono);background:var(--accent);color:white;padding:3px 12px;border-radius:20px;display:inline-block;}
 
+/* GUEST BANNER inside popup */
+.guest-banner{background:var(--accent-l);border:1px solid var(--accent-b);border-radius:12px;padding:18px;text-align:center;margin-bottom:18px;}
+.guest-banner p{font-size:13.5px;color:var(--accent);line-height:1.6;margin-bottom:12px;font-weight:500;}
+.guest-banner-btn{background:var(--accent);color:white;border:none;border-radius:8px;padding:10px 20px;font-family:var(--font);font-size:13.5px;font-weight:700;cursor:pointer;transition:background 0.15s;}
+.guest-banner-btn:hover{background:#245079;}
+
 /* CONTACT */
 .contact-hero{background:linear-gradient(135deg,#1a3a5c,var(--accent));border-radius:16px;padding:26px;margin-bottom:22px;color:white;position:relative;overflow:hidden;}
 .contact-hero::before{content:'';position:absolute;right:-20px;top:-20px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,0.07);}
@@ -169,7 +187,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
 .contact-submit:disabled{opacity:0.6;cursor:not-allowed;}
 
 /* AUTH MODAL */
-.modal-backdrop{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.42);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px;}
+.modal-backdrop{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.42);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px;}
 .modal-backdrop.show{display:flex;}
 .auth-modal{background:var(--surface);border:1px solid var(--border2);border-radius:22px;padding:42px 38px;width:100%;max-width:408px;box-shadow:0 2px 8px rgba(0,0,0,0.06),0 24px 64px rgba(0,0,0,0.2);animation:popupIn 0.3s cubic-bezier(0.16,1,0.3,1) both;position:relative;}
 .modal-close{position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;color:var(--text3);padding:6px;border-radius:8px;display:flex;transition:all 0.12s;}
@@ -229,6 +247,10 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
 .sug{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;cursor:pointer;text-align:left;font-family:var(--font);transition:all 0.15s;color:var(--text2);font-size:14px;line-height:1.5;box-shadow:var(--shadow);}
 .sug:hover{border-color:var(--accent);color:var(--text);transform:translateY(-2px);box-shadow:0 4px 18px rgba(44,95,138,0.12);}
 .sug strong{display:block;font-size:14.5px;color:var(--text);margin-bottom:4px;font-weight:700;}
+
+/* Guest chat notice strip */
+.guest-chat-notice{background:var(--accent-l);border-bottom:1px solid var(--accent-b);padding:9px 20px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:13px;color:var(--accent);font-weight:500;flex-shrink:0;}
+.guest-chat-notice a{color:var(--accent);font-weight:700;cursor:pointer;text-decoration:underline;}
 
 /* MESSAGES */
 .message{display:flex;gap:14px;margin-bottom:26px;animation:msgIn 0.22s ease both;}
@@ -290,6 +312,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
 .toast.show{transform:translateY(0);opacity:1;}
 .toast.success{border-color:rgba(29,122,95,0.35);color:var(--green);}
 .toast.error{border-color:rgba(192,57,43,0.35);color:var(--red);}
+.toast.info{border-color:var(--accent-b);color:var(--accent);}
 
 .sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.35);backdrop-filter:blur(3px);z-index:150;}
 .sb-overlay.show{display:block;}
@@ -318,7 +341,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
 <input type="file" id="avatarInput" accept="image/*" onchange="handleAvatarUpload(event)"/>
 <div class="toast" id="toast"></div>
 
-<!-- AUTH MODAL -->
+<!-- ═══ AUTH MODAL ═══ -->
 <div class="modal-backdrop" id="authModal" onclick="handleModalBackdropClick(event)">
   <div class="auth-modal">
     <button class="modal-close" onclick="closeAuthModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
@@ -333,7 +356,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
       </div>
     </div>
     <div class="modal-headline" id="modalHeadline">Welcome back</div>
-    <div class="modal-sub" id="modalSub">Sign in to save your chats, view stats, and personalise your experience.</div>
+    <div class="modal-sub" id="modalSub">Sign in to save your chats, sync history, and view your usage stats.</div>
     <button class="btn-google-modal" onclick="triggerGoogleSignIn()">
       <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3z"/></svg>
       Continue with Google
@@ -343,7 +366,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
   </div>
 </div>
 
-<!-- STATS POPUP -->
+<!-- ═══ STATS POPUP ═══ -->
 <div class="popup-backdrop" id="popup-stats" onclick="handlePopupBackdropClick(event,'stats')">
   <div class="popup">
     <div class="popup-hdr">
@@ -369,7 +392,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
   </div>
 </div>
 
-<!-- SETTINGS POPUP -->
+<!-- ═══ SETTINGS POPUP ═══ -->
 <div class="popup-backdrop" id="popup-settings" onclick="handlePopupBackdropClick(event,'settings')">
   <div class="popup">
     <div class="popup-hdr">
@@ -404,7 +427,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
   </div>
 </div>
 
-<!-- PROFILE POPUP -->
+<!-- ═══ PROFILE POPUP ═══ -->
 <div class="popup-backdrop" id="popup-profile" onclick="handlePopupBackdropClick(event,'profile')">
   <div class="popup">
     <div class="popup-hdr">
@@ -422,12 +445,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
         <div class="profile-email" id="profileEmail">—</div>
         <span class="profile-plan" id="profilePlan">Guest</span>
       </div>
-      <div class="section-title" style="margin-bottom:10px">Account info</div>
-      <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:22px">
-        <div class="info-row"><span class="info-lbl">Session type</span><span class="info-val acc" id="profileAuth">Guest</span></div>
-        <div class="info-row"><span class="info-lbl">Total messages</span><span class="info-val" id="profileMsgs">0</span></div>
-        <div class="info-row"><span class="info-lbl">Tokens used</span><span class="info-val acc" id="profileTokens">0</span></div>
-        <div class="info-row"><span class="info-lbl">Total chats</span><span class="info-val" id="profileChats">0</span></div>
+      <div id="profileStatsSection">
+        <div class="section-title" style="margin-bottom:10px">Account info</div>
+        <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:22px">
+          <div class="info-row"><span class="info-lbl">Session type</span><span class="info-val acc" id="profileAuth">Guest</span></div>
+          <div class="info-row"><span class="info-lbl">Total messages</span><span class="info-val" id="profileMsgs">0</span></div>
+          <div class="info-row"><span class="info-lbl">Tokens used</span><span class="info-val acc" id="profileTokens">0</span></div>
+          <div class="info-row"><span class="info-lbl">Total chats</span><span class="info-val" id="profileChats">0</span></div>
+        </div>
       </div>
       <div class="section-title" style="margin-bottom:9px">Actions</div>
       <button class="action-btn" id="profileSignInBtn" onclick="openAuthModal('login')" style="display:none">Sign in to save history</button>
@@ -437,7 +462,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
   </div>
 </div>
 
-<!-- CONTACT US POPUP -->
+<!-- ═══ CONTACT US POPUP ═══ -->
 <div class="popup-backdrop" id="popup-contact" onclick="handlePopupBackdropClick(event,'contact')">
   <div class="popup">
     <div class="popup-hdr">
@@ -460,22 +485,10 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
         </div>
       </div>
       <div class="contact-info-grid">
-        <div class="contact-info-card">
-          <div class="contact-info-card-label">Email</div>
-          <div class="contact-info-card-val"><a href="/cdn-cgi/l/email-protection#e988889a88809d8c8a81999b869f808d8c9b9aa98e84888085c78a8684"><span class="__cf_email__" data-cfemail="a1c0c0d2c0c8d5c4c2c9d1d3ced7c8c5c4d3d2e1c6ccc0c8cd8fc2cecc">[email&#160;protected]</span></a></div>
-        </div>
-        <div class="contact-info-card">
-          <div class="contact-info-card-label">Website</div>
-          <div class="contact-info-card-val"><a href="https://aasaitech.in" target="_blank">aasaitech.in ↗</a></div>
-        </div>
-        <div class="contact-info-card">
-          <div class="contact-info-card-label">Location</div>
-          <div class="contact-info-card-val">Tamil Nadu, India</div>
-        </div>
-        <div class="contact-info-card">
-          <div class="contact-info-card-label">Product</div>
-          <div class="contact-info-card-val">Aasai Tech AI<br><span style="font-size:11.5px;color:var(--text3)">AI Chat Platform</span></div>
-        </div>
+        <div class="contact-info-card"><div class="contact-info-card-label">Email</div><div class="contact-info-card-val"><a href="mailto:aasaitechproviders@gmail.com">aasaitechproviders@gmail.com</a></div></div>
+        <div class="contact-info-card"><div class="contact-info-card-label">Website</div><div class="contact-info-card-val"><a href="https://aasaitech.in" target="_blank">aasaitech.in ↗</a></div></div>
+        <div class="contact-info-card"><div class="contact-info-card-label">Location</div><div class="contact-info-card-val">Tamil Nadu, India</div></div>
+        <div class="contact-info-card"><div class="contact-info-card-label">Product</div><div class="contact-info-card-val">Aasai Tech AI<br><span style="font-size:11.5px;color:var(--text3)">AI Chat Platform</span></div></div>
       </div>
       <div class="section-title" style="margin-bottom:16px">Send us a message</div>
       <label class="contact-form-label">Your name</label>
@@ -503,7 +516,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
   </div>
 </div>
 
-<!-- APP SHELL -->
+<!-- ═══ APP SHELL ═══ -->
 <div id="appShell">
   <div class="sb-overlay" id="sbOverlay" onclick="closeSidebar()"></div>
 
@@ -523,36 +536,61 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
         New chat <kbd>⌘K</kbd>
       </button>
     </div>
+
+    <!-- NAV: Stats & Profile only for logged-in users -->
     <div class="sb-nav">
-      <button class="nav-btn" id="nav-stats" onclick="openPopup('stats')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>Statistics</button>
-      <button class="nav-btn" id="nav-settings" onclick="openPopup('settings')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</button>
-      <button class="nav-btn" id="nav-profile" onclick="openPopup('profile')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</button>
-      <button class="nav-btn" id="nav-contact" onclick="openPopup('contact')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.81a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.92 16.92z"/></svg>Contact Us</button>
+      <button class="nav-btn auth-only" id="nav-stats" onclick="openPopup('stats')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>Statistics
+      </button>
+      <button class="nav-btn auth-only" id="nav-settings" onclick="openPopup('settings')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings
+      </button>
+      <button class="nav-btn auth-only" id="nav-profile" onclick="openPopup('profile')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile
+      </button>
+      <!-- Contact Us always visible -->
+      <button class="nav-btn" id="nav-contact" onclick="openPopup('contact')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.81a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.92 16.92z"/></svg>Contact Us
+      </button>
     </div>
-    <div class="sb-history">
+
+    <!-- Chat history: logged-in only -->
+    <div class="sb-history" id="sbHistory">
       <div class="hist-label">Recent chats</div>
       <div id="historyList"></div>
     </div>
-    <div id="sbFooterLoggedOut" class="sb-footer-loggedout" style="display:none">
+
+    <!-- Spacer for guest (fills gap where history would be) -->
+    <div class="sb-spacer" id="sbSpacer"></div>
+
+    <!-- FOOTER: guest sign-in prompt -->
+    <div id="sbFooterGuest" class="sb-footer-guest">
       <div class="sb-signin-prompt">
-        <p>Sign in to save your history &amp; access stats across sessions.</p>
+        <p>Sign in to save history &amp; access stats across sessions.</p>
         <button class="sb-signin-btn" onclick="openAuthModal('login')">Sign in to Aasai Tech AI</button>
       </div>
       <div class="sb-brand-foot">
-        <a href="https://aasaitech.in" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>Aasai Tech Providers Pvt. Ltd.</a>
+        <a href="https://aasaitech.in" target="_blank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          Aasai Tech Providers Pvt. Ltd.
+        </a>
         <div class="sb-brand-foot-sub">DPIIT · NVIDIA Inception · Tamil Nadu</div>
       </div>
     </div>
-    <div id="sbFooterLoggedIn" class="sb-footer" style="display:none">
+
+    <!-- FOOTER: logged-in user row -->
+    <div id="sbFooterUser" class="sb-footer" style="display:none">
       <div class="user-row" onclick="openPopup('profile')">
         <div class="u-avatar" id="sbAvatar">?</div>
         <div class="u-info"><div class="u-name" id="sbName">User</div><div class="u-sub" id="sbSub">Free plan</div></div>
-        <button class="logout-btn" onclick="event.stopPropagation();logout()" title="Sign out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+        <button class="logout-btn" onclick="event.stopPropagation();logout()" title="Sign out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
       </div>
     </div>
   </aside>
 
-  <!-- MAIN -->
+  <!-- MAIN CHAT -->
   <main class="main">
     <div class="topbar">
       <div class="topbar-left">
@@ -576,14 +614,23 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
         </div>
       </div>
     </div>
+
+    <!-- Guest notice strip: shown when guest is actively chatting -->
+    <div class="guest-chat-notice" id="guestNotice" style="display:none">
+      💡 You're chatting as a guest — chats won't be saved. <a onclick="openAuthModal('login')">Sign in</a> to save your history.
+    </div>
+
     <div class="chat-scroll" id="chatScroll">
       <div class="chat-inner" id="chatInner"></div>
     </div>
+
     <div class="input-area">
       <div class="input-inner">
         <div class="input-box">
           <textarea id="msgInput" placeholder="Ask anything…" rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-          <button class="send-btn" id="sendBtn" onclick="sendMessage()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+          <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
         </div>
         <div class="input-hint">Aasai Tech AI · <a href="https://aasaitech.in" target="_blank">Aasai Tech Providers Pvt. Ltd.</a> · DPIIT Recognised · NVIDIA Inception · Tamil Nadu, India</div>
       </div>
@@ -591,193 +638,281 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
   </main>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-const CONFIG={CLIENT_ID:'37355855536-n1pdonbkg3lb3s6psq938jk81hgjnebe.apps.googleusercontent.com',API_URL:'https://wuczpngnl8.execute-api.ap-southeast-2.amazonaws.com/default'};
-const ACCENT_PRESETS=['#2c5f8a','#1d7a5f','#6366f1','#8b5cf6','#ec4899','#f97316','#0284c7','#b45309','#c0392b','#374151'];
-let conversations=JSON.parse(localStorage.getItem('freeai_convs')||'[]');
-let currentConvId=null,isLoading=false,isGuest=false,user=null;
-let settings=JSON.parse(localStorage.getItem('freeai_settings')||'{"accent":"#2c5f8a","enter":true,"typing":true,"highlight":true}');
-let customAvatarData=localStorage.getItem('freeai_avatar')||null;
-let googleBtnInitialized=false;
+<script>
+// ═══ CONFIG ═══
+const CONFIG = {
+  CLIENT_ID: '37355855536-n1pdonbkg3lb3s6psq938jk81hgjnebe.apps.googleusercontent.com',
+  API_URL: 'https://wuczpngnl8.execute-api.ap-southeast-2.amazonaws.com/default'
+};
+const ACCENT_PRESETS = ['#2c5f8a','#1d7a5f','#6366f1','#8b5cf6','#ec4899','#f97316','#0284c7','#b45309','#c0392b','#374151'];
 
-window.addEventListener('DOMContentLoaded',()=>{
-  const token=localStorage.getItem('freeai_token');
-  if(token){const raw=localStorage.getItem('freeai_user');if(raw)user=JSON.parse(raw);isGuest=false;}
-  else isGuest=true;
-  applyAccent(settings.accent);loadSettings();buildColorPresets();
-  renderUIState();renderHistory();updateStats();showEmptyState();
+// ═══ STATE ═══
+// Logged-in conversations come from backend; guest ones are local only
+let conversations = [];           // shown in sidebar (from backend when logged in)
+let guestMessages = [];           // in-memory only — never persisted for guests
+let currentConvId = null;
+let isLoading = false;
+let user = null;                  // null = guest
+let settings = JSON.parse(localStorage.getItem('at_settings') || '{"accent":"#2c5f8a","enter":true,"typing":true,"highlight":true}');
+let customAvatarData = localStorage.getItem('at_avatar') || null;
+let googleBtnInitialized = false;
+let guestChatActive = false;      // true once guest sends first message
+
+// ═══ INIT ═══
+window.addEventListener('DOMContentLoaded', () => {
+  const token = localStorage.getItem('at_token');
+  if (token) {
+    const raw = localStorage.getItem('at_user');
+    if (raw) { try { user = JSON.parse(raw); } catch(e) { user = null; } }
+  }
+  applyAccent(settings.accent);
+  loadSettings();
+  buildColorPresets();
+  renderUIState();
+  if (user) loadConversationsFromServer();
+  showEmptyState();
 });
 
-function renderUIState(){
-  const li=!isGuest&&user;
-  document.getElementById('topbarAuth').style.display=li?'none':'flex';
-  document.getElementById('topbarUser').style.display=li?'flex':'none';
-  document.getElementById('sbFooterLoggedOut').style.display=li?'none':'block';
-  document.getElementById('sbFooterLoggedIn').style.display=li?'block':'none';
-  document.getElementById('profileSignInBtn').style.display=li?'none':'block';
-  document.getElementById('profileSignOutBtn').style.display=li?'block':'none';
-  const name=li?(user.name||'User'):'Guest';
-  const email=li?(user.email||''):'';
-  const pic=customAvatarData||(li?user.picture:null);
-  if(li){
-    const tAv=document.getElementById('topbarAvatar');
-    tAv.innerHTML=pic?`<img src="${pic}" alt=""/>`:`${name.charAt(0).toUpperCase()}`;
-    document.getElementById('topbarUname').textContent=name.split(' ')[0];
-    const sbAv=document.getElementById('sbAvatar');
-    sbAv.innerHTML=pic?`<img src="${pic}" alt=""/>`:`${name.charAt(0).toUpperCase()}`;
-    document.getElementById('sbName').textContent=name;
-    document.getElementById('sbSub').textContent=email||'Free plan';
+// ═══ UI STATE — the master function ═══
+function renderUIState() {
+  const loggedIn = !!user;
+
+  // Topbar
+  document.getElementById('topbarAuth').style.display = loggedIn ? 'none' : 'flex';
+  document.getElementById('topbarUser').style.display = loggedIn ? 'flex' : 'none';
+
+  // Sidebar auth-gated nav items
+  document.querySelectorAll('.auth-only').forEach(el => {
+    el.style.display = loggedIn ? 'flex' : 'none';
+  });
+
+  // Sidebar history section
+  document.getElementById('sbHistory').style.display = loggedIn ? 'block' : 'none';
+  document.getElementById('sbSpacer').style.display = loggedIn ? 'none' : 'block';
+
+  // Sidebar footer
+  document.getElementById('sbFooterGuest').style.display = loggedIn ? 'none' : 'block';
+  document.getElementById('sbFooterUser').style.display = loggedIn ? 'block' : 'none';
+
+  // Profile popup buttons
+  const pSignIn = document.getElementById('profileSignInBtn');
+  const pSignOut = document.getElementById('profileSignOutBtn');
+  if (pSignIn) pSignIn.style.display = loggedIn ? 'none' : 'block';
+  if (pSignOut) pSignOut.style.display = loggedIn ? 'block' : 'none';
+
+  if (loggedIn) {
+    const name = user.name || 'User';
+    const email = user.email || '';
+    const pic = customAvatarData || user.picture || null;
+
+    // Topbar user
+    const tAv = document.getElementById('topbarAvatar');
+    tAv.innerHTML = pic ? `<img src="${pic}" alt=""/>` : name.charAt(0).toUpperCase();
+    document.getElementById('topbarUname').textContent = name.split(' ')[0];
+
+    // Sidebar footer
+    const sbAv = document.getElementById('sbAvatar');
+    sbAv.innerHTML = pic ? `<img src="${pic}" alt=""/>` : name.charAt(0).toUpperCase();
+    document.getElementById('sbName').textContent = name;
+    document.getElementById('sbSub').textContent = email || 'Free plan';
+
+    // Profile popup
+    refreshProfilePopup();
   }
-  const pAvWrap=document.getElementById('profileAvatar');
-  const overlay=`<div class="profile-avatar-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`;
-  pAvWrap.innerHTML=pic?`<img src="${pic}" alt=""/>${overlay}`:`<span>${name.charAt(0).toUpperCase()}</span>${overlay}`;
-  pAvWrap.onclick=()=>document.getElementById('avatarInput').click();
-  document.getElementById('profileName').textContent=li?name:'Guest User';
-  document.getElementById('profileEmail').textContent=li?email:'Not signed in';
-  document.getElementById('profilePlan').textContent=li?'Free Plan':'Guest';
-  document.getElementById('profileAuth').textContent=li?'Google ✓':'Guest';
 }
 
-function openPopup(name){
-  document.querySelectorAll('.popup-backdrop').forEach(p=>p.classList.remove('show'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('popup-'+name)?.classList.add('show');
-  document.getElementById('nav-'+name)?.classList.add('active');
-  if(name==='stats')renderStatsPanel();
-  if(name==='profile'){renderUIState();updateStats();}
+function refreshProfilePopup() {
+  if (!user) {
+    document.getElementById('profileName').textContent = 'Guest User';
+    document.getElementById('profileEmail').textContent = 'Not signed in';
+    document.getElementById('profilePlan').textContent = 'Guest';
+    document.getElementById('profileAuth').textContent = 'Guest';
+    const pAv = document.getElementById('profileAvatar');
+    pAv.innerHTML = `<span>G</span><div class="profile-avatar-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`;
+    return;
+  }
+  const name = user.name || 'User';
+  const email = user.email || '';
+  const pic = customAvatarData || user.picture || null;
+  const overlay = `<div class="profile-avatar-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`;
+  const pAv = document.getElementById('profileAvatar');
+  pAv.innerHTML = pic ? `<img src="${pic}" alt=""/>${overlay}` : `<span>${name.charAt(0).toUpperCase()}</span>${overlay}`;
+  pAv.onclick = () => document.getElementById('avatarInput').click();
+  document.getElementById('profileName').textContent = name;
+  document.getElementById('profileEmail').textContent = email;
+  document.getElementById('profilePlan').textContent = (user.plan === 'pro') ? 'Pro Plan' : 'Free Plan';
+  document.getElementById('profileAuth').textContent = 'Google ✓';
+}
+
+// ═══ POPUPS ═══
+function openPopup(name) {
+  // Stats and Profile require login
+  if ((name === 'stats' || name === 'profile') && !user) {
+    openAuthModal('login');
+    return;
+  }
+  document.querySelectorAll('.popup-backdrop').forEach(p => p.classList.remove('show'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('popup-' + name)?.classList.add('show');
+  document.getElementById('nav-' + name)?.classList.add('active');
+  if (name === 'stats') renderStatsPanel();
+  if (name === 'profile') { refreshProfilePopup(); }
   closeSidebar();
 }
-function closePopup(name){
-  document.getElementById('popup-'+name)?.classList.remove('show');
-  document.getElementById('nav-'+name)?.classList.remove('active');
+function closePopup(name) {
+  document.getElementById('popup-' + name)?.classList.remove('show');
+  document.getElementById('nav-' + name)?.classList.remove('active');
 }
-function handlePopupBackdropClick(e,name){if(e.target===document.getElementById('popup-'+name))closePopup(name);}
+function handlePopupBackdropClick(e, name) {
+  if (e.target === document.getElementById('popup-' + name)) closePopup(name);
+}
 
-function openAuthModal(mode){
-  document.getElementById('modalHeadline').textContent=mode==='signup'?'Create an account':'Welcome back';
-  document.getElementById('modalSub').textContent='Sign in to save your chats, view stats, and personalise your experience.';
+// ═══ AUTH MODAL ═══
+function openAuthModal(mode) {
+  document.getElementById('modalHeadline').textContent = mode === 'signup' ? 'Create an account' : 'Welcome back';
+  document.getElementById('modalSub').textContent = 'Sign in to save your chats, sync history, and view your usage stats.';
   document.getElementById('authModal').classList.add('show');
-  if(!googleBtnInitialized)initGoogleBtn();
+  if (!googleBtnInitialized) initGoogleBtn();
 }
-function closeAuthModal(){document.getElementById('authModal').classList.remove('show');}
-function handleModalBackdropClick(e){if(e.target===document.getElementById('authModal'))closeAuthModal();}
+function closeAuthModal() { document.getElementById('authModal').classList.remove('show'); }
+function handleModalBackdropClick(e) { if (e.target === document.getElementById('authModal')) closeAuthModal(); }
 
-function initGoogleBtn(){
-  if(typeof google==='undefined'){setTimeout(initGoogleBtn,150);return;}
-  try{
-    google.accounts.id.initialize({client_id:CONFIG.CLIENT_ID,callback:handleGoogleSignIn});
-    google.accounts.id.renderButton(document.getElementById('modal-google-btn-wrap'),{theme:'outline',size:'large',width:328,shape:'rectangular'});
-    googleBtnInitialized=true;
-  }catch(e){console.warn(e);}
+function initGoogleBtn() {
+  if (typeof google === 'undefined') { setTimeout(initGoogleBtn, 200); return; }
+  try {
+    google.accounts.id.initialize({ client_id: CONFIG.CLIENT_ID, callback: handleGoogleSignIn });
+    google.accounts.id.renderButton(document.getElementById('modal-google-btn-wrap'), {
+      theme: 'outline', size: 'large', width: 328, shape: 'rectangular'
+    });
+    googleBtnInitialized = true;
+  } catch(e) { console.warn('Google btn:', e); }
 }
-function triggerGoogleSignIn(){if(typeof google!=='undefined')google.accounts.id.prompt();}
+function triggerGoogleSignIn() { if (typeof google !== 'undefined') google.accounts.id.prompt(); }
 
-async function handleGoogleSignIn(response){
+async function handleGoogleSignIn(response) {
   closeAuthModal();
-  try{
-    const ui=parseJwt(response.credential);
-    const res=await fetch(`${CONFIG.API_URL}/auth/google`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({googleUserData:{id:ui.sub,email:ui.email,name:ui.name,picture:ui.picture}})});
-    const data=await res.json();
-    if(data.error){toast(data.error,'error');return;}
-    localStorage.setItem('freeai_token',data.sessionToken);
-    localStorage.setItem('freeai_user',JSON.stringify(data.user));
-    user=data.user;isGuest=false;
-  }catch{
-    const ui=parseJwt(response.credential);
-    user={name:ui.name,email:ui.email,picture:ui.picture};
-    localStorage.setItem('freeai_user',JSON.stringify(user));
-    localStorage.setItem('freeai_token','local-'+Date.now());
-    isGuest=false;
+  try {
+    const ui = parseJwt(response.credential);
+    const res = await fetch(`${CONFIG.API_URL}/auth/google`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ googleUserData: { id: ui.sub, email: ui.email, name: ui.name, picture: ui.picture } })
+    });
+    const data = await res.json();
+    if (data.error) { toast(data.error, 'error'); return; }
+    localStorage.setItem('at_token', data.sessionToken);
+    localStorage.setItem('at_user', JSON.stringify(data.user));
+    user = data.user;
+  } catch(err) {
+    // Fallback: use Google JWT data directly
+    const ui = parseJwt(response.credential);
+    user = { name: ui.name, email: ui.email, picture: ui.picture, plan: 'free' };
+    localStorage.setItem('at_user', JSON.stringify(user));
+    localStorage.setItem('at_token', 'local-' + Date.now());
   }
-  renderUIState();toast('Signed in as '+(user.name||'User'),'success');
-}
-function logout(){
-  localStorage.removeItem('freeai_token');localStorage.removeItem('freeai_user');localStorage.removeItem('freeai_avatar');
-  user=null;isGuest=true;customAvatarData=null;
-  closePopup('profile');renderUIState();toast('Signed out','success');
+
+  // Clear guest state
+  guestMessages = [];
+  guestChatActive = false;
+  document.getElementById('guestNotice').style.display = 'none';
+
+  renderUIState();
+  loadConversationsFromServer();
+  newChat();
+  toast('Welcome, ' + (user.name?.split(' ')[0] || 'there') + '! 👋', 'success');
 }
 
-function sendContactEmail(){
-  const name=document.getElementById('contactName').value.trim();
-  const email=document.getElementById('contactEmail').value.trim();
-  const subject=document.getElementById('contactSubject').value;
-  const message=document.getElementById('contactMessage').value.trim();
-  if(!name||!email||!subject||!message){toast('Please fill in all fields','error');return;}
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast('Please enter a valid email','error');return;}
-  const sub=encodeURIComponent(`[Aasai Tech AI] ${subject}`);
-  const body=encodeURIComponent(`Name: ${name}\nEmail: ${email}\nSubject: ${subject}\n\nMessage:\n${message}\n\n---\nSent via Aasai Tech AI`);
-  const btn=document.getElementById('contactSendBtn');btn.disabled=true;
-  window.location.href=`mailto:aasaitechproviders@gmail.com?subject=${sub}&body=${body}`;
-  setTimeout(()=>{
-    btn.disabled=false;toast('Email client opened!','success');
-    ['contactName','contactEmail','contactMessage'].forEach(id=>document.getElementById(id).value='');
-    document.getElementById('contactSubject').value='';
-  },1500);
+function logout() {
+  localStorage.removeItem('at_token');
+  localStorage.removeItem('at_user');
+  localStorage.removeItem('at_avatar');
+  user = null;
+  customAvatarData = null;
+  conversations = [];
+  guestMessages = [];
+  guestChatActive = false;
+  currentConvId = null;
+  closePopup('profile');
+  renderUIState();
+  newChat();
+  toast('Signed out successfully', 'success');
 }
 
-function updateStats(){
-  const tm=conversations.reduce((a,c)=>a+c.messages.length,0);
-  const tt=conversations.reduce((a,c)=>a+(c.totalTokens||0),0);
-  const today=new Date().toDateString();
-  const td=conversations.filter(c=>new Date(c.createdAt).toDateString()===today).reduce((a,c)=>a+c.messages.filter(m=>m.role==='user').length,0);
-  ['st-msgs','st-tokens','st-chats','st-today'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.textContent=fmtNum([tm,tt,conversations.length,td][i]);});
-  const limit=1000000,pct=Math.min((tt/limit)*100,100).toFixed(1);
-  const bar=document.getElementById('st-bar');if(bar)bar.style.width=pct+'%';
-  const pe=document.getElementById('st-pct');if(pe)pe.textContent=pct+'%';
-  const ue=document.getElementById('st-used-lbl');if(ue)ue.textContent=fmtNum(tt)+' used';
-  ['profileMsgs','profileTokens','profileChats'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.textContent=fmtNum([tm,tt,conversations.length][i]);});
+// ═══ BACKEND CONVERSATIONS ═══
+async function loadConversationsFromServer() {
+  if (!user) return;
+  const token = localStorage.getItem('at_token');
+  try {
+    const res = await fetch(`${CONFIG.API_URL}/conversations`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    conversations = data.conversations || [];
+    renderHistory();
+    updateStatsFromServer();
+  } catch(e) {
+    console.warn('Could not load conversations:', e);
+  }
 }
 
-function renderStatsPanel(){
-  updateStats();
-  const list=document.getElementById('sessionList');if(!list)return;
-  const recent=[...conversations].slice(0,8);
-  if(!recent.length){list.innerHTML='<div style="font-size:13.5px;color:var(--text3);text-align:center;padding:12px 0;">No sessions yet</div>';return;}
-  list.innerHTML=recent.map(c=>`<div class="info-row"><span class="info-lbl" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px">${escHtml(c.title)}</span><span class="info-val acc">${fmtNum(c.totalTokens||0)} tok</span></div>`).join('');
+async function updateStatsFromServer() {
+  if (!user) return;
+  const token = localStorage.getItem('at_token');
+  try {
+    const res = await fetch(`${CONFIG.API_URL}/stats`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    // Update stats popup fields
+    const set = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = v; };
+    set('st-msgs', fmtNum(data.total_queries || 0));
+    set('st-tokens', fmtNum(data.tokens_used || 0));
+    set('st-chats', fmtNum(data.total_conversations || 0));
+    set('st-today', fmtNum(data.today_queries || 0));
+    set('profileMsgs', fmtNum(data.total_queries || 0));
+    set('profileTokens', fmtNum(data.tokens_used || 0));
+    set('profileChats', fmtNum(data.total_conversations || 0));
+    const limit = data.token_limit || 1000000;
+    const used = data.tokens_used || 0;
+    const pct = Math.min((used / limit) * 100, 100).toFixed(1);
+    const bar = document.getElementById('st-bar'); if(bar) bar.style.width = pct + '%';
+    const pctEl = document.getElementById('st-pct'); if(pctEl) pctEl.textContent = pct + '%';
+    const usedEl = document.getElementById('st-used-lbl'); if(usedEl) usedEl.textContent = fmtNum(used) + ' used';
+    const limEl = document.getElementById('st-limit-lbl'); if(limEl) limEl.textContent = fmtNum(limit) + ' total';
+
+    // Session breakdown
+    const list = document.getElementById('sessionList');
+    if (list && data.recent_conversations?.length) {
+      list.innerHTML = data.recent_conversations.map(c => `
+        <div class="info-row">
+          <span class="info-lbl" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px">${escHtml(c.title||'Chat')}</span>
+          <span class="info-val acc">${fmtNum(c.total_tokens||0)} tok</span>
+        </div>`).join('');
+    } else if (list) {
+      list.innerHTML = '<div style="font-size:13.5px;color:var(--text3);text-align:center;padding:12px 0;">No sessions yet</div>';
+    }
+  } catch(e) { console.warn('Stats fetch failed:', e); }
 }
 
-function loadSettings(){
-  applyAccent(settings.accent||'#2c5f8a');
-  document.getElementById('accentPicker').value=settings.accent||'#2c5f8a';
-  document.getElementById('tog-enter').checked=settings.enter!==false;
-  document.getElementById('tog-typing').checked=settings.typing!==false;
-  document.getElementById('tog-highlight').checked=settings.highlight!==false;
-  ['tog-enter','tog-typing','tog-highlight'].forEach(id=>document.getElementById(id).addEventListener('change',saveSettings));
-}
-function saveSettings(){
-  settings={accent:document.getElementById('accentPicker').value,enter:document.getElementById('tog-enter').checked,typing:document.getElementById('tog-typing').checked,highlight:document.getElementById('tog-highlight').checked};
-  localStorage.setItem('freeai_settings',JSON.stringify(settings));
-}
-function applyAccent(hex){
-  document.documentElement.style.setProperty('--accent',hex);
-  document.documentElement.style.setProperty('--accent-l',hex+'18');
-  document.documentElement.style.setProperty('--accent-b',hex+'44');
-  const p=document.getElementById('accentPicker');if(p)p.value=hex;
-  document.querySelectorAll('.color-dot').forEach(d=>d.classList.toggle('sel',d.dataset.c===hex));
-  settings.accent=hex;localStorage.setItem('freeai_settings',JSON.stringify(settings));
-}
-function buildColorPresets(){
-  document.getElementById('colorPresets').innerHTML=ACCENT_PRESETS.map(c=>`<div class="color-dot${c===settings.accent?' sel':''}" data-c="${c}" style="background:${c}" onclick="applyAccent('${c}')"></div>`).join('');
-}
-function exportHistory(){
-  const blob=new Blob([JSON.stringify(conversations,null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='aasaitech-ai-history.json';a.click();
-  toast('History exported','success');
-}
-function clearAllChats(){
-  if(!confirm('Clear all chat history? This cannot be undone.'))return;
-  conversations=[];currentConvId=null;saveConversations();newChat();closePopup('settings');toast('All chats cleared','success');
+function renderStatsPanel() {
+  if (!user) return;
+  updateStatsFromServer();
 }
 
-function showEmptyState(){
-  document.getElementById('chatInner').innerHTML=`
+// ═══ CHAT ═══
+function showEmptyState() {
+  document.getElementById('chatInner').innerHTML = `
     <div class="empty">
       <div class="empty-logo">
         <img src="logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
       </div>
       <div class="empty-title">How can I help?</div>
-      <div class="empty-sub">Your AI assistant, built and powered by <strong>Aasai Tech Providers Pvt. Ltd.</strong>, Tamil Nadu<br><span style="font-size:13.5px;color:var(--text3)">DPIIT Recognised Startup · NVIDIA Inception Member</span></div>
+      <div class="empty-sub">Your AI assistant, built and powered by <strong>Aasai Tech Providers Pvt. Ltd.</strong>, Tamil Nadu<br>
+        <span style="font-size:13.5px;color:var(--text3)">DPIIT Recognised Startup · NVIDIA Inception Member</span>
+      </div>
       <div class="suggestions">
         <button class="sug" onclick="useSug(this)"><strong>✍️ Write &amp; Edit</strong>Draft a professional email to a client</button>
         <button class="sug" onclick="useSug(this)"><strong>💻 Code Help</strong>Explain async/await with examples</button>
@@ -786,115 +921,344 @@ function showEmptyState(){
       </div>
     </div>`;
 }
-function newChat(){currentConvId=null;showEmptyState();renderHistory();closeSidebar();}
-function useSug(el){
-  const s=el.querySelector('strong');const text=el.textContent.replace(s.textContent,'').trim();
-  const input=document.getElementById('msgInput');input.value=text;autoResize(input);input.focus();
+
+function newChat() {
+  currentConvId = null;
+  guestMessages = [];
+  guestChatActive = false;
+  document.getElementById('guestNotice').style.display = 'none';
+  showEmptyState();
+  if (user) renderHistory();
+  closeSidebar();
 }
 
-async function sendMessage(){
-  const input=document.getElementById('msgInput');const text=input.value.trim();
-  if(!text||isLoading)return;
+function useSug(el) {
+  const s = el.querySelector('strong');
+  const text = el.textContent.replace(s.textContent, '').trim();
+  const input = document.getElementById('msgInput');
+  input.value = text; autoResize(input); input.focus();
+}
+
+async function sendMessage() {
+  const input = document.getElementById('msgInput');
+  const text = input.value.trim();
+  if (!text || isLoading) return;
+
   document.querySelector('.empty')?.remove();
-  input.value='';autoResize(input);setLoading(true);
-  if(!currentConvId){
-    currentConvId=Date.now().toString();
-    conversations.unshift({id:currentConvId,title:text.substring(0,48)+(text.length>48?'…':''),messages:[],totalTokens:0,createdAt:new Date().toISOString()});
-    renderHistory();
-  }
-  const conv=conversations.find(c=>c.id===currentConvId);
-  conv.messages.push({role:'user',content:text});saveConversations();appendMsg('user',text);
-  const aiId='ai-'+Date.now();appendAIMsg(aiId);
-  try{
-    const token=localStorage.getItem('freeai_token');
-    const res=await fetch(`${CONFIG.API_URL}/chat`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token||''}`},body:JSON.stringify({messages:conv.messages.map(m=>({role:m.role,content:m.content})),conversationId:currentConvId})});
-    if(!res.ok){const e=await res.json().catch(()=>{});throw new Error(e?.error||'HTTP '+res.status);}
-    const data=await res.json();const content=data.content||'';const tkns=data.tokens_used||estimateTokens(content);
-    const el=document.getElementById(aiId);
-    if(el){el.innerHTML=marked.parse(content);if(settings.highlight)hlCode(el);addMsgActions(el,content);}
-    conv.messages.push({role:'assistant',content});conv.totalTokens=(conv.totalTokens||0)+tkns;
-    saveConversations();updateStats();
-  }catch(err){
-    const el=document.getElementById(aiId);
-    if(el)el.innerHTML=`<span style="color:var(--red)">⚠ ${escHtml(err.message||'Could not connect.')}</span>`;
-  }
-  setLoading(false);scrollDown();
-}
+  input.value = ''; autoResize(input); setLoading(true);
 
-function appendMsg(role,text){
-  const inner=document.getElementById('chatInner');const isUser=role==='user';
-  const pic=customAvatarData||user?.picture||null;
-  const initials=user?(user.name||'U').charAt(0).toUpperCase():'G';
-  const aiAvatar=`<img src="logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none;width:15px;height:15px;color:white"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`;
-  const avatarHtml=isUser?(pic?`<img src="${pic}" alt=""/>`:`<span>${initials}</span>`):aiAvatar;
-  const div=document.createElement('div');div.className='message';
-  div.innerHTML=`<div class="msg-avatar ${isUser?'user':'ai'}">${avatarHtml}</div><div class="msg-body"><div class="msg-name">${isUser?(user?.name||'You'):'Aasai Tech AI'}${!isUser?'<span class="msg-tag">Aasai Tech</span>':''}</div><div class="msg-content">${isUser?escHtml(text).replace(/\n/g,'<br>'):marked.parse(text)}</div></div>`;
-  inner.appendChild(div);
-  if(!isUser){const c=div.querySelector('.msg-content');if(settings.highlight)hlCode(c);addMsgActions(c,text);}
+  const isGuest = !user;
+
+  // Show guest notice strip on first message
+  if (isGuest && !guestChatActive) {
+    guestChatActive = true;
+    document.getElementById('guestNotice').style.display = 'flex';
+  }
+
+  appendMsg('user', text);
+  const aiId = 'ai-' + Date.now();
+  appendAIMsg(aiId);
+
+  if (isGuest) {
+    // ── GUEST: no token, use local message memory ──
+    guestMessages.push({ role: 'user', content: text });
+    try {
+      const res = await fetch(`${CONFIG.API_URL}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        // No Authorization header — backend receives no token
+        body: JSON.stringify({ messages: guestMessages })
+      });
+
+      if (res.status === 401) {
+        // Backend requires auth for /chat — show friendly prompt
+        const el = document.getElementById(aiId);
+        if (el) {
+          el.innerHTML = `<div style="background:var(--accent-l);border:1px solid var(--accent-b);border-radius:12px;padding:16px;">
+            <div style="font-size:15px;font-weight:700;color:var(--accent);margin-bottom:6px;">Sign in to chat</div>
+            <div style="font-size:14px;color:var(--text2);margin-bottom:12px;">Create a free account to start chatting with Aasai Tech AI. It's quick and free!</div>
+            <button onclick="openAuthModal('login')" style="background:var(--accent);color:white;border:none;border-radius:8px;padding:9px 20px;font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer;">Sign in with Google</button>
+          </div>`;
+        }
+        guestMessages.pop(); // remove failed message
+        setLoading(false);
+        return;
+      }
+
+      if (!res.ok) { const e = await res.json().catch(()=>{}); throw new Error(e?.error || 'HTTP ' + res.status); }
+      const data = await res.json();
+      const content = data.content || '';
+      guestMessages.push({ role: 'assistant', content });
+      const el = document.getElementById(aiId);
+      if (el) { el.innerHTML = marked.parse(content); if(settings.highlight) hlCode(el); addMsgActions(el, content); }
+    } catch(err) {
+      const el = document.getElementById(aiId);
+      if (el) el.innerHTML = `<span style="color:var(--red)">⚠ ${escHtml(err.message || 'Could not connect.')}</span>`;
+    }
+  } else {
+    // ── LOGGED IN: send with token, save to backend ──
+    if (!currentConvId) {
+      currentConvId = Date.now().toString();
+      conversations.unshift({ conversationId: currentConvId, title: text.substring(0, 48) + (text.length > 48 ? '…' : ''), total_tokens: 0 });
+      renderHistory();
+    }
+
+    // Build message history from backend or local
+    const msgHistory = buildMsgHistory(text);
+
+    try {
+      const token = localStorage.getItem('at_token');
+      const res = await fetch(`${CONFIG.API_URL}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ messages: msgHistory, conversationId: currentConvId })
+      });
+      if (!res.ok) { const e = await res.json().catch(()=>{}); throw new Error(e?.error || 'HTTP ' + res.status); }
+      const data = await res.json();
+      const content = data.content || '';
+      const el = document.getElementById(aiId);
+      if (el) { el.innerHTML = marked.parse(content); if(settings.highlight) hlCode(el); addMsgActions(el, content); }
+
+      // Update local conversation token count
+      const conv = conversations.find(c => c.conversationId === currentConvId);
+      if (conv) conv.total_tokens = (conv.total_tokens || 0) + (data.tokens_used || 0);
+    } catch(err) {
+      const el = document.getElementById(aiId);
+      if (el) el.innerHTML = `<span style="color:var(--red)">⚠ ${escHtml(err.message || 'Could not connect.')}</span>`;
+    }
+  }
+
+  setLoading(false);
   scrollDown();
 }
-function appendAIMsg(id){
-  const inner=document.getElementById('chatInner');const div=document.createElement('div');div.className='message';
-  div.innerHTML=`<div class="msg-avatar ai"><img src="logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none;width:15px;height:15px;color:white"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div><div class="msg-body"><div class="msg-name">Aasai Tech AI <span class="msg-tag">Aasai Tech</span></div><div class="msg-content" id="${id}">${settings.typing!==false?'<div class="typing"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>':''}</div></div>`;
-  inner.appendChild(div);scrollDown();
+
+// Build a running message history for logged-in chat
+// We collect messages visible in the DOM for the current conversation
+function buildMsgHistory(latestUserText) {
+  const msgs = [];
+  document.querySelectorAll('.message').forEach(el => {
+    const isUser = el.querySelector('.msg-avatar.user') !== null;
+    const content = el.querySelector('.msg-content')?.innerText || '';
+    if (content) msgs.push({ role: isUser ? 'user' : 'assistant', content });
+  });
+  // Replace last user message with the actual text (avoid duplicate from DOM)
+  if (msgs.length && msgs[msgs.length-1].role === 'user') msgs.pop();
+  msgs.push({ role: 'user', content: latestUserText });
+  return msgs;
 }
-function addMsgActions(el,content){
-  const wrap=document.createElement('div');wrap.className='msg-actions';
-  const encoded=btoa(unescape(encodeURIComponent(content)));
-  wrap.innerHTML=`<button class="msg-act-btn" onclick="copyMsg(this,'${encoded}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy</button>`;
+
+async function loadConvMessages(convId) {
+  currentConvId = convId;
+  document.getElementById('chatInner').innerHTML = '';
+  document.getElementById('guestNotice').style.display = 'none';
+  renderHistory();
+  closeSidebar();
+  if (!user) return;
+
+  const token = localStorage.getItem('at_token');
+  try {
+    const res = await fetch(`${CONFIG.API_URL}/conversations/${convId}/messages`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    (data.messages || []).forEach(m => appendMsg(m.role, m.content));
+    scrollDown();
+  } catch(e) { console.warn('Load messages error:', e); }
+}
+
+async function deleteConv(convId, e) {
+  e.stopPropagation();
+  conversations = conversations.filter(c => c.conversationId !== convId);
+  renderHistory();
+  if (currentConvId === convId) newChat();
+  if (!user) return;
+  const token = localStorage.getItem('at_token');
+  try {
+    await fetch(`${CONFIG.API_URL}/conversations/${convId}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+  } catch(e) {}
+}
+
+function renderHistory() {
+  const list = document.getElementById('historyList');
+  if (!list) return;
+  if (!conversations.length) {
+    list.innerHTML = '<div style="font-size:13px;color:var(--text3);padding:4px 6px;text-align:center">No chats yet</div>';
+    return;
+  }
+  list.innerHTML = conversations.map(c => `
+    <div class="hist-item${c.conversationId===currentConvId?' active':''}" onclick="loadConvMessages('${c.conversationId}')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;flex-shrink:0;opacity:0.4"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span>${escHtml(c.title||'Chat')}</span>
+      <button class="del" onclick="deleteConv('${c.conversationId}',event)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>`).join('');
+}
+
+// ═══ MESSAGE RENDERING ═══
+function appendMsg(role, text) {
+  const inner = document.getElementById('chatInner');
+  const isUser = role === 'user';
+  const pic = customAvatarData || user?.picture || null;
+  const initials = user ? (user.name || 'U').charAt(0).toUpperCase() : 'G';
+  const aiAvatar = `<img src="logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none;width:15px;height:15px;color:white"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`;
+  const avatarHtml = isUser ? (pic ? `<img src="${pic}" alt=""/>` : `<span>${initials}</span>`) : aiAvatar;
+  const div = document.createElement('div');
+  div.className = 'message';
+  div.innerHTML = `
+    <div class="msg-avatar ${isUser?'user':'ai'}">${avatarHtml}</div>
+    <div class="msg-body">
+      <div class="msg-name">${isUser?(user?.name||'You'):'Aasai Tech AI'}${!isUser?'<span class="msg-tag">Aasai Tech</span>':''}</div>
+      <div class="msg-content">${isUser?escHtml(text).replace(/\n/g,'<br>'):marked.parse(text)}</div>
+    </div>`;
+  inner.appendChild(div);
+  if (!isUser) { const c = div.querySelector('.msg-content'); if(settings.highlight) hlCode(c); addMsgActions(c, text); }
+  scrollDown();
+}
+
+function appendAIMsg(id) {
+  const inner = document.getElementById('chatInner');
+  const div = document.createElement('div');
+  div.className = 'message';
+  div.innerHTML = `
+    <div class="msg-avatar ai">
+      <img src="logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none;width:15px;height:15px;color:white"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    </div>
+    <div class="msg-body">
+      <div class="msg-name">Aasai Tech AI <span class="msg-tag">Aasai Tech</span></div>
+      <div class="msg-content" id="${id}">${settings.typing!==false?'<div class="typing"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>':''}</div>
+    </div>`;
+  inner.appendChild(div); scrollDown();
+}
+
+function addMsgActions(el, content) {
+  const wrap = document.createElement('div');
+  wrap.className = 'msg-actions';
+  const encoded = btoa(unescape(encodeURIComponent(content)));
+  wrap.innerHTML = `<button class="msg-act-btn" onclick="copyMsg(this,'${encoded}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy</button>`;
   el.after(wrap);
 }
-function copyMsg(btn,b64){
+
+function copyMsg(btn, b64) {
   navigator.clipboard.writeText(decodeURIComponent(escape(atob(b64))));
-  btn.textContent='✓ Copied';
-  setTimeout(()=>btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy',2000);
+  btn.textContent = '✓ Copied';
+  setTimeout(() => { btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy'; }, 2000);
 }
-function loadConv(id){
-  currentConvId=id;const conv=conversations.find(c=>c.id===id);if(!conv)return;
-  document.getElementById('chatInner').innerHTML='';
-  conv.messages.forEach(m=>appendMsg(m.role,m.content));renderHistory();closeSidebar();
+
+// ═══ SETTINGS ═══
+function loadSettings() {
+  applyAccent(settings.accent || '#2c5f8a');
+  document.getElementById('accentPicker').value = settings.accent || '#2c5f8a';
+  document.getElementById('tog-enter').checked = settings.enter !== false;
+  document.getElementById('tog-typing').checked = settings.typing !== false;
+  document.getElementById('tog-highlight').checked = settings.highlight !== false;
+  ['tog-enter','tog-typing','tog-highlight'].forEach(id => {
+    document.getElementById(id).addEventListener('change', saveSettings);
+  });
 }
-function deleteConv(id,e){
-  e.stopPropagation();conversations=conversations.filter(c=>c.id!==id);saveConversations();
-  if(currentConvId===id)newChat();else renderHistory();updateStats();
+function saveSettings() {
+  settings = { accent: document.getElementById('accentPicker').value, enter: document.getElementById('tog-enter').checked, typing: document.getElementById('tog-typing').checked, highlight: document.getElementById('tog-highlight').checked };
+  localStorage.setItem('at_settings', JSON.stringify(settings));
 }
-function renderHistory(){
-  const list=document.getElementById('historyList');
-  if(!conversations.length){list.innerHTML='<div style="font-size:13px;color:var(--text3);padding:4px 6px;text-align:center">No chats yet</div>';return;}
-  list.innerHTML=conversations.map(c=>`<div class="hist-item${c.id===currentConvId?' active':''}" onclick="loadConv('${c.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;flex-shrink:0;opacity:0.4"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>${escHtml(c.title)}</span><button class="del" onclick="deleteConv('${c.id}',event)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>`).join('');
+function applyAccent(hex) {
+  document.documentElement.style.setProperty('--accent', hex);
+  document.documentElement.style.setProperty('--accent-l', hex + '18');
+  document.documentElement.style.setProperty('--accent-b', hex + '44');
+  const p = document.getElementById('accentPicker'); if(p) p.value = hex;
+  document.querySelectorAll('.color-dot').forEach(d => d.classList.toggle('sel', d.dataset.c === hex));
+  settings.accent = hex;
+  localStorage.setItem('at_settings', JSON.stringify(settings));
 }
-function saveConversations(){localStorage.setItem('freeai_convs',JSON.stringify(conversations));}
-function hlCode(el){
-  el.querySelectorAll('pre code').forEach(block=>{
-    hljs.highlightElement(block);const pre=block.parentElement;
-    if(pre.querySelector('.copy-code-btn'))return;pre.style.position='relative';
-    const btn=document.createElement('button');btn.className='copy-code-btn';btn.textContent='Copy';
-    btn.onclick=()=>{navigator.clipboard.writeText(block.textContent);btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy',2000);};
+function buildColorPresets() {
+  document.getElementById('colorPresets').innerHTML = ACCENT_PRESETS.map(c =>
+    `<div class="color-dot${c===settings.accent?' sel':''}" data-c="${c}" style="background:${c}" onclick="applyAccent('${c}')"></div>`
+  ).join('');
+}
+function exportHistory() {
+  const blob = new Blob([JSON.stringify(conversations, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'aasaitech-ai-history.json'; a.click();
+  toast('History exported', 'success');
+}
+function clearAllChats() {
+  if (!confirm('Clear all chat history?')) return;
+  conversations = []; currentConvId = null;
+  renderHistory(); newChat(); closePopup('settings');
+  toast('All chats cleared', 'success');
+}
+
+// ═══ CONTACT FORM ═══
+function sendContactEmail() {
+  const name = document.getElementById('contactName').value.trim();
+  const email = document.getElementById('contactEmail').value.trim();
+  const subject = document.getElementById('contactSubject').value;
+  const message = document.getElementById('contactMessage').value.trim();
+  if (!name || !email || !subject || !message) { toast('Please fill in all fields', 'error'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast('Please enter a valid email', 'error'); return; }
+  const sub = encodeURIComponent(`[Aasai Tech AI] ${subject}`);
+  const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nSubject: ${subject}\n\nMessage:\n${message}\n\n---\nSent via Aasai Tech AI`);
+  const btn = document.getElementById('contactSendBtn'); btn.disabled = true;
+  window.location.href = `mailto:aasaitechproviders@gmail.com?subject=${sub}&body=${body}`;
+  setTimeout(() => {
+    btn.disabled = false; toast('Email client opened!', 'success');
+    ['contactName','contactEmail','contactMessage'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('contactSubject').value = '';
+  }, 1500);
+}
+
+// ═══ AVATAR ═══
+function handleAvatarUpload(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => { customAvatarData = ev.target.result; localStorage.setItem('at_avatar', customAvatarData); renderUIState(); toast('Profile picture updated', 'success'); };
+  reader.readAsDataURL(file);
+}
+
+// ═══ UTILS ═══
+function setLoading(v) { isLoading = v; document.getElementById('sendBtn').disabled = v; }
+function scrollDown() { const s = document.getElementById('chatScroll'); s.scrollTop = s.scrollHeight; }
+function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey && settings.enter !== false) { e.preventDefault(); sendMessage(); } }
+function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 200) + 'px'; }
+function escHtml(t) { return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmtNum(n) { if(n>=1e6) return (n/1e6).toFixed(1)+'M'; if(n>=1e3) return (n/1e3).toFixed(1)+'K'; return (n||0).toString(); }
+function parseJwt(token) {
+  const b64 = token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+  return JSON.parse(decodeURIComponent(atob(b64).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join('')));
+}
+function toast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = `toast ${type} show`;
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sbOverlay').classList.toggle('show'); }
+function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sbOverlay').classList.remove('show'); }
+function hlCode(el) {
+  el.querySelectorAll('pre code').forEach(block => {
+    hljs.highlightElement(block);
+    const pre = block.parentElement;
+    if (pre.querySelector('.copy-code-btn')) return;
+    pre.style.position = 'relative';
+    const btn = document.createElement('button');
+    btn.className = 'copy-code-btn'; btn.textContent = 'Copy';
+    btn.onclick = () => { navigator.clipboard.writeText(block.textContent); btn.textContent = 'Copied!'; setTimeout(() => btn.textContent = 'Copy', 2000); };
     pre.appendChild(btn);
   });
 }
-function handleAvatarUpload(e){
-  const file=e.target.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=(ev)=>{customAvatarData=ev.target.result;localStorage.setItem('freeai_avatar',customAvatarData);renderUIState();toast('Profile picture updated','success');};
-  reader.readAsDataURL(file);
-}
-function setLoading(v){isLoading=v;document.getElementById('sendBtn').disabled=v;}
-function scrollDown(){const s=document.getElementById('chatScroll');s.scrollTop=s.scrollHeight;}
-function handleKey(e){if(e.key==='Enter'&&!e.shiftKey&&settings.enter!==false){e.preventDefault();sendMessage();}}
-function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,200)+'px';}
-function escHtml(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function fmtNum(n){if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return(n/1e3).toFixed(1)+'K';return(n||0).toString();}
-function estimateTokens(t){return Math.ceil(t.length/4);}
-function parseJwt(token){const b64=token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');return JSON.parse(decodeURIComponent(atob(b64).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join('')));}
-function toast(msg,type='success'){const t=document.getElementById('toast');t.textContent=msg;t.className=`toast ${type} show`;setTimeout(()=>t.classList.remove('show'),3000);}
-function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sbOverlay').classList.toggle('show');}
-function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sbOverlay').classList.remove('show');}
-document.addEventListener('keydown',e=>{
-  if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();newChat();}
-  if(e.key==='Escape'){closeAuthModal();document.querySelectorAll('.popup-backdrop').forEach(p=>p.classList.remove('show'));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));}
+
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); newChat(); }
+  if (e.key === 'Escape') {
+    closeAuthModal();
+    document.querySelectorAll('.popup-backdrop').forEach(p => p.classList.remove('show'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  }
 });
-marked.setOptions({breaks:true,gfm:true});
+
+marked.setOptions({ breaks: true, gfm: true });
 </script>
 </body>
 </html>
