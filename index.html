@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>FreeAI — Aasai Tech</title>
+<title>Aasai Tech AI — Aasai Tech</title>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"/>
@@ -495,21 +495,46 @@ body {
   max-width: 720px; margin: 0 auto; padding: 32px 24px;
 }
 
-/* EMPTY STATE */
-.empty {
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  min-height: 60vh; text-align: center; padding: 40px 20px;
+/* PROPOSAL CARD (new empty state) */
+.proposal-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow);
 }
-.empty-logo {
-  width: 52px; height: 52px; background: var(--accent);
-  border-radius: 14px; display: flex; align-items: center; justify-content: center;
-  margin-bottom: 20px; box-shadow: 0 4px 16px rgba(44,95,138,0.25);
+.proposal-card h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
 }
-.empty-logo svg { width: 26px; height: 26px; color: white; }
-.empty-title { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
-.empty-sub { font-size: 14px; color: var(--text2); margin-bottom: 32px; max-width: 360px; line-height: 1.65; }
+.proposal-card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.proposal-card ul {
+  padding-left: 20px;
+  color: var(--text2);
+}
+.proposal-card li {
+  margin-bottom: 4px;
+}
+.proposal-card .copy-proposal-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: background 0.15s;
+}
+.proposal-card .copy-proposal-btn:hover {
+  background: var(--surface);
+}
 
+/* SUGGESTIONS */
 .suggestions {
   display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
   width: 100%; max-width: 540px;
@@ -707,7 +732,7 @@ body {
         </svg>
       </div>
       <div>
-        <div class="login-brand">FreeAI</div>
+        <div class="login-brand">Aasai Tech AI</div>
         <div class="login-tag">by Aasai Tech Providers</div>
       </div>
     </div>
@@ -763,7 +788,7 @@ body {
         <div class="brand-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
         </div>
-        <span class="brand-name">FreeAI</span>
+        <span class="brand-name">Aasai Tech AI</span>
         <span class="brand-badge">GPT-5 Nano</span>
       </div>
       <button class="new-chat-btn" onclick="newChat()">
@@ -937,7 +962,7 @@ body {
       <button class="menu-btn" onclick="toggleSidebar()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
-      <div style="font-size:14px;font-weight:700">FreeAI</div>
+      <div style="font-size:14px;font-weight:700">Aasai Tech AI</div>
     </div>
 
     <div class="chat-scroll" id="chatScroll">
@@ -947,13 +972,13 @@ body {
     <div class="input-area">
       <div class="input-inner">
         <div class="input-box">
-          <textarea id="msgInput" placeholder="Message FreeAI…" rows="1"
+          <textarea id="msgInput" placeholder="Message Aasai Tech AI…" rows="1"
             onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
           <button class="send-btn" id="sendBtn" onclick="sendMessage()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           </button>
         </div>
-        <div class="input-hint">FreeAI · GPT-5 Nano · <a href="https://aasaitech.in" target="_blank">Aasai Tech Providers</a> · DPIIT Recognised · NVIDIA Inception</div>
+        <div class="input-hint">Aasai Tech AI · GPT-5 Nano · <a href="https://www.aasaitech.in" target="_blank">Aasai Tech Providers</a> · DPIIT Recognised · NVIDIA Inception</div>
       </div>
     </div>
   </main>
@@ -1067,7 +1092,7 @@ function showChatView(guest) {
   renderUserInfo();
   renderHistory();
   updateStats();
-  showEmptyState();
+  showEmptyState(); // now shows proposal card
   if (guest) {
     document.getElementById('guestBanner').classList.add('show');
   } else {
@@ -1234,19 +1259,59 @@ function clearAllChats() {
 // ═══ CHAT ═══
 function showEmptyState() {
   document.getElementById('chatInner').innerHTML = `
-    <div class="empty">
-      <div class="empty-logo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    <div class="proposal-card">
+      <h2>Aasai Tech AI</h2>
+      <p style="font-size: 14px; color: var(--text2); margin-bottom: 16px;">GPT-5 Nano · DPIIT Recognised · NVIDIA Inception</p>
+      <div style="display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;">
+        <div><strong>Investment:</strong> ₹[pricing or range]</div>
+        <div><strong>Payment terms:</strong> [terms]</div>
+        <div><strong>Success metrics:</strong> [KPIs]</div>
       </div>
-      <div class="empty-title">How can I help?</div>
-      <div class="empty-sub">Powered by GPT-5 Nano via Azure OpenAI · Aasai Tech Providers, Tamil Nadu</div>
-      <div class="suggestions">
-        <button class="sug" onclick="useSug(this)"><strong>✍️ Write &amp; Edit</strong>Draft a professional email to a client</button>
-        <button class="sug" onclick="useSug(this)"><strong>💻 Code Help</strong>Explain async/await with examples</button>
-        <button class="sug" onclick="useSug(this)"><strong>🧠 Brainstorm</strong>10 startup ideas in the EdTech space</button>
-        <button class="sug" onclick="useSug(this)"><strong>📊 Analyze</strong>Summarize and extract key points from text</button>
+      <div style="margin-bottom: 20px;">
+        <h3>What you’ll find in the attachment:</h3>
+        <p style="background: var(--surface2); padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border);">Proposal: [Project/Title].pdf with detailed scope, assumptions, risks, governance, and full pricing options</p>
       </div>
+      <div style="margin-bottom: 20px;">
+        <h3>Next steps:</h3>
+        <ul style="padding-left: 20px; color: var(--text2);">
+          <li>Please review the proposal and share any questions or requested changes by [date].</li>
+          <li>If you’d like, we can schedule a 30-minute call to review together. I’m available [days/times].</li>
+          <li>With your confirmation, we can proceed to finalize the agreement.</li>
+        </ul>
+        <p style="margin-top: 8px;">This proposal is valid until [date].</p>
+      </div>
+      <div style="margin-bottom: 20px;">
+        <p>If you need to discuss now, please feel free to contact me at [phone] or [email].</p>
+      </div>
+      <div style="margin-bottom: 20px;">
+        <p>Thank you again for considering Aasai Tech. We look forward to the possibility of partnering with [Client Company] to achieve [benefit].</p>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <p style="font-weight: 600;">Sincerely,</p>
+          <p>[Your Full Name]<br>[Title]<br>Aasai Tech<br>[Phone]<br>[Email]<br><a href="https://www.aasaitech.in" target="_blank">https://www.aasaitech.in</a></p>
+        </div>
+        <button class="copy-proposal-btn" onclick="copyProposal()">Copy</button>
+      </div>
+    </div>
+    <div class="suggestions">
+      <button class="sug" onclick="useSug(this)"><strong>✍️ Write &amp; Edit</strong>Draft a professional email to a client</button>
+      <button class="sug" onclick="useSug(this)"><strong>💻 Code Help</strong>Explain async/await with examples</button>
+      <button class="sug" onclick="useSug(this)"><strong>🧠 Brainstorm</strong>10 startup ideas in the EdTech space</button>
+      <button class="sug" onclick="useSug(this)"><strong>📊 Analyze</strong>Summarize and extract key points from text</button>
     </div>`;
+}
+
+function copyProposal() {
+  const proposal = document.querySelector('.proposal-card');
+  if (!proposal) return;
+  // Clone to avoid modifying the displayed card
+  const clone = proposal.cloneNode(true);
+  const copyBtn = clone.querySelector('.copy-proposal-btn');
+  if (copyBtn) copyBtn.remove();
+  const text = clone.innerText;
+  navigator.clipboard.writeText(text);
+  toast('Proposal copied to clipboard', 'success');
 }
 
 function newChat() {
@@ -1268,7 +1333,12 @@ async function sendMessage() {
   const text = input.value.trim();
   if (!text || isLoading) return;
 
-  document.querySelector('.empty')?.remove();
+  document.querySelector('.empty')?.remove(); // not used now, but keep for safety
+  // Also remove proposal card if it's the first message? We'll keep it – user might want to refer.
+  // But to avoid clutter, we can remove the proposal card on first message.
+  const proposalCard = document.querySelector('.proposal-card');
+  if (proposalCard) proposalCard.remove();
+
   input.value = ''; autoResize(input); setLoading(true);
 
   if (!currentConvId) {
@@ -1330,7 +1400,7 @@ function appendMsg(role, text) {
   div.innerHTML = `
     <div class="msg-avatar ${isUser?'user':'ai'}">${avatarHtml}</div>
     <div class="msg-body">
-      <div class="msg-name">${isUser?(user?.name||'You'):'FreeAI'}${!isUser?'<span class="msg-tag">gpt-5-nano</span>':''}</div>
+      <div class="msg-name">${isUser?(user?.name||'You'):'Aasai Tech AI'}${!isUser?'<span class="msg-tag">gpt-5-nano</span>':''}</div>
       <div class="msg-content">${isUser?escHtml(text).replace(/\n/g,'<br>'):marked.parse(text)}</div>
     </div>`;
   inner.appendChild(div);
@@ -1347,7 +1417,7 @@ function appendAIMsg(id) {
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
     </div>
     <div class="msg-body">
-      <div class="msg-name">FreeAI <span class="msg-tag">gpt-5-nano</span></div>
+      <div class="msg-name">Aasai Tech AI <span class="msg-tag">gpt-5-nano</span></div>
       <div class="msg-content" id="${id}">${settings.typing!==false?'<div class="typing"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>':''}</div>
     </div>`;
   inner.appendChild(div); scrollDown();
