@@ -960,37 +960,47 @@ async function sendMessage() {
   appendAIMsg(aiId);
 
   if (isGuest) {
-    // ── GUEST: no token, use local message memory ──
+    // ── GUEST: use /chat/guest — no auth, stateless, limited ──
     guestMessages.push({ role: 'user', content: text });
     try {
-      const res = await fetch(`${CONFIG.API_URL}/chat`, {
+      const res = await fetch(`${CONFIG.API_URL}/chat/guest`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        // No Authorization header — backend receives no token
         body: JSON.stringify({ messages: guestMessages })
       });
 
-      if (res.status === 401) {
-        // Backend requires auth for /chat — show friendly prompt
+      const data = await res.json();
+
+      if (res.status === 429) {
+        // Guest message limit reached
         const el = document.getElementById(aiId);
         if (el) {
-          el.innerHTML = `<div style="background:var(--accent-l);border:1px solid var(--accent-b);border-radius:12px;padding:16px;">
-            <div style="font-size:15px;font-weight:700;color:var(--accent);margin-bottom:6px;">Sign in to chat</div>
-            <div style="font-size:14px;color:var(--text2);margin-bottom:12px;">Create a free account to start chatting with Aasai Tech AI. It's quick and free!</div>
-            <button onclick="openAuthModal('login')" style="background:var(--accent);color:white;border:none;border-radius:8px;padding:9px 20px;font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer;">Sign in with Google</button>
+          el.innerHTML = `<div style="background:var(--accent-l);border:1px solid var(--accent-b);border-radius:14px;padding:20px;text-align:center;">
+            <div style="font-size:32px;margin-bottom:10px;">🎉</div>
+            <div style="font-size:16px;font-weight:800;color:var(--accent);margin-bottom:7px;">You've reached the guest limit</div>
+            <div style="font-size:14px;color:var(--text2);margin-bottom:16px;line-height:1.6;">Create a free account to continue chatting with unlimited messages and save your history.</div>
+            <button onclick="openAuthModal('signup')" style="background:var(--accent);color:white;border:none;border-radius:9px;padding:11px 24px;font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;margin-right:8px;">Sign up free</button>
+            <button onclick="openAuthModal('login')" style="background:transparent;color:var(--accent);border:1px solid var(--accent-b);border-radius:9px;padding:11px 20px;font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer;">Log in</button>
           </div>`;
         }
-        guestMessages.pop(); // remove failed message
+        guestMessages.pop();
         setLoading(false);
         return;
       }
 
-      if (!res.ok) { const e = await res.json().catch(()=>{}); throw new Error(e?.error || 'HTTP ' + res.status); }
-      const data = await res.json();
+      if (!res.ok) throw new Error(data?.error || 'HTTP ' + res.status);
+
       const content = data.content || '';
       guestMessages.push({ role: 'assistant', content });
       const el = document.getElementById(aiId);
       if (el) { el.innerHTML = marked.parse(content); if(settings.highlight) hlCode(el); addMsgActions(el, content); }
+
+      // Show remaining messages hint when running low
+      const remaining = data.messages_remaining ?? null;
+      if (remaining !== null && remaining <= 3 && remaining > 0) {
+        toast(`${remaining} guest message${remaining===1?'':'s'} remaining — sign in for unlimited`, 'info');
+      }
+
     } catch(err) {
       const el = document.getElementById(aiId);
       if (el) el.innerHTML = `<span style="color:var(--red)">⚠ ${escHtml(err.message || 'Could not connect.')}</span>`;
