@@ -3,862 +3,353 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>FreeAI — Aasai Tech Providers</title>
+<title>Aasai Tech AI</title>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 :root {
-  --bg:       #f5f4f0;
-  --sidebar:  #edecea;
-  --surface:  #ffffff;
-  --surface2: #f0eeeb;
-  --border:   rgba(0,0,0,0.08);
-  --border2:  rgba(0,0,0,0.13);
-  --text:     #1a1917;
-  --text2:    #6b6860;
-  --text3:    #a09e99;
-  --accent:   #2c5f8a;
-  --accent-l: #e8f0f8;
-  --accent-b: rgba(44,95,138,0.25);
-  --green:    #1d7a5f;
-  --red:      #c0392b;
-  --radius:   10px;
-  --sidebar-w:260px;
-  --font:     'Plus Jakarta Sans', sans-serif;
-  --mono:     'JetBrains Mono', monospace;
-  --shadow:   0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.05);
+  --bg:#f5f4f0; --sidebar:#edecea; --surface:#ffffff; --surface2:#f0eeeb;
+  --border:rgba(0,0,0,0.08); --border2:rgba(0,0,0,0.13);
+  --text:#1a1917; --text2:#6b6860; --text3:#a09e99;
+  --accent:#2c5f8a; --accent-l:#e8f0f8; --accent-b:rgba(44,95,138,0.25);
+  --green:#1d7a5f; --red:#c0392b;
+  --sidebar-w:264px;
+  --font:'Plus Jakarta Sans',sans-serif; --mono:'JetBrains Mono',monospace;
+  --shadow:0 1px 3px rgba(0,0,0,0.08),0 4px 16px rgba(0,0,0,0.05);
 }
-
 *{margin:0;padding:0;box-sizing:border-box;}
-
-body {
-  font-family: var(--font);
-  background: var(--bg);
-  color: var(--text);
-  height: 100vh;
-  display: flex;
-  overflow: hidden;
-  font-size: 14px;
-}
-
-/* ══════════════ MAIN LAYOUT ══════════════ */
-#appShell {
-  display: flex;
-  width: 100%;
-  height: 100vh;
-}
+body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh;display:flex;overflow:hidden;font-size:15px;}
+#appShell{display:flex;width:100%;height:100vh;}
 
 /* ── SIDEBAR ── */
-.sidebar {
-  width: var(--sidebar-w);
-  background: var(--sidebar);
-  border-right: 1px solid var(--border);
-  display: flex; flex-direction: column;
-  height: 100vh; flex-shrink: 0;
-  transition: transform 0.25s ease;
-}
+.sidebar{width:var(--sidebar-w);background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100vh;flex-shrink:0;transition:transform 0.25s ease;}
+.sb-top{padding:16px 14px 13px;border-bottom:1px solid var(--border);}
+.brand-row{display:flex;align-items:center;gap:10px;padding:4px 6px 12px;}
+.brand-logo{width:32px;height:32px;border-radius:9px;overflow:hidden;flex-shrink:0;background:var(--accent);display:flex;align-items:center;justify-content:center;}
+.brand-logo img{width:100%;height:100%;object-fit:cover;border-radius:9px;}
+.brand-logo svg{width:16px;height:16px;color:white;}
+.brand-name{font-size:15px;font-weight:800;letter-spacing:-0.02em;}
+.brand-badge{margin-left:auto;font-size:9px;font-family:var(--mono);background:var(--accent-l);color:var(--accent);padding:2px 7px;border-radius:4px;border:1px solid var(--accent-b);font-weight:600;}
+.new-chat-btn{width:100%;display:flex;align-items:center;gap:9px;padding:9px 12px;background:var(--surface);border:1px solid var(--border2);border-radius:9px;color:var(--text);font-family:var(--font);font-size:13.5px;font-weight:500;cursor:pointer;transition:all 0.15s;box-shadow:var(--shadow);}
+.new-chat-btn:hover{border-color:var(--accent);color:var(--accent);}
+.new-chat-btn svg{width:14px;height:14px;}
+.new-chat-btn kbd{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--text3);background:var(--surface2);padding:1px 5px;border-radius:3px;border:1px solid var(--border);}
+.sb-nav{padding:10px 14px;border-bottom:1px solid var(--border);}
+.nav-btn{width:100%;display:flex;align-items:center;gap:10px;padding:9px 10px;background:transparent;border:none;border-radius:8px;color:var(--text2);font-family:var(--font);font-size:13.5px;cursor:pointer;transition:all 0.12s;text-align:left;margin-bottom:2px;}
+.nav-btn:hover{background:rgba(0,0,0,0.05);color:var(--text);}
+.nav-btn.active{background:var(--accent-l);color:var(--accent);font-weight:600;}
+.nav-btn svg{width:15px;height:15px;flex-shrink:0;}
+.sb-history{flex:1;overflow-y:auto;padding:12px 14px;}
+.sb-history::-webkit-scrollbar{width:3px;}
+.sb-history::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+.hist-label{font-size:10.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;padding:0 6px;margin-bottom:6px;}
+.hist-item{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:8px;cursor:pointer;color:var(--text2);font-size:13px;transition:all 0.1s;margin-bottom:2px;}
+.hist-item:hover{background:rgba(0,0,0,0.05);color:var(--text);}
+.hist-item.active{background:var(--accent-l);color:var(--accent);}
+.hist-item span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.hist-item .del{opacity:0;background:none;border:none;color:var(--text3);cursor:pointer;padding:2px;border-radius:4px;display:flex;}
+.hist-item:hover .del{opacity:1;}
+.hist-item .del:hover{color:var(--red);}
+.hist-item .del svg{width:11px;height:11px;}
+.sb-footer{padding:12px 14px;border-top:1px solid var(--border);}
+.sb-footer-loggedout{padding:12px 14px;border-top:1px solid var(--border);}
+.sb-signin-prompt{background:var(--accent-l);border:1px solid var(--accent-b);border-radius:9px;padding:13px;}
+.sb-signin-prompt p{font-size:12.5px;color:var(--accent);line-height:1.55;font-weight:500;margin-bottom:9px;}
+.sb-signin-btn{width:100%;background:var(--accent);color:white;border:none;border-radius:7px;padding:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);transition:background 0.15s;}
+.sb-signin-btn:hover{background:#245079;}
+.sb-brand-foot{margin-top:10px;text-align:center;}
+.sb-brand-foot a{font-size:11px;color:var(--text3);text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px;}
+.sb-brand-foot-sub{font-size:9.5px;color:var(--text3);margin-top:3px;letter-spacing:0.03em;}
+.user-row{display:flex;align-items:center;gap:10px;padding:8px 9px;border-radius:9px;cursor:pointer;transition:background 0.12s;}
+.user-row:hover{background:rgba(0,0,0,0.05);}
+.u-avatar{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;overflow:hidden;flex-shrink:0;}
+.u-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.u-info{flex:1;min-width:0;}
+.u-name{font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.u-sub{font-size:11px;color:var(--text3);margin-top:1px;}
+.logout-btn{background:none;border:none;color:var(--text3);cursor:pointer;padding:5px;border-radius:6px;display:flex;flex-shrink:0;}
+.logout-btn:hover{color:var(--red);background:rgba(192,57,43,0.08);}
+.logout-btn svg{width:14px;height:14px;}
 
-.sb-top {
-  padding: 16px 14px 12px;
-  border-bottom: 1px solid var(--border);
-}
-
-.brand-row {
-  display: flex; align-items: center; gap: 9px;
-  padding: 4px 6px 10px;
-}
-.brand-icon {
-  width: 26px; height: 26px;
-  background: var(--accent);
-  border-radius: 7px;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.brand-icon svg { width: 13px; height: 13px; color: white; }
-.brand-name { font-size: 14px; font-weight: 700; }
-.brand-badge {
-  margin-left: auto;
-  font-size: 9px; font-family: var(--mono);
-  background: var(--accent-l); color: var(--accent);
-  padding: 2px 6px; border-radius: 4px; border: 1px solid var(--accent-b);
-  font-weight: 500;
-}
-
-.new-chat-btn {
-  width: 100%;
-  display: flex; align-items: center; gap: 8px;
-  padding: 8px 10px;
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: 8px;
-  color: var(--text); font-family: var(--font); font-size: 13px; font-weight: 500;
-  cursor: pointer; transition: all 0.15s;
-  box-shadow: var(--shadow);
-}
-.new-chat-btn:hover { border-color: var(--accent); color: var(--accent); }
-.new-chat-btn svg { width: 13px; height: 13px; }
-.new-chat-btn kbd {
-  margin-left: auto; font-family: var(--mono); font-size: 10px;
-  color: var(--text3); background: var(--surface2);
-  padding: 1px 5px; border-radius: 3px; border: 1px solid var(--border);
-}
-
-/* NAV */
-.sb-nav {
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--border);
-}
-
-.nav-btn {
-  width: 100%;
-  display: flex; align-items: center; gap: 9px;
-  padding: 7px 8px;
-  background: transparent; border: none; border-radius: 7px;
-  color: var(--text2); font-family: var(--font); font-size: 13px;
-  cursor: pointer; transition: all 0.12s; text-align: left; margin-bottom: 1px;
-}
-.nav-btn:hover { background: rgba(0,0,0,0.05); color: var(--text); }
-.nav-btn.active { background: var(--accent-l); color: var(--accent); font-weight: 500; }
-.nav-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
-
-/* HISTORY */
-.sb-history {
-  flex: 1; overflow-y: auto; padding: 10px 14px;
-}
-.sb-history::-webkit-scrollbar { width: 3px; }
-.sb-history::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
-
-.hist-label {
-  font-size: 10px; font-weight: 600; color: var(--text3);
-  text-transform: uppercase; letter-spacing: 0.07em;
-  padding: 0 6px; margin-bottom: 5px;
-}
-
-.hist-item {
-  display: flex; align-items: center; gap: 7px;
-  padding: 6px 8px; border-radius: 7px; cursor: pointer;
-  color: var(--text2); font-size: 12.5px; transition: all 0.1s; margin-bottom: 1px;
-}
-.hist-item:hover { background: rgba(0,0,0,0.05); color: var(--text); }
-.hist-item.active { background: var(--accent-l); color: var(--accent); }
-.hist-item span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.hist-item .del {
-  opacity: 0; background: none; border: none; color: var(--text3);
-  cursor: pointer; padding: 2px; border-radius: 4px; display: flex;
-}
-.hist-item:hover .del { opacity: 1; }
-.hist-item .del:hover { color: var(--red); }
-.hist-item .del svg { width: 11px; height: 11px; }
-
-/* FOOTER */
-.sb-footer {
-  padding: 10px 14px;
-  border-top: 1px solid var(--border);
-}
-
-/* Logged-out footer: shows sign in prompt */
-.sb-footer-loggedout {
-  padding: 12px 14px;
-}
-.sb-signin-prompt {
-  background: var(--accent-l);
-  border: 1px solid var(--accent-b);
-  border-radius: 8px;
-  padding: 12px;
-}
-.sb-signin-prompt p { font-size: 12px; color: var(--accent); line-height: 1.5; font-weight: 500; margin-bottom: 8px; }
-.sb-signin-btn {
-  width: 100%;
-  background: var(--accent); color: white; border: none;
-  border-radius: 6px; padding: 7px; font-size: 12px; font-weight: 600;
-  cursor: pointer; font-family: var(--font); transition: background 0.15s;
-}
-.sb-signin-btn:hover { background: #245079; }
-
-.user-row {
-  display: flex; align-items: center; gap: 9px;
-  padding: 7px 8px; border-radius: 8px; cursor: pointer;
-  transition: background 0.12s;
-}
-.user-row:hover { background: rgba(0,0,0,0.05); }
-
-.u-avatar {
-  width: 30px; height: 30px; border-radius: 50%;
-  background: var(--accent);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 600; color: white;
-  overflow: hidden; flex-shrink: 0;
-}
-.u-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-.u-info { flex: 1; min-width: 0; }
-.u-name { font-size: 12.5px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.u-sub  { font-size: 10.5px; color: var(--text3); }
-
-.logout-btn {
-  background: none; border: none; color: var(--text3);
-  cursor: pointer; padding: 4px; border-radius: 5px; display: flex;
-  flex-shrink: 0;
-}
-.logout-btn:hover { color: var(--red); background: rgba(192,57,43,0.08); }
-.logout-btn svg { width: 13px; height: 13px; }
-
-/* ── PANELS ── */
-.panel {
-  display: none; flex-direction: column;
-  width: 280px; background: var(--surface);
-  border-right: 1px solid var(--border);
-  height: 100vh; flex-shrink: 0; overflow-y: auto;
-  box-shadow: 4px 0 16px rgba(0,0,0,0.06);
-}
-.panel.open { display: flex; }
-.panel::-webkit-scrollbar { width: 3px; }
-.panel::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
-
-.panel-hdr {
-  padding: 16px 16px 12px;
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; gap: 9px; flex-shrink: 0;
-  position: sticky; top: 0; background: var(--surface); z-index: 1;
-}
-.panel-hdr-icon { width: 28px; height: 28px; background: var(--accent-l); border: 1px solid var(--accent-b); border-radius: 7px; display: flex; align-items: center; justify-content: center; }
-.panel-hdr-icon svg { width: 14px; height: 14px; color: var(--accent); }
-.panel-title { font-size: 13.5px; font-weight: 700; }
-.panel-close {
-  margin-left: auto; background: none; border: none; color: var(--text3);
-  cursor: pointer; padding: 4px; border-radius: 5px; display: flex;
-}
-.panel-close:hover { background: var(--surface2); color: var(--text); }
-.panel-close svg { width: 13px; height: 13px; }
-
-.panel-body { padding: 16px; flex: 1; }
+/* ══ OVERLAY POPUPS ══ */
+.popup-backdrop{display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,0.4);backdrop-filter:blur(5px);align-items:center;justify-content:center;padding:20px;}
+.popup-backdrop.show{display:flex;}
+.popup{background:var(--surface);border:1px solid var(--border2);border-radius:22px;width:100%;max-width:520px;max-height:88vh;overflow-y:auto;box-shadow:0 4px 24px rgba(0,0,0,0.1),0 32px 80px rgba(0,0,0,0.22);animation:popupIn 0.28s cubic-bezier(0.16,1,0.3,1) both;position:relative;}
+.popup::-webkit-scrollbar{width:4px;}
+.popup::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
+@keyframes popupIn{from{opacity:0;transform:translateY(16px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.popup-hdr{display:flex;align-items:center;gap:12px;padding:22px 24px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:1;border-radius:22px 22px 0 0;}
+.popup-hdr-icon{width:38px;height:38px;background:var(--accent-l);border:1px solid var(--accent-b);border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.popup-hdr-icon svg{width:18px;height:18px;color:var(--accent);}
+.popup-title{font-size:18px;font-weight:800;letter-spacing:-0.02em;}
+.popup-close{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--text3);padding:7px;border-radius:8px;display:flex;transition:all 0.12s;}
+.popup-close:hover{background:var(--surface2);color:var(--text);}
+.popup-close svg{width:17px;height:17px;}
+.popup-body{padding:24px;}
 
 /* STATS */
-.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
-.stat-box {
-  background: var(--surface2); border: 1px solid var(--border);
-  border-radius: 10px; padding: 14px 12px;
-}
-.stat-val { font-size: 20px; font-weight: 700; font-family: var(--mono); color: var(--text); margin-bottom: 2px; }
-.stat-lbl { font-size: 10.5px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500; }
-.stat-box.accent .stat-val { color: var(--accent); }
-.stat-box.green  .stat-val { color: var(--green); }
-
-.quota-box {
-  background: var(--surface2); border: 1px solid var(--border);
-  border-radius: 10px; padding: 14px; margin-bottom: 12px;
-}
-.quota-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-.quota-hdr span { font-size: 12px; color: var(--text2); font-weight: 500; }
-.quota-hdr strong { font-size: 12px; font-family: var(--mono); color: var(--accent); }
-.quota-track { height: 5px; background: var(--border2); border-radius: 3px; overflow: hidden; margin-bottom: 6px; }
-.quota-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #1d7a5f); border-radius: 3px; transition: width 0.8s ease; }
-.quota-foot { display: flex; justify-content: space-between; }
-.quota-foot span { font-size: 10.5px; color: var(--text3); font-family: var(--mono); }
-
-.section-title {
-  font-size: 10px; font-weight: 700; color: var(--text3);
-  text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;
-}
-
-.info-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 9px 12px; background: var(--surface2);
-  border: 1px solid var(--border); border-radius: 8px; margin-bottom: 4px;
-}
-.info-lbl { font-size: 12px; color: var(--text2); }
-.info-val { font-size: 12px; font-family: var(--mono); color: var(--text); }
-.info-val.acc { color: var(--accent); }
-.info-val.grn { color: var(--green); }
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.stat-box{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:18px 16px;}
+.stat-val{font-size:30px;font-weight:800;font-family:var(--mono);color:var(--text);margin-bottom:4px;letter-spacing:-0.04em;}
+.stat-lbl{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;font-weight:600;}
+.stat-box.accent .stat-val{color:var(--accent);}
+.stat-box.green .stat-val{color:var(--green);}
+.quota-box{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:17px;margin-bottom:16px;}
+.quota-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.quota-hdr span{font-size:13.5px;color:var(--text2);font-weight:600;}
+.quota-hdr strong{font-size:13.5px;font-family:var(--mono);color:var(--accent);}
+.quota-track{height:6px;background:var(--border2);border-radius:4px;overflow:hidden;margin-bottom:8px;}
+.quota-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:4px;transition:width 0.8s ease;}
+.quota-foot{display:flex;justify-content:space-between;}
+.quota-foot span{font-size:11.5px;color:var(--text3);font-family:var(--mono);}
+.section-title{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;margin-bottom:5px;}
+.info-lbl{font-size:13.5px;color:var(--text2);}
+.info-val{font-size:13.5px;font-family:var(--mono);color:var(--text);}
+.info-val.acc{color:var(--accent);}
 
 /* SETTINGS */
-.setting-section { margin-bottom: 18px; }
-.setting-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 12px; background: var(--surface2);
-  border: 1px solid var(--border); border-radius: 8px; margin-bottom: 5px;
-}
-.setting-lbl { font-size: 12.5px; color: var(--text); font-weight: 500; }
-.setting-sub { font-size: 11px; color: var(--text3); margin-top: 1px; }
-
-.toggle { position: relative; width: 34px; height: 19px; flex-shrink: 0; }
-.toggle input { opacity:0; width:0; height:0; }
-.toggle-track {
-  position: absolute; cursor: pointer;
-  top:0; left:0; right:0; bottom:0;
-  background: var(--border2); border-radius: 19px; transition: 0.2s;
-}
-.toggle-track::before {
-  content: ''; position: absolute;
-  width: 13px; height: 13px; border-radius: 50%; background: white;
-  bottom: 3px; left: 3px; transition: 0.2s;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
-.toggle input:checked + .toggle-track { background: var(--accent); }
-.toggle input:checked + .toggle-track::before { transform: translateX(15px); }
-
-.color-presets { display: flex; flex-wrap: wrap; gap: 7px; }
-.color-dot {
-  width: 20px; height: 20px; border-radius: 50%; cursor: pointer;
-  transition: transform 0.15s; border: 2px solid transparent;
-}
-.color-dot:hover { transform: scale(1.15); }
-.color-dot.sel { border-color: var(--text); }
-
-.action-btn {
-  width: 100%; padding: 9px; border: 1px solid var(--border2);
-  background: var(--surface2); border-radius: 8px; font-family: var(--font);
-  font-size: 12.5px; font-weight: 500; color: var(--text); cursor: pointer;
-  margin-bottom: 6px; transition: all 0.15s;
-}
-.action-btn:hover { border-color: var(--accent); color: var(--accent); }
-.action-btn.danger { color: var(--red); }
-.action-btn.danger:hover { border-color: var(--red); background: rgba(192,57,43,0.06); }
+.setting-section{margin-bottom:22px;}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;background:var(--surface2);border:1px solid var(--border);border-radius:11px;margin-bottom:7px;}
+.setting-lbl{font-size:14px;color:var(--text);font-weight:600;}
+.setting-sub{font-size:12px;color:var(--text3);margin-top:2px;}
+.toggle{position:relative;width:36px;height:20px;flex-shrink:0;}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle-track{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:var(--border2);border-radius:20px;transition:0.2s;}
+.toggle-track::before{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:white;bottom:3px;left:3px;transition:0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);}
+.toggle input:checked+.toggle-track{background:var(--accent);}
+.toggle input:checked+.toggle-track::before{transform:translateX(16px);}
+.color-presets{display:flex;flex-wrap:wrap;gap:8px;}
+.color-dot{width:22px;height:22px;border-radius:50%;cursor:pointer;transition:transform 0.15s;border:2.5px solid transparent;}
+.color-dot:hover{transform:scale(1.2);}
+.color-dot.sel{border-color:var(--text);}
+.action-btn{width:100%;padding:12px;border:1px solid var(--border2);background:var(--surface2);border-radius:11px;font-family:var(--font);font-size:14px;font-weight:500;color:var(--text);cursor:pointer;margin-bottom:8px;transition:all 0.15s;}
+.action-btn:hover{border-color:var(--accent);color:var(--accent);}
+.action-btn.danger{color:var(--red);}
+.action-btn.danger:hover{border-color:var(--red);background:rgba(192,57,43,0.06);}
 
 /* PROFILE */
-.profile-hero {
-  display: flex; align-items: center; gap: 12px;
-  padding: 14px; background: var(--surface2);
-  border: 1px solid var(--border); border-radius: 12px; margin-bottom: 16px;
-}
-.profile-avatar {
-  width: 52px; height: 52px; border-radius: 50%; background: var(--accent);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 20px; font-weight: 700; color: white; overflow: hidden;
-  cursor: pointer; position: relative; flex-shrink: 0;
-}
-.profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.profile-avatar-overlay {
-  position: absolute; inset: 0; background: rgba(0,0,0,0.45);
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; transition: opacity 0.15s; border-radius: 50%;
-}
-.profile-avatar-overlay svg { width: 18px; height: 18px; color: white; }
-.profile-avatar:hover .profile-avatar-overlay { opacity: 1; }
-.profile-name { font-size: 14px; font-weight: 700; }
-.profile-email { font-size: 11.5px; color: var(--text3); margin-top: 2px; }
-.profile-plan {
-  font-size: 10px; font-family: var(--mono); background: var(--accent-l);
-  color: var(--accent); padding: 2px 7px; border-radius: 4px;
-  border: 1px solid var(--accent-b); margin-top: 5px; display: inline-block;
-}
+.profile-hero{display:flex;flex-direction:column;align-items:center;padding:28px 20px;background:linear-gradient(135deg,var(--accent-l),var(--surface2));border:1px solid var(--accent-b);border-radius:16px;margin-bottom:22px;text-align:center;}
+.profile-avatar{width:76px;height:76px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;color:white;overflow:hidden;cursor:pointer;position:relative;margin-bottom:14px;box-shadow:0 4px 20px rgba(44,95,138,0.25);}
+.profile-avatar img{width:100%;height:100%;object-fit:cover;}
+.profile-avatar-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.15s;border-radius:50%;}
+.profile-avatar-overlay svg{width:22px;height:22px;color:white;}
+.profile-avatar:hover .profile-avatar-overlay{opacity:1;}
+.profile-name{font-size:19px;font-weight:800;margin-bottom:4px;letter-spacing:-0.02em;}
+.profile-email{font-size:13px;color:var(--text3);margin-bottom:9px;}
+.profile-plan{font-size:11px;font-family:var(--mono);background:var(--accent);color:white;padding:3px 12px;border-radius:20px;display:inline-block;}
 
-/* ── MAIN CHAT AREA ── */
-.main {
-  flex: 1; display: flex; flex-direction: column;
-  height: 100vh; overflow: hidden; min-width: 0;
-  position: relative;
-}
+/* CONTACT */
+.contact-hero{background:linear-gradient(135deg,#1a3a5c,var(--accent));border-radius:16px;padding:26px;margin-bottom:22px;color:white;position:relative;overflow:hidden;}
+.contact-hero::before{content:'';position:absolute;right:-20px;top:-20px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,0.07);}
+.contact-hero::after{content:'';position:absolute;right:50px;bottom:-30px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,0.05);}
+.contact-logo{width:52px;height:52px;border-radius:14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:14px;overflow:hidden;}
+.contact-logo img{width:100%;height:100%;object-fit:cover;border-radius:14px;}
+.contact-logo svg{width:24px;height:24px;color:white;}
+.contact-company{font-size:20px;font-weight:800;margin-bottom:5px;letter-spacing:-0.02em;position:relative;z-index:1;}
+.contact-tagline{font-size:13.5px;opacity:0.85;line-height:1.6;position:relative;z-index:1;}
+.contact-badges{display:flex;gap:7px;margin-top:14px;flex-wrap:wrap;position:relative;z-index:1;}
+.contact-badge{font-size:10px;font-weight:600;font-family:var(--mono);background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.22);color:white;padding:3px 10px;border-radius:20px;}
+.contact-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:22px;}
+.contact-info-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;}
+.contact-info-card-label{font-size:10.5px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px;}
+.contact-info-card-val{font-size:13.5px;font-weight:600;color:var(--text);line-height:1.5;}
+.contact-info-card-val a{color:var(--accent);text-decoration:none;}
+.contact-info-card-val a:hover{text-decoration:underline;}
+.contact-form-label{font-size:13.5px;font-weight:600;color:var(--text);margin-bottom:7px;display:block;}
+.contact-input,.contact-textarea,.contact-select{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:11px;padding:12px 15px;font-family:var(--font);font-size:14.5px;color:var(--text);margin-bottom:14px;transition:border-color 0.2s,box-shadow 0.2s;outline:none;appearance:none;}
+.contact-input:focus,.contact-textarea:focus,.contact-select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(44,95,138,0.1);}
+.contact-textarea{resize:vertical;min-height:110px;}
+.contact-submit{width:100%;padding:14px;background:var(--accent);color:white;border:none;border-radius:11px;font-family:var(--font);font-size:15px;font-weight:700;cursor:pointer;transition:background 0.15s;display:flex;align-items:center;justify-content:center;gap:9px;}
+.contact-submit:hover{background:#245079;}
+.contact-submit:disabled{opacity:0.6;cursor:not-allowed;}
 
-/* TOP BAR — always visible, has auth buttons when logged out */
-.topbar {
-  height: 52px;
-  display: flex; align-items: center;
-  padding: 0 16px;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg);
-  flex-shrink: 0;
-  gap: 10px;
-  z-index: 10;
-}
+/* AUTH MODAL */
+.modal-backdrop{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.42);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px;}
+.modal-backdrop.show{display:flex;}
+.auth-modal{background:var(--surface);border:1px solid var(--border2);border-radius:22px;padding:42px 38px;width:100%;max-width:408px;box-shadow:0 2px 8px rgba(0,0,0,0.06),0 24px 64px rgba(0,0,0,0.2);animation:popupIn 0.3s cubic-bezier(0.16,1,0.3,1) both;position:relative;}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;color:var(--text3);padding:6px;border-radius:8px;display:flex;transition:all 0.12s;}
+.modal-close:hover{background:var(--surface2);color:var(--text);}
+.modal-close svg{width:16px;height:16px;}
+.modal-logo{display:flex;align-items:center;gap:12px;margin-bottom:26px;}
+.modal-logo-box{width:44px;height:44px;border-radius:12px;overflow:hidden;flex-shrink:0;background:var(--accent);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(44,95,138,0.3);}
+.modal-logo-box img{width:100%;height:100%;object-fit:cover;}
+.modal-logo-box svg{width:22px;height:22px;color:white;}
+.modal-brand{font-size:20px;font-weight:800;letter-spacing:-0.02em;}
+.modal-brand-sub{font-size:12px;color:var(--text3);margin-top:2px;}
+.modal-headline{font-size:24px;font-weight:800;margin-bottom:8px;letter-spacing:-0.03em;}
+.modal-sub{font-size:14.5px;color:var(--text2);margin-bottom:28px;line-height:1.65;}
+.btn-google-modal{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:13px;background:var(--surface2);border:1px solid var(--border2);border-radius:11px;font-family:var(--font);font-size:14.5px;font-weight:600;color:var(--text);cursor:pointer;transition:all 0.15s;margin-bottom:10px;}
+.btn-google-modal:hover{background:#fff;border-color:var(--accent);}
+.modal-terms{font-size:12px;color:var(--text3);text-align:center;line-height:1.6;}
+.modal-terms a{color:var(--accent);text-decoration:none;}
+#modal-google-btn-wrap{display:flex;justify-content:center;margin-bottom:10px;}
 
-.topbar-left {
-  display: flex; align-items: center; gap: 10px;
-}
+/* MAIN CHAT */
+.main{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;min-width:0;}
+.topbar{height:56px;display:flex;align-items:center;padding:0 18px;border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0;gap:10px;z-index:10;}
+.topbar-left{display:flex;align-items:center;gap:10px;}
+.menu-btn{background:none;border:none;cursor:pointer;color:var(--text2);padding:7px;border-radius:8px;display:flex;align-items:center;transition:all 0.12s;}
+.menu-btn:hover{background:rgba(0,0,0,0.06);color:var(--text);}
+.menu-btn svg{width:18px;height:18px;}
+.topbar-brand{display:flex;align-items:center;gap:9px;}
+.topbar-logo{width:30px;height:30px;border-radius:9px;overflow:hidden;background:var(--accent);display:flex;align-items:center;justify-content:center;}
+.topbar-logo img{width:100%;height:100%;object-fit:cover;}
+.topbar-logo svg{width:15px;height:15px;color:white;}
+.topbar-title{font-size:16px;font-weight:800;letter-spacing:-0.02em;}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.btn-login{padding:8px 18px;background:none;border:1px solid var(--border2);border-radius:9px;font-family:var(--font);font-size:14px;font-weight:500;color:var(--text);cursor:pointer;transition:all 0.15s;}
+.btn-login:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-l);}
+.btn-signup{padding:8px 18px;background:var(--text);border:none;border-radius:9px;font-family:var(--font);font-size:14px;font-weight:700;color:var(--bg);cursor:pointer;transition:all 0.15s;}
+.btn-signup:hover{background:#2d2c2a;}
+.topbar-user{display:flex;align-items:center;gap:9px;padding:5px 12px 5px 5px;border-radius:9px;cursor:pointer;transition:background 0.12s;}
+.topbar-user:hover{background:rgba(0,0,0,0.05);}
+.topbar-avatar{width:32px;height:32px;border-radius:50%;background:var(--accent);color:white;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;overflow:hidden;}
+.topbar-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.topbar-uname{font-size:14px;font-weight:700;}
 
-.menu-btn {
-  background: none; border: none; cursor: pointer; color: var(--text2);
-  padding: 6px; border-radius: 7px; display: flex; align-items: center;
-  transition: all 0.12s;
-}
-.menu-btn:hover { background: rgba(0,0,0,0.06); color: var(--text); }
-.menu-btn svg { width: 16px; height: 16px; }
+/* CHAT */
+.chat-scroll{flex:1;overflow-y:auto;scroll-behavior:smooth;}
+.chat-scroll::-webkit-scrollbar{width:4px;}
+.chat-scroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
+.chat-inner{max-width:740px;margin:0 auto;padding:28px 28px 10px;}
 
-.topbar-brand {
-  display: flex; align-items: center; gap: 8px;
-}
-.topbar-logo {
-  width: 24px; height: 24px; background: var(--accent);
-  border-radius: 6px; display: flex; align-items: center; justify-content: center;
-}
-.topbar-logo svg { width: 12px; height: 12px; color: white; }
-.topbar-title { font-size: 14px; font-weight: 700; }
-
-.topbar-right {
-  margin-left: auto;
-  display: flex; align-items: center; gap: 8px;
-}
-
-/* Auth buttons shown when logged out */
-.topbar-auth { display: flex; align-items: center; gap: 8px; }
-
-.btn-login {
-  padding: 7px 16px;
-  background: none; border: 1px solid var(--border2);
-  border-radius: 8px; font-family: var(--font); font-size: 13px; font-weight: 500;
-  color: var(--text); cursor: pointer; transition: all 0.15s;
-}
-.btn-login:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-l); }
-
-.btn-signup {
-  padding: 7px 16px;
-  background: var(--text); border: none;
-  border-radius: 8px; font-family: var(--font); font-size: 13px; font-weight: 600;
-  color: var(--bg); cursor: pointer; transition: all 0.15s;
-}
-.btn-signup:hover { background: #2d2c2a; }
-
-/* User avatar shown when logged in */
-.topbar-user {
-  display: flex; align-items: center; gap: 8px;
-  padding: 5px 10px 5px 5px;
-  border-radius: 8px; cursor: pointer;
-  transition: background 0.12s;
-}
-.topbar-user:hover { background: rgba(0,0,0,0.05); }
-.topbar-avatar {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: var(--accent); color: white;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 700; overflow: hidden;
-}
-.topbar-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-.topbar-uname { font-size: 13px; font-weight: 600; }
-
-/* CHAT SCROLL */
-.chat-scroll {
-  flex: 1; overflow-y: auto;
-  padding: 0;
-  scroll-behavior: smooth;
-}
-.chat-scroll::-webkit-scrollbar { width: 4px; }
-.chat-scroll::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
-
-.chat-inner {
-  max-width: 720px; margin: 0 auto;
-  padding: 24px 24px 8px;
-}
-
-/* EMPTY STATE */
-.empty {
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  min-height: 60vh; text-align: center; padding: 40px 20px;
-}
-.empty-logo {
-  width: 52px; height: 52px; background: var(--accent);
-  border-radius: 14px; display: flex; align-items: center; justify-content: center;
-  margin-bottom: 20px; box-shadow: 0 4px 16px rgba(44,95,138,0.25);
-}
-.empty-logo svg { width: 26px; height: 26px; color: white; }
-.empty-title { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
-.empty-sub { font-size: 14px; color: var(--text2); margin-bottom: 32px; max-width: 360px; line-height: 1.65; }
-
-.suggestions {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
-  width: 100%; max-width: 540px;
-}
-.sug {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 10px; padding: 13px 15px;
-  cursor: pointer; text-align: left; font-family: var(--font);
-  transition: all 0.15s; color: var(--text2); font-size: 13px; line-height: 1.45;
-  box-shadow: var(--shadow);
-}
-.sug:hover { border-color: var(--accent); color: var(--text); transform: translateY(-1px); }
-.sug strong { display: block; font-size: 13px; color: var(--text); margin-bottom: 3px; font-weight: 600; }
+/* EMPTY */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:65vh;text-align:center;padding:40px 20px;}
+.empty-logo{width:68px;height:68px;border-radius:20px;overflow:hidden;background:var(--accent);display:flex;align-items:center;justify-content:center;margin-bottom:24px;box-shadow:0 6px 28px rgba(44,95,138,0.28);}
+.empty-logo img{width:100%;height:100%;object-fit:cover;}
+.empty-logo svg{width:32px;height:32px;color:white;}
+.empty-title{font-size:34px;font-weight:800;margin-bottom:12px;letter-spacing:-0.03em;}
+.empty-sub{font-size:15.5px;color:var(--text2);margin-bottom:36px;max-width:420px;line-height:1.7;}
+.suggestions{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:580px;}
+.sug{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;cursor:pointer;text-align:left;font-family:var(--font);transition:all 0.15s;color:var(--text2);font-size:14px;line-height:1.5;box-shadow:var(--shadow);}
+.sug:hover{border-color:var(--accent);color:var(--text);transform:translateY(-2px);box-shadow:0 4px 18px rgba(44,95,138,0.12);}
+.sug strong{display:block;font-size:14.5px;color:var(--text);margin-bottom:4px;font-weight:700;}
 
 /* MESSAGES */
-.message {
-  display: flex; gap: 13px; margin-bottom: 22px;
-  animation: msgIn 0.22s ease both;
-}
-@keyframes msgIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
-
-.msg-avatar {
-  width: 28px; height: 28px; border-radius: 50%;
-  flex-shrink: 0; margin-top: 2px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 700;
-}
-.msg-avatar.ai { background: var(--accent); }
-.msg-avatar.ai svg { width: 13px; height: 13px; color: white; }
-.msg-avatar.user { background: var(--surface2); border: 1px solid var(--border2); overflow: hidden; }
-.msg-avatar.user img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-
-.msg-body { flex: 1; min-width: 0; }
-.msg-name {
-  font-size: 12px; font-weight: 600; color: var(--text2);
-  margin-bottom: 5px; display: flex; align-items: center; gap: 7px;
-}
-.msg-tag {
-  font-size: 9.5px; font-family: var(--mono); color: var(--text3);
-  background: var(--surface2); padding: 1px 6px; border-radius: 4px;
-  border: 1px solid var(--border);
-}
-.msg-content {
-  font-size: 14.5px; line-height: 1.78; color: var(--text);
-}
-.msg-content p { margin-bottom: 10px; }
-.msg-content p:last-child { margin-bottom: 0; }
-.msg-content h1,.msg-content h2,.msg-content h3 { font-family: var(--font); margin: 16px 0 7px; }
-.msg-content h1{font-size:18px} .msg-content h2{font-size:16px} .msg-content h3{font-size:14px}
-.msg-content ul,.msg-content ol { padding-left: 18px; margin-bottom: 10px; }
-.msg-content li { margin-bottom: 4px; }
-.msg-content code {
-  background: var(--surface2); border: 1px solid var(--border);
-  padding: 1px 5px; border-radius: 4px; font-family: var(--mono); font-size: 12.5px;
-}
-.msg-content pre {
-  background: #1a1917; border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 10px; padding: 16px; overflow-x: auto; margin: 10px 0; position: relative;
-}
-.msg-content pre code { background: none; border: none; padding: 0; font-size: 12.5px; }
-.msg-content blockquote {
-  border-left: 3px solid var(--accent); padding-left: 12px; color: var(--text2); margin: 10px 0;
-}
-.msg-content strong { font-weight: 700; }
-.msg-content a { color: var(--accent); text-decoration: none; }
-.msg-content a:hover { text-decoration: underline; }
-.msg-content table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 13px; }
-.msg-content th { padding: 8px 12px; background: var(--surface2); border: 1px solid var(--border); font-weight: 600; text-align: left; }
-.msg-content td { padding: 8px 12px; border: 1px solid var(--border); }
-
-.copy-code-btn {
-  position: absolute; top: 8px; right: 8px;
-  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
-  color: #a0a0a0; padding: 3px 8px; border-radius: 5px; font-size: 10.5px; cursor: pointer;
-  font-family: var(--font); transition: all 0.15s;
-}
-.copy-code-btn:hover { background: rgba(255,255,255,0.18); color: white; }
-
-.typing { display: flex; gap: 4px; align-items: center; padding: 4px 0; }
-.typing-dot {
-  width: 5px; height: 5px; background: var(--text3); border-radius: 50%;
-  animation: bounce 1.2s infinite;
-}
+.message{display:flex;gap:14px;margin-bottom:26px;animation:msgIn 0.22s ease both;}
+@keyframes msgIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.msg-avatar{width:34px;height:34px;border-radius:50%;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;overflow:hidden;}
+.msg-avatar.ai{background:var(--accent);}
+.msg-avatar.ai img{width:100%;height:100%;object-fit:cover;}
+.msg-avatar.ai svg{width:15px;height:15px;color:white;}
+.msg-avatar.user{background:var(--surface2);border:1px solid var(--border2);overflow:hidden;}
+.msg-avatar.user img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.msg-body{flex:1;min-width:0;}
+.msg-name{font-size:13.5px;font-weight:700;color:var(--text2);margin-bottom:7px;display:flex;align-items:center;gap:8px;}
+.msg-tag{font-size:10px;font-family:var(--mono);color:var(--text3);background:var(--surface2);padding:2px 7px;border-radius:5px;border:1px solid var(--border);}
+.msg-content{font-size:15.5px;line-height:1.82;color:var(--text);}
+.msg-content p{margin-bottom:12px;}
+.msg-content p:last-child{margin-bottom:0;}
+.msg-content h1,.msg-content h2,.msg-content h3{font-family:var(--font);margin:18px 0 8px;}
+.msg-content h1{font-size:21px}.msg-content h2{font-size:19px}.msg-content h3{font-size:17px}
+.msg-content ul,.msg-content ol{padding-left:20px;margin-bottom:12px;}
+.msg-content li{margin-bottom:5px;}
+.msg-content code{background:var(--surface2);border:1px solid var(--border);padding:2px 6px;border-radius:5px;font-family:var(--mono);font-size:13.5px;}
+.msg-content pre{background:#1a1917;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:18px;overflow-x:auto;margin:12px 0;position:relative;}
+.msg-content pre code{background:none;border:none;padding:0;font-size:13.5px;}
+.msg-content blockquote{border-left:3px solid var(--accent);padding-left:14px;color:var(--text2);margin:12px 0;}
+.msg-content strong{font-weight:700;}
+.msg-content a{color:var(--accent);text-decoration:none;}
+.msg-content a:hover{text-decoration:underline;}
+.msg-content table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;}
+.msg-content th{padding:9px 14px;background:var(--surface2);border:1px solid var(--border);font-weight:700;text-align:left;}
+.msg-content td{padding:9px 14px;border:1px solid var(--border);}
+.copy-code-btn{position:absolute;top:9px;right:9px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:#a0a0a0;padding:3px 9px;border-radius:5px;font-size:11px;cursor:pointer;font-family:var(--font);transition:all 0.15s;}
+.copy-code-btn:hover{background:rgba(255,255,255,0.18);color:white;}
+.typing{display:flex;gap:4px;align-items:center;padding:4px 0;}
+.typing-dot{width:6px;height:6px;background:var(--text3);border-radius:50%;animation:bounce 1.2s infinite;}
 .typing-dot:nth-child(2){animation-delay:0.2s}
 .typing-dot:nth-child(3){animation-delay:0.4s}
-@keyframes bounce {
-  0%,60%,100%{transform:translateY(0);opacity:0.4}
-  30%{transform:translateY(-4px);opacity:1}
-}
-
-.msg-actions { display: flex; gap: 5px; margin-top: 7px; }
-.msg-act-btn {
-  background: none; border: none; color: var(--text3);
-  cursor: pointer; padding: 3px 7px; border-radius: 5px;
-  font-size: 11px; display: flex; align-items: center; gap: 4px;
-  font-family: var(--font); transition: all 0.12s;
-}
-.msg-act-btn:hover { background: var(--surface2); color: var(--text2); }
-.msg-act-btn svg { width: 11px; height: 11px; }
+@keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:0.4}30%{transform:translateY(-5px);opacity:1}}
+.msg-actions{display:flex;gap:5px;margin-top:8px;}
+.msg-act-btn{background:none;border:none;color:var(--text3);cursor:pointer;padding:4px 9px;border-radius:6px;font-size:12px;display:flex;align-items:center;gap:5px;font-family:var(--font);transition:all 0.12s;}
+.msg-act-btn:hover{background:var(--surface2);color:var(--text2);}
+.msg-act-btn svg{width:12px;height:12px;}
 
 /* INPUT */
-.input-area {
-  padding: 10px 24px 18px;
-}
-.input-inner { max-width: 720px; margin: 0 auto; }
-.input-box {
-  background: var(--surface); border: 1px solid var(--border2);
-  border-radius: 13px; padding: 4px 4px 4px 16px;
-  display: flex; align-items: flex-end; gap: 8px;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  box-shadow: var(--shadow);
-}
-.input-box:focus-within {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(44,95,138,0.1);
-}
-#msgInput {
-  flex: 1; background: none; border: none; outline: none;
-  color: var(--text); font-family: var(--font); font-size: 14.5px;
-  line-height: 1.5; resize: none; max-height: 200px;
-  padding: 10px 0; min-height: 44px;
-}
-#msgInput::placeholder { color: var(--text3); }
-
-.send-btn {
-  width: 36px; height: 36px; background: var(--accent);
-  border: none; border-radius: 9px; color: white; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; margin-bottom: 4px; transition: all 0.15s;
-}
-.send-btn:hover:not(:disabled) { background: #245079; }
-.send-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-.send-btn svg { width: 15px; height: 15px; }
-
-.input-hint { text-align: center; font-size: 11px; color: var(--text3); margin-top: 7px; }
-.input-hint a { color: var(--accent); text-decoration: none; }
+.input-area{padding:12px 28px 20px;}
+.input-inner{max-width:740px;margin:0 auto;}
+.input-box{background:var(--surface);border:1px solid var(--border2);border-radius:15px;padding:4px 4px 4px 18px;display:flex;align-items:flex-end;gap:8px;transition:border-color 0.2s,box-shadow 0.2s;box-shadow:var(--shadow);}
+.input-box:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(44,95,138,0.1);}
+#msgInput{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:var(--font);font-size:15.5px;line-height:1.55;resize:none;max-height:200px;padding:12px 0;min-height:48px;}
+#msgInput::placeholder{color:var(--text3);}
+.send-btn{width:40px;height:40px;background:var(--accent);border:none;border-radius:11px;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-bottom:4px;transition:all 0.15s;}
+.send-btn:hover:not(:disabled){background:#245079;}
+.send-btn:disabled{opacity:0.35;cursor:not-allowed;}
+.send-btn svg{width:17px;height:17px;}
+.input-hint{text-align:center;font-size:12px;color:var(--text3);margin-top:9px;}
+.input-hint a{color:var(--accent);text-decoration:none;}
 
 /* TOAST */
-.toast {
-  position: fixed; bottom: 20px; right: 20px;
-  background: var(--surface); border: 1px solid var(--border2);
-  border-radius: 10px; padding: 10px 16px;
-  font-size: 13px; z-index: 9999; font-weight: 500;
-  transform: translateY(20px); opacity: 0;
-  transition: all 0.25s; pointer-events: none;
-  box-shadow: var(--shadow);
-}
-.toast.show { transform: translateY(0); opacity: 1; }
-.toast.success { border-color: rgba(29,122,95,0.35); color: var(--green); }
-.toast.error   { border-color: rgba(192,57,43,0.35); color: var(--red); }
+.toast{position:fixed;bottom:22px;right:22px;background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:12px 18px;font-size:14px;z-index:9999;font-weight:500;transform:translateY(20px);opacity:0;transition:all 0.25s;pointer-events:none;box-shadow:var(--shadow);}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-color:rgba(29,122,95,0.35);color:var(--green);}
+.toast.error{border-color:rgba(192,57,43,0.35);color:var(--red);}
 
-/* OVERLAY */
-.sb-overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.35); backdrop-filter: blur(3px); z-index: 150;
-}
-.sb-overlay.show { display: block; }
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.35);backdrop-filter:blur(3px);z-index:150;}
+.sb-overlay.show{display:block;}
+#avatarInput{display:none;}
 
-/* ══════════════ AUTH MODAL ══════════════ */
-.modal-backdrop {
-  display: none;
-  position: fixed; inset: 0; z-index: 300;
-  background: rgba(0,0,0,0.4); backdrop-filter: blur(6px);
-  align-items: center; justify-content: center;
+@media(max-width:900px){
+  .sidebar{position:fixed;top:0;bottom:0;left:0;transform:translateX(-100%);z-index:200;}
+  .sidebar.open{transform:translateX(0);}
+  .sb-overlay.show{display:block;}
+  .topbar-title{display:none;}
 }
-.modal-backdrop.show { display: flex; }
-
-.auth-modal {
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: 20px;
-  padding: 40px 36px;
-  width: 100%; max-width: 400px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 24px 64px rgba(0,0,0,0.18);
-  animation: modalUp 0.3s cubic-bezier(0.16,1,0.3,1) both;
-  position: relative;
-}
-@keyframes modalUp {
-  from { opacity:0; transform: translateY(16px) scale(0.98); }
-  to   { opacity:1; transform: translateY(0) scale(1); }
-}
-
-.modal-close {
-  position: absolute; top: 16px; right: 16px;
-  background: none; border: none; cursor: pointer;
-  color: var(--text3); padding: 6px; border-radius: 7px;
-  display: flex; transition: all 0.12s;
-}
-.modal-close:hover { background: var(--surface2); color: var(--text); }
-.modal-close svg { width: 16px; height: 16px; }
-
-.modal-logo {
-  display: flex; align-items: center; gap: 10px; margin-bottom: 24px;
-}
-.modal-logo-box {
-  width: 40px; height: 40px; background: var(--accent);
-  border-radius: 11px; display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 12px rgba(44,95,138,0.3);
-}
-.modal-logo-box svg { width: 20px; height: 20px; color: white; }
-.modal-brand { font-size: 18px; font-weight: 700; }
-.modal-brand-sub { font-size: 11px; color: var(--text3); margin-top: 1px; }
-
-.modal-headline { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
-.modal-sub { font-size: 13.5px; color: var(--text2); margin-bottom: 28px; line-height: 1.6; }
-
-.btn-google-modal {
-  width: 100%;
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  padding: 11px;
-  background: var(--surface2);
-  border: 1px solid var(--border2);
-  border-radius: 10px;
-  font-family: var(--font); font-size: 14px; font-weight: 500;
-  color: var(--text); cursor: pointer;
-  transition: all 0.15s;
-  margin-bottom: 10px;
-}
-.btn-google-modal:hover { background: #fff; border-color: var(--accent); }
-
-.modal-divider {
-  text-align: center; font-size: 12px; color: var(--text3);
-  margin: 12px 0; position: relative;
-}
-.modal-divider::before, .modal-divider::after {
-  content: ''; position: absolute; top: 50%;
-  width: calc(50% - 20px); height: 1px; background: var(--border2);
-}
-.modal-divider::before { left: 0; }
-.modal-divider::after  { right: 0; }
-
-.btn-guest-modal {
-  width: 100%;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  padding: 11px;
-  background: none; border: 1px solid var(--border2);
-  border-radius: 10px;
-  font-family: var(--font); font-size: 13.5px; font-weight: 500;
-  color: var(--text2); cursor: pointer;
-  transition: all 0.15s;
-  margin-bottom: 18px;
-}
-.btn-guest-modal:hover { background: var(--surface2); color: var(--text); }
-
-.modal-terms {
-  font-size: 11px; color: var(--text3); text-align: center; line-height: 1.6;
-}
-.modal-terms a { color: var(--accent); text-decoration: none; }
-
-#modal-google-btn-wrap { display: flex; justify-content: center; margin-bottom: 10px; }
-
-/* HIDDEN */
-#avatarInput { display: none; }
-
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  .sidebar { position: fixed; top:0; bottom:0; left:0; transform: translateX(-100%); z-index: 200; }
-  .sidebar.open { transform: translateX(0); }
-  .panel { position: fixed; top:0; bottom:0; left: var(--sidebar-w); width: 280px; transform: translateX(-100%); z-index: 199; }
-  .panel.open { transform: translateX(0); }
-  .sb-overlay.show { display: block; }
-  .topbar-title { display: none; }
-}
-@media (max-width: 500px) {
-  .suggestions { grid-template-columns: 1fr; }
-  .chat-inner { padding: 20px 14px; }
-  .input-area { padding: 10px 14px 14px; }
-  .stat-grid { grid-template-columns: 1fr; }
-  .auth-modal { padding: 32px 24px; margin: 16px; }
-  .btn-signup span { display: none; }
+@media(max-width:600px){
+  .suggestions{grid-template-columns:1fr;}
+  .chat-inner{padding:20px 16px;}
+  .input-area{padding:10px 16px 16px;}
+  .stat-grid{grid-template-columns:1fr;}
+  .auth-modal{padding:32px 22px;}
+  .popup{max-width:calc(100vw - 32px);}
+  .contact-info-grid{grid-template-columns:1fr;}
 }
 </style>
 </head>
 <body>
-
 <input type="file" id="avatarInput" accept="image/*" onchange="handleAvatarUpload(event)"/>
 <div class="toast" id="toast"></div>
 
-<!-- ═══════════════ AUTH MODAL ═══════════════ -->
+<!-- AUTH MODAL -->
 <div class="modal-backdrop" id="authModal" onclick="handleModalBackdropClick(event)">
-  <div class="auth-modal" id="authModalCard">
-    <button class="modal-close" onclick="closeAuthModal()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-
+  <div class="auth-modal">
+    <button class="modal-close" onclick="closeAuthModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     <div class="modal-logo">
       <div class="modal-logo-box">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-          <path d="M2 17l10 5 10-5"/>
-          <path d="M2 12l10 5 10-5"/>
-        </svg>
+        <img src="logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
       </div>
       <div>
-        <div class="modal-brand">FreeAI</div>
+        <div class="modal-brand">Aasai Tech AI</div>
         <div class="modal-brand-sub">by Aasai Tech Providers Pvt. Ltd.</div>
       </div>
     </div>
-
     <div class="modal-headline" id="modalHeadline">Welcome back</div>
-    <div class="modal-sub" id="modalSub">Sign in to save your chats, view stats, and personalise your experience. Powered by Aasai Tech — AI solutions from Tamil Nadu.</div>
-
+    <div class="modal-sub" id="modalSub">Sign in to save your chats, view stats, and personalise your experience.</div>
     <button class="btn-google-modal" onclick="triggerGoogleSignIn()">
       <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3z"/></svg>
       Continue with Google
     </button>
-
     <div id="modal-google-btn-wrap"></div>
-
-    <div class="modal-divider">or</div>
-
-    <button class="btn-guest-modal" onclick="continueAsGuest()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      Continue as Guest
-    </button>
-
-    <div class="modal-terms">
-      By continuing, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.
-    </div>
+    <div class="modal-terms">By continuing, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.</div>
   </div>
 </div>
 
-<!-- ═══════════════ APP SHELL ═══════════════ -->
-<div id="appShell">
-
-  <!-- SIDEBAR OVERLAY -->
-  <div class="sb-overlay" id="sbOverlay" onclick="closeSidebar()"></div>
-
-  <!-- SIDEBAR -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sb-top">
-      <div class="brand-row">
-        <div class="brand-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-        </div>
-        <span class="brand-name">FreeAI</span>
-        <span class="brand-badge">by Aasai Tech</span>
-      </div>
-      <button class="new-chat-btn" onclick="newChat()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>
-        New chat
-        <kbd>⌘K</kbd>
-      </button>
+<!-- STATS POPUP -->
+<div class="popup-backdrop" id="popup-stats" onclick="handlePopupBackdropClick(event,'stats')">
+  <div class="popup">
+    <div class="popup-hdr">
+      <div class="popup-hdr-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg></div>
+      <span class="popup-title">Statistics</span>
+      <button class="popup-close" onclick="closePopup('stats')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
-
-    <div class="sb-nav" id="sbNav">
-      <button class="nav-btn" id="nav-stats" onclick="openPanel('stats')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
-        Statistics
-      </button>
-      <button class="nav-btn" id="nav-settings" onclick="openPanel('settings')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        Settings
-      </button>
-      <button class="nav-btn" id="nav-profile" onclick="openPanel('profile')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        Profile
-      </button>
-    </div>
-
-    <div class="sb-history">
-      <div class="hist-label">Recent chats</div>
-      <div id="historyList"></div>
-    </div>
-
-    <!-- Footer: changes based on auth state -->
-    <div id="sbFooterLoggedOut" class="sb-footer-loggedout" style="display:none">
-      <div class="sb-signin-prompt">
-        <p>Sign in to save history &amp; view stats across sessions.</p>
-        <button class="sb-signin-btn" onclick="openAuthModal('login')">Sign in to FreeAI</button>
-      </div>
-      <div style="margin-top:10px;text-align:center">
-        <a href="https://aasaitech.in" target="_blank" style="font-size:10.5px;color:var(--text3);text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:10px;height:10px"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-          Aasai Tech Providers Pvt. Ltd.
-        </a>
-        <div style="font-size:9.5px;color:var(--text3);margin-top:3px;letter-spacing:0.03em">DPIIT · NVIDIA Inception · Tamil Nadu</div>
-      </div>
-    </div>
-
-    <div id="sbFooterLoggedIn" class="sb-footer" style="display:none">
-      <div class="user-row" onclick="openPanel('profile')">
-        <div class="u-avatar" id="sbAvatar">?</div>
-        <div class="u-info">
-          <div class="u-name" id="sbName">User</div>
-          <div class="u-sub" id="sbSub">Free plan</div>
-        </div>
-        <button class="logout-btn" onclick="event.stopPropagation();logout()" title="Sign out">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        </button>
-      </div>
-    </div>
-  </aside>
-
-  <!-- STATS PANEL -->
-  <div class="panel" id="panel-stats">
-    <div class="panel-hdr">
-      <div class="panel-hdr-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg></div>
-      <span class="panel-title">Statistics</span>
-      <button class="panel-close" onclick="closePanel('stats')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    </div>
-    <div class="panel-body">
+    <div class="popup-body">
       <div class="stat-grid">
         <div class="stat-box"><div class="stat-val" id="st-msgs">—</div><div class="stat-lbl">Messages</div></div>
         <div class="stat-box accent"><div class="stat-val" id="st-tokens">—</div><div class="stat-lbl">Tokens</div></div>
@@ -868,473 +359,423 @@ body {
       <div class="quota-box">
         <div class="quota-hdr"><span>Free quota</span><strong id="st-pct">0%</strong></div>
         <div class="quota-track"><div class="quota-fill" id="st-bar" style="width:0%"></div></div>
-        <div class="quota-foot">
-          <span id="st-used-lbl">0 used</span>
-          <span id="st-limit-lbl">1M total</span>
-        </div>
+        <div class="quota-foot"><span id="st-used-lbl">0 used</span><span id="st-limit-lbl">1M total</span></div>
       </div>
-      <div class="section-title" style="margin-top:4px">Session breakdown</div>
-      <div id="sessionList" style="display:flex;flex-direction:column;gap:4px;margin-top:8px;"></div>
+      <div class="section-title">Session breakdown</div>
+      <div id="sessionList" style="display:flex;flex-direction:column;gap:5px;margin-top:8px;"></div>
     </div>
   </div>
+</div>
 
-  <!-- SETTINGS PANEL -->
-  <div class="panel" id="panel-settings">
-    <div class="panel-hdr">
-      <div class="panel-hdr-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
-      <span class="panel-title">Settings</span>
-      <button class="panel-close" onclick="closePanel('settings')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+<!-- SETTINGS POPUP -->
+<div class="popup-backdrop" id="popup-settings" onclick="handlePopupBackdropClick(event,'settings')">
+  <div class="popup">
+    <div class="popup-hdr">
+      <div class="popup-hdr-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+      <span class="popup-title">Settings</span>
+      <button class="popup-close" onclick="closePopup('settings')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
-    <div class="panel-body">
+    <div class="popup-body">
       <div class="setting-section">
         <div class="section-title">Appearance</div>
         <div class="setting-row">
-          <div class="setting-info">
-            <div class="setting-lbl">Accent colour</div>
-            <div class="setting-sub">Used in buttons &amp; highlights</div>
-          </div>
-          <input type="color" id="accentPicker" value="#2c5f8a" style="width:26px;height:26px;border:none;border-radius:6px;cursor:pointer;background:none;padding:0;" oninput="applyAccent(this.value)"/>
+          <div><div class="setting-lbl">Accent colour</div><div class="setting-sub">Used in buttons &amp; highlights</div></div>
+          <input type="color" id="accentPicker" value="#2c5f8a" style="width:30px;height:30px;border:none;border-radius:8px;cursor:pointer;background:none;padding:0;" oninput="applyAccent(this.value)"/>
         </div>
-        <div style="padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-top:5px;">
-          <div class="section-title" style="margin-bottom:8px">Presets</div>
+        <div style="padding:14px;background:var(--surface2);border:1px solid var(--border);border-radius:11px;margin-top:7px;">
+          <div class="section-title" style="margin-bottom:10px">Presets</div>
           <div class="color-presets" id="colorPresets"></div>
         </div>
       </div>
       <div class="setting-section">
         <div class="section-title">Behaviour</div>
-        <div class="setting-row">
-          <div class="setting-info"><div class="setting-lbl">Enter to send</div><div class="setting-sub">Shift+Enter for newline</div></div>
-          <label class="toggle"><input type="checkbox" id="tog-enter" checked /><span class="toggle-track"></span></label>
-        </div>
-        <div class="setting-row">
-          <div class="setting-info"><div class="setting-lbl">Typing indicator</div><div class="setting-sub">Show dots while generating</div></div>
-          <label class="toggle"><input type="checkbox" id="tog-typing" checked /><span class="toggle-track"></span></label>
-        </div>
-        <div class="setting-row">
-          <div class="setting-info"><div class="setting-lbl">Syntax highlighting</div><div class="setting-sub">Highlight code blocks</div></div>
-          <label class="toggle"><input type="checkbox" id="tog-highlight" checked /><span class="toggle-track"></span></label>
-        </div>
+        <div class="setting-row"><div><div class="setting-lbl">Enter to send</div><div class="setting-sub">Shift+Enter for newline</div></div><label class="toggle"><input type="checkbox" id="tog-enter" checked/><span class="toggle-track"></span></label></div>
+        <div class="setting-row"><div><div class="setting-lbl">Typing indicator</div><div class="setting-sub">Show dots while generating</div></div><label class="toggle"><input type="checkbox" id="tog-typing" checked/><span class="toggle-track"></span></label></div>
+        <div class="setting-row"><div><div class="setting-lbl">Syntax highlighting</div><div class="setting-sub">Highlight code blocks</div></div><label class="toggle"><input type="checkbox" id="tog-highlight" checked/><span class="toggle-track"></span></label></div>
       </div>
       <div class="setting-section">
         <div class="section-title">Data</div>
-        <div class="setting-row" style="cursor:pointer" onclick="exportHistory()">
-          <div class="setting-info"><div class="setting-lbl">Export history</div><div class="setting-sub">Download as JSON</div></div>
-          <svg viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2" width="13" height="13"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        </div>
-        <div class="setting-row" style="cursor:pointer" onclick="clearAllChats()">
-          <div class="setting-info"><div class="setting-lbl" style="color:var(--red)">Clear all chats</div><div class="setting-sub">Remove local history</div></div>
-          <svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" width="13" height="13"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>
-        </div>
+        <div class="setting-row" style="cursor:pointer" onclick="exportHistory()"><div><div class="setting-lbl">Export history</div><div class="setting-sub">Download as JSON</div></div><svg viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2" width="16" height="16"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+        <div class="setting-row" style="cursor:pointer" onclick="clearAllChats()"><div><div class="setting-lbl" style="color:var(--red)">Clear all chats</div><div class="setting-sub">Remove local history</div></div><svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" width="16" height="16"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- PROFILE PANEL -->
-  <div class="panel" id="panel-profile">
-    <div class="panel-hdr">
-      <div class="panel-hdr-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-      <span class="panel-title">Profile</span>
-      <button class="panel-close" onclick="closePanel('profile')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+<!-- PROFILE POPUP -->
+<div class="popup-backdrop" id="popup-profile" onclick="handlePopupBackdropClick(event,'profile')">
+  <div class="popup">
+    <div class="popup-hdr">
+      <div class="popup-hdr-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <span class="popup-title">Profile</span>
+      <button class="popup-close" onclick="closePopup('profile')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
-    <div class="panel-body">
+    <div class="popup-body">
       <div class="profile-hero">
         <div class="profile-avatar" id="profileAvatar" onclick="document.getElementById('avatarInput').click()" title="Click to change photo">
           <span id="profileAvatarInner">?</span>
-          <div class="profile-avatar-overlay">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-          </div>
+          <div class="profile-avatar-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
         </div>
-        <div>
-          <div class="profile-name" id="profileName">—</div>
-          <div class="profile-email" id="profileEmail">—</div>
-          <span class="profile-plan" id="profilePlan">Guest</span>
-        </div>
+        <div class="profile-name" id="profileName">—</div>
+        <div class="profile-email" id="profileEmail">—</div>
+        <span class="profile-plan" id="profilePlan">Guest</span>
       </div>
-      <div class="section-title" style="margin-bottom:8px">Account info</div>
-      <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:16px">
+      <div class="section-title" style="margin-bottom:10px">Account info</div>
+      <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:22px">
         <div class="info-row"><span class="info-lbl">Session type</span><span class="info-val acc" id="profileAuth">Guest</span></div>
         <div class="info-row"><span class="info-lbl">Total messages</span><span class="info-val" id="profileMsgs">0</span></div>
         <div class="info-row"><span class="info-lbl">Tokens used</span><span class="info-val acc" id="profileTokens">0</span></div>
         <div class="info-row"><span class="info-lbl">Total chats</span><span class="info-val" id="profileChats">0</span></div>
       </div>
-      <div class="section-title" style="margin-bottom:6px">Actions</div>
+      <div class="section-title" style="margin-bottom:9px">Actions</div>
       <button class="action-btn" id="profileSignInBtn" onclick="openAuthModal('login')" style="display:none">Sign in to save history</button>
       <button class="action-btn" id="profileSignOutBtn" onclick="logout()" style="display:none">Sign out</button>
       <button class="action-btn danger" onclick="if(confirm('Delete all local data?')){localStorage.clear();location.reload();}">Delete local data</button>
-
-      <div style="margin-top:20px;padding:14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;">
-        <div class="section-title" style="margin-bottom:8px">About FreeAI</div>
-        <p style="font-size:11.5px;color:var(--text2);line-height:1.65;margin-bottom:10px;">FreeAI is built by <strong style="color:var(--text)">Aasai Tech Providers Private Limited</strong> — a leading AI-powered software development &amp; technical training company from Tamil Nadu, India.</p>
-        <p style="font-size:11.5px;color:var(--text2);line-height:1.65;margin-bottom:12px;">We specialize in AI-powered RAG systems for education, full-stack development, cloud computing, and empowering the next generation of tech professionals.</p>
-        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px;">
-          <span style="font-size:10px;font-family:var(--mono);background:var(--accent-l);color:var(--accent);padding:2px 7px;border-radius:4px;border:1px solid var(--accent-b);">DPIIT Recognised</span>
-          <span style="font-size:10px;font-family:var(--mono);background:var(--accent-l);color:var(--accent);padding:2px 7px;border-radius:4px;border:1px solid var(--accent-b);">NVIDIA Inception</span>
-          <span style="font-size:10px;font-family:var(--mono);background:var(--accent-l);color:var(--accent);padding:2px 7px;border-radius:4px;border:1px solid var(--accent-b);">Tamil Nadu, India</span>
-        </div>
-        <a href="https://aasaitech.in" target="_blank" style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--accent);text-decoration:none;font-weight:500;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          Visit aasaitech.in
-        </a>
-      </div>
     </div>
   </div>
+</div>
 
-  <!-- MAIN CHAT -->
-  <main class="main">
-    <!-- TOP BAR -->
-    <div class="topbar" id="topbar">
-      <div class="topbar-left">
-        <button class="menu-btn" onclick="toggleSidebar()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        </button>
-        <div class="topbar-brand">
-          <div class="topbar-logo">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-          </div>
-          <span class="topbar-title">FreeAI</span>
+<!-- CONTACT US POPUP -->
+<div class="popup-backdrop" id="popup-contact" onclick="handlePopupBackdropClick(event,'contact')">
+  <div class="popup">
+    <div class="popup-hdr">
+      <div class="popup-hdr-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.81a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.92 16.92z"/></svg></div>
+      <span class="popup-title">Contact Us</span>
+      <button class="popup-close" onclick="closePopup('contact')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="popup-body">
+      <div class="contact-hero">
+        <div class="contact-logo">
+          <img src="logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="contact-company">Aasai Tech Providers Pvt. Ltd.</div>
+        <div class="contact-tagline">Empowering businesses &amp; learners with cutting-edge AI solutions, software development, and technical training from Tamil Nadu, India.</div>
+        <div class="contact-badges">
+          <span class="contact-badge">DPIIT Recognised</span>
+          <span class="contact-badge">NVIDIA Inception</span>
+          <span class="contact-badge">Tamil Nadu, India</span>
         </div>
       </div>
-
-      <div class="topbar-right">
-        <!-- Shown when logged out -->
-        <div class="topbar-auth" id="topbarAuth">
-          <button class="btn-login" onclick="openAuthModal('login')">Log in</button>
-          <button class="btn-signup" onclick="openAuthModal('signup')"><span>Sign up</span></button>
+      <div class="contact-info-grid">
+        <div class="contact-info-card">
+          <div class="contact-info-card-label">Email</div>
+          <div class="contact-info-card-val"><a href="mailto:aasaitechproviders@gmail.com">aasaitechproviders@gmail.com</a></div>
         </div>
+        <div class="contact-info-card">
+          <div class="contact-info-card-label">Website</div>
+          <div class="contact-info-card-val"><a href="https://aasaitech.in" target="_blank">aasaitech.in ↗</a></div>
+        </div>
+        <div class="contact-info-card">
+          <div class="contact-info-card-label">Location</div>
+          <div class="contact-info-card-val">Tamil Nadu, India</div>
+        </div>
+        <div class="contact-info-card">
+          <div class="contact-info-card-label">Product</div>
+          <div class="contact-info-card-val">Aasai Tech AI<br><span style="font-size:11.5px;color:var(--text3)">AI Chat Platform</span></div>
+        </div>
+      </div>
+      <div class="section-title" style="margin-bottom:16px">Send us a message</div>
+      <label class="contact-form-label">Your name</label>
+      <input type="text" id="contactName" class="contact-input" placeholder="Enter your name"/>
+      <label class="contact-form-label">Email address</label>
+      <input type="email" id="contactEmail" class="contact-input" placeholder="your@email.com"/>
+      <label class="contact-form-label">Subject</label>
+      <select id="contactSubject" class="contact-select">
+        <option value="">Select a subject...</option>
+        <option>General Enquiry</option>
+        <option>Technical Support</option>
+        <option>Partnership / Collaboration</option>
+        <option>Training Programs</option>
+        <option>AI Solutions for Business</option>
+        <option>Feedback</option>
+        <option>Other</option>
+      </select>
+      <label class="contact-form-label">Message</label>
+      <textarea id="contactMessage" class="contact-textarea" placeholder="Write your message here…"></textarea>
+      <button class="contact-submit" id="contactSendBtn" onclick="sendContactEmail()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px;height:18px"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Send Message
+      </button>
+    </div>
+  </div>
+</div>
 
-        <!-- Shown when logged in -->
-        <div class="topbar-user" id="topbarUser" style="display:none" onclick="openPanel('profile')">
+<!-- APP SHELL -->
+<div id="appShell">
+  <div class="sb-overlay" id="sbOverlay" onclick="closeSidebar()"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-top">
+      <div class="brand-row">
+        <div class="brand-logo">
+          <img src="logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <span class="brand-name">Aasai Tech AI</span>
+        <span class="brand-badge">AI</span>
+      </div>
+      <button class="new-chat-btn" onclick="newChat()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>
+        New chat <kbd>⌘K</kbd>
+      </button>
+    </div>
+    <div class="sb-nav">
+      <button class="nav-btn" id="nav-stats" onclick="openPopup('stats')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>Statistics</button>
+      <button class="nav-btn" id="nav-settings" onclick="openPopup('settings')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</button>
+      <button class="nav-btn" id="nav-profile" onclick="openPopup('profile')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</button>
+      <button class="nav-btn" id="nav-contact" onclick="openPopup('contact')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.81a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.92 16.92z"/></svg>Contact Us</button>
+    </div>
+    <div class="sb-history">
+      <div class="hist-label">Recent chats</div>
+      <div id="historyList"></div>
+    </div>
+    <div id="sbFooterLoggedOut" class="sb-footer-loggedout" style="display:none">
+      <div class="sb-signin-prompt">
+        <p>Sign in to save your history &amp; access stats across sessions.</p>
+        <button class="sb-signin-btn" onclick="openAuthModal('login')">Sign in to Aasai Tech AI</button>
+      </div>
+      <div class="sb-brand-foot">
+        <a href="https://aasaitech.in" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>Aasai Tech Providers Pvt. Ltd.</a>
+        <div class="sb-brand-foot-sub">DPIIT · NVIDIA Inception · Tamil Nadu</div>
+      </div>
+    </div>
+    <div id="sbFooterLoggedIn" class="sb-footer" style="display:none">
+      <div class="user-row" onclick="openPopup('profile')">
+        <div class="u-avatar" id="sbAvatar">?</div>
+        <div class="u-info"><div class="u-name" id="sbName">User</div><div class="u-sub" id="sbSub">Free plan</div></div>
+        <button class="logout-btn" onclick="event.stopPropagation();logout()" title="Sign out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="menu-btn" onclick="toggleSidebar()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+        <div class="topbar-brand">
+          <div class="topbar-logo">
+            <img src="logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <span class="topbar-title">Aasai Tech AI</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div id="topbarAuth" style="display:flex;align-items:center;gap:8px;">
+          <button class="btn-login" onclick="openAuthModal('login')">Log in</button>
+          <button class="btn-signup" onclick="openAuthModal('signup')">Sign up</button>
+        </div>
+        <div class="topbar-user" id="topbarUser" style="display:none" onclick="openPopup('profile')">
           <div class="topbar-avatar" id="topbarAvatar">?</div>
           <span class="topbar-uname" id="topbarUname">User</span>
         </div>
       </div>
     </div>
-
     <div class="chat-scroll" id="chatScroll">
       <div class="chat-inner" id="chatInner"></div>
     </div>
-
     <div class="input-area">
       <div class="input-inner">
         <div class="input-box">
-          <textarea id="msgInput" placeholder="Ask anything…" rows="1"
-            onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-          <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          </button>
+          <textarea id="msgInput" placeholder="Ask anything…" rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+          <button class="send-btn" id="sendBtn" onclick="sendMessage()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
         </div>
-        <div class="input-hint">FreeAI · <a href="https://aasaitech.in" target="_blank">Aasai Tech Providers Pvt. Ltd.</a> · DPIIT Recognised · NVIDIA Inception · Tamil Nadu, India</div>
+        <div class="input-hint">Aasai Tech AI · <a href="https://aasaitech.in" target="_blank">Aasai Tech Providers Pvt. Ltd.</a> · DPIIT Recognised · NVIDIA Inception · Tamil Nadu, India</div>
       </div>
     </div>
   </main>
 </div>
 
 <script>
-// ═══ CONFIG ═══
-const CONFIG = {
-  CLIENT_ID: '37355855536-n1pdonbkg3lb3s6psq938jk81hgjnebe.apps.googleusercontent.com',
-  API_URL: 'https://wuczpngnl8.execute-api.ap-southeast-2.amazonaws.com/default'
-};
-const ACCENT_PRESETS = ['#2c5f8a','#1d7a5f','#6366f1','#8b5cf6','#ec4899','#f97316','#0284c7','#b45309','#c0392b','#374151'];
+const CONFIG={CLIENT_ID:'37355855536-n1pdonbkg3lb3s6psq938jk81hgjnebe.apps.googleusercontent.com',API_URL:'https://wuczpngnl8.execute-api.ap-southeast-2.amazonaws.com/default'};
+const ACCENT_PRESETS=['#2c5f8a','#1d7a5f','#6366f1','#8b5cf6','#ec4899','#f97316','#0284c7','#b45309','#c0392b','#374151'];
+let conversations=JSON.parse(localStorage.getItem('freeai_convs')||'[]');
+let currentConvId=null,isLoading=false,isGuest=false,user=null;
+let settings=JSON.parse(localStorage.getItem('freeai_settings')||'{"accent":"#2c5f8a","enter":true,"typing":true,"highlight":true}');
+let customAvatarData=localStorage.getItem('freeai_avatar')||null;
+let googleBtnInitialized=false;
 
-// ═══ STATE ═══
-let conversations = JSON.parse(localStorage.getItem('freeai_convs') || '[]');
-let currentConvId = null;
-let isLoading = false;
-let isGuest = false;
-let user = null;
-let settings = JSON.parse(localStorage.getItem('freeai_settings') || '{"accent":"#2c5f8a","enter":true,"typing":true,"highlight":true}');
-let customAvatarData = localStorage.getItem('freeai_avatar') || null;
-let googleBtnInitialized = false;
-
-// ═══ INIT ═══
-window.addEventListener('DOMContentLoaded', () => {
-  const token = localStorage.getItem('freeai_token');
-  const guestMode = localStorage.getItem('freeai_guest');
-
-  if (token) {
-    const raw = localStorage.getItem('freeai_user');
-    if (raw) user = JSON.parse(raw);
-    isGuest = false;
-  } else if (guestMode) {
-    isGuest = true;
-  } else {
-    isGuest = true; // default: guest, but show auth buttons in topbar
-  }
-
-  applyAccent(settings.accent);
-  loadSettings();
-  buildColorPresets();
-  renderUIState();
-  renderHistory();
-  updateStats();
-  showEmptyState();
+window.addEventListener('DOMContentLoaded',()=>{
+  const token=localStorage.getItem('freeai_token');
+  if(token){const raw=localStorage.getItem('freeai_user');if(raw)user=JSON.parse(raw);isGuest=false;}
+  else isGuest=true;
+  applyAccent(settings.accent);loadSettings();buildColorPresets();
+  renderUIState();renderHistory();updateStats();showEmptyState();
 });
 
-// ═══ AUTH STATE RENDERING ═══
-function renderUIState() {
-  const loggedIn = !isGuest && user;
-
-  // Topbar
-  document.getElementById('topbarAuth').style.display = loggedIn ? 'none' : 'flex';
-  document.getElementById('topbarUser').style.display = loggedIn ? 'flex' : 'none';
-
-  // Sidebar footer
-  document.getElementById('sbFooterLoggedOut').style.display = loggedIn ? 'none' : 'block';
-  document.getElementById('sbFooterLoggedIn').style.display = loggedIn ? 'block' : 'none';
-
-  // Profile panel action buttons
-  document.getElementById('profileSignInBtn').style.display = loggedIn ? 'none' : 'block';
-  document.getElementById('profileSignOutBtn').style.display = loggedIn ? 'block' : 'none';
-
-  if (loggedIn) {
-    const name = user.name || 'User';
-    const email = user.email || '';
-    const pic = customAvatarData || user.picture || null;
-
-    // Topbar
-    const tAv = document.getElementById('topbarAvatar');
-    if (pic) tAv.innerHTML = `<img src="${pic}" alt=""/>`;
-    else tAv.textContent = name.charAt(0).toUpperCase();
-    document.getElementById('topbarUname').textContent = name.split(' ')[0];
-
-    // Sidebar footer
-    const sbAv = document.getElementById('sbAvatar');
-    if (pic) sbAv.innerHTML = `<img src="${pic}" alt=""/>`;
-    else sbAv.textContent = name.charAt(0).toUpperCase();
-    document.getElementById('sbName').textContent = name;
-    document.getElementById('sbSub').textContent = email || 'Free plan';
-
-    // Profile panel
-    const pAvWrap = document.getElementById('profileAvatar');
-    if (pic) {
-      pAvWrap.innerHTML = `<img src="${pic}" alt=""/><div class="profile-avatar-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`;
-    } else {
-      pAvWrap.innerHTML = `<span>${name.charAt(0).toUpperCase()}</span><div class="profile-avatar-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`;
-    }
-    pAvWrap.onclick = () => document.getElementById('avatarInput').click();
-    document.getElementById('profileName').textContent = name;
-    document.getElementById('profileEmail').textContent = email || '—';
-    document.getElementById('profilePlan').textContent = 'Free Plan';
-    document.getElementById('profileAuth').textContent = 'Google ✓';
-  } else {
-    // Guest/logged-out state
-    const pAvWrap = document.getElementById('profileAvatar');
-    pAvWrap.innerHTML = `<span>G</span><div class="profile-avatar-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`;
-    document.getElementById('profileName').textContent = 'Guest User';
-    document.getElementById('profileEmail').textContent = 'Not signed in';
-    document.getElementById('profilePlan').textContent = 'Guest';
-    document.getElementById('profileAuth').textContent = 'Guest';
+function renderUIState(){
+  const li=!isGuest&&user;
+  document.getElementById('topbarAuth').style.display=li?'none':'flex';
+  document.getElementById('topbarUser').style.display=li?'flex':'none';
+  document.getElementById('sbFooterLoggedOut').style.display=li?'none':'block';
+  document.getElementById('sbFooterLoggedIn').style.display=li?'block':'none';
+  document.getElementById('profileSignInBtn').style.display=li?'none':'block';
+  document.getElementById('profileSignOutBtn').style.display=li?'block':'none';
+  const name=li?(user.name||'User'):'Guest';
+  const email=li?(user.email||''):'';
+  const pic=customAvatarData||(li?user.picture:null);
+  if(li){
+    const tAv=document.getElementById('topbarAvatar');
+    tAv.innerHTML=pic?`<img src="${pic}" alt=""/>`:`${name.charAt(0).toUpperCase()}`;
+    document.getElementById('topbarUname').textContent=name.split(' ')[0];
+    const sbAv=document.getElementById('sbAvatar');
+    sbAv.innerHTML=pic?`<img src="${pic}" alt=""/>`:`${name.charAt(0).toUpperCase()}`;
+    document.getElementById('sbName').textContent=name;
+    document.getElementById('sbSub').textContent=email||'Free plan';
   }
+  const pAvWrap=document.getElementById('profileAvatar');
+  const overlay=`<div class="profile-avatar-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`;
+  pAvWrap.innerHTML=pic?`<img src="${pic}" alt=""/>${overlay}`:`<span>${name.charAt(0).toUpperCase()}</span>${overlay}`;
+  pAvWrap.onclick=()=>document.getElementById('avatarInput').click();
+  document.getElementById('profileName').textContent=li?name:'Guest User';
+  document.getElementById('profileEmail').textContent=li?email:'Not signed in';
+  document.getElementById('profilePlan').textContent=li?'Free Plan':'Guest';
+  document.getElementById('profileAuth').textContent=li?'Google ✓':'Guest';
 }
 
-// ═══ AUTH MODAL ═══
-function openAuthModal(mode) {
-  const modal = document.getElementById('authModal');
-  if (mode === 'signup') {
-    document.getElementById('modalHeadline').textContent = 'Create an account';
-    document.getElementById('modalSub').textContent = 'Sign up to save your chats, view stats, and personalise your experience. Powered by Aasai Tech — AI solutions from Tamil Nadu.';
-  } else {
-    document.getElementById('modalHeadline').textContent = 'Welcome back';
-    document.getElementById('modalSub').textContent = 'Sign in to save your chats, view stats, and personalise your experience. Powered by Aasai Tech — AI solutions from Tamil Nadu.';
-  }
-  modal.classList.add('show');
-  if (!googleBtnInitialized) initGoogleBtn();
+function openPopup(name){
+  document.querySelectorAll('.popup-backdrop').forEach(p=>p.classList.remove('show'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('popup-'+name)?.classList.add('show');
+  document.getElementById('nav-'+name)?.classList.add('active');
+  if(name==='stats')renderStatsPanel();
+  if(name==='profile'){renderUIState();updateStats();}
+  closeSidebar();
 }
-
-function closeAuthModal() {
-  document.getElementById('authModal').classList.remove('show');
+function closePopup(name){
+  document.getElementById('popup-'+name)?.classList.remove('show');
+  document.getElementById('nav-'+name)?.classList.remove('active');
 }
+function handlePopupBackdropClick(e,name){if(e.target===document.getElementById('popup-'+name))closePopup(name);}
 
-function handleModalBackdropClick(e) {
-  if (e.target === document.getElementById('authModal')) closeAuthModal();
+function openAuthModal(mode){
+  document.getElementById('modalHeadline').textContent=mode==='signup'?'Create an account':'Welcome back';
+  document.getElementById('modalSub').textContent='Sign in to save your chats, view stats, and personalise your experience.';
+  document.getElementById('authModal').classList.add('show');
+  if(!googleBtnInitialized)initGoogleBtn();
 }
+function closeAuthModal(){document.getElementById('authModal').classList.remove('show');}
+function handleModalBackdropClick(e){if(e.target===document.getElementById('authModal'))closeAuthModal();}
 
-// ═══ GOOGLE AUTH ═══
-function initGoogleBtn() {
-  if (typeof google === 'undefined') { setTimeout(initGoogleBtn, 150); return; }
-  try {
-    google.accounts.id.initialize({ client_id: CONFIG.CLIENT_ID, callback: handleGoogleSignIn });
-    google.accounts.id.renderButton(document.getElementById('modal-google-btn-wrap'), {
-      theme: 'outline', size: 'large', width: 328, shape: 'rectangular'
-    });
-    googleBtnInitialized = true;
-  } catch(e) { console.warn('Google btn error:', e); }
+function initGoogleBtn(){
+  if(typeof google==='undefined'){setTimeout(initGoogleBtn,150);return;}
+  try{
+    google.accounts.id.initialize({client_id:CONFIG.CLIENT_ID,callback:handleGoogleSignIn});
+    google.accounts.id.renderButton(document.getElementById('modal-google-btn-wrap'),{theme:'outline',size:'large',width:328,shape:'rectangular'});
+    googleBtnInitialized=true;
+  }catch(e){console.warn(e);}
 }
+function triggerGoogleSignIn(){if(typeof google!=='undefined')google.accounts.id.prompt();}
 
-function triggerGoogleSignIn() {
-  if (typeof google !== 'undefined') google.accounts.id.prompt();
-}
-
-async function handleGoogleSignIn(response) {
+async function handleGoogleSignIn(response){
   closeAuthModal();
-  try {
-    const userInfo = parseJwt(response.credential);
-    const res = await fetch(`${CONFIG.API_URL}/auth/google`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ googleUserData: { id: userInfo.sub, email: userInfo.email, name: userInfo.name, picture: userInfo.picture } })
-    });
-    const data = await res.json();
-    if (data.error) { toast(data.error, 'error'); return; }
-    localStorage.setItem('freeai_token', data.sessionToken);
-    localStorage.setItem('freeai_user', JSON.stringify(data.user));
-    localStorage.removeItem('freeai_guest');
-    user = data.user;
-    isGuest = false;
-  } catch {
-    const userInfo = parseJwt(response.credential);
-    user = { name: userInfo.name, email: userInfo.email, picture: userInfo.picture };
-    localStorage.setItem('freeai_user', JSON.stringify(user));
-    localStorage.setItem('freeai_token', 'local-' + Date.now());
-    localStorage.removeItem('freeai_guest');
-    isGuest = false;
+  try{
+    const ui=parseJwt(response.credential);
+    const res=await fetch(`${CONFIG.API_URL}/auth/google`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({googleUserData:{id:ui.sub,email:ui.email,name:ui.name,picture:ui.picture}})});
+    const data=await res.json();
+    if(data.error){toast(data.error,'error');return;}
+    localStorage.setItem('freeai_token',data.sessionToken);
+    localStorage.setItem('freeai_user',JSON.stringify(data.user));
+    user=data.user;isGuest=false;
+  }catch{
+    const ui=parseJwt(response.credential);
+    user={name:ui.name,email:ui.email,picture:ui.picture};
+    localStorage.setItem('freeai_user',JSON.stringify(user));
+    localStorage.setItem('freeai_token','local-'+Date.now());
+    isGuest=false;
   }
-  renderUIState();
-  toast('Signed in as ' + (user.name || 'User'), 'success');
+  renderUIState();toast('Signed in as '+(user.name||'User'),'success');
+}
+function logout(){
+  localStorage.removeItem('freeai_token');localStorage.removeItem('freeai_user');localStorage.removeItem('freeai_avatar');
+  user=null;isGuest=true;customAvatarData=null;
+  closePopup('profile');renderUIState();toast('Signed out','success');
 }
 
-function continueAsGuest() {
-  localStorage.setItem('freeai_guest', '1');
-  localStorage.removeItem('freeai_token');
-  isGuest = true;
-  user = null;
-  closeAuthModal();
-  renderUIState();
+function sendContactEmail(){
+  const name=document.getElementById('contactName').value.trim();
+  const email=document.getElementById('contactEmail').value.trim();
+  const subject=document.getElementById('contactSubject').value;
+  const message=document.getElementById('contactMessage').value.trim();
+  if(!name||!email||!subject||!message){toast('Please fill in all fields','error');return;}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast('Please enter a valid email','error');return;}
+  const sub=encodeURIComponent(`[Aasai Tech AI] ${subject}`);
+  const body=encodeURIComponent(`Name: ${name}\nEmail: ${email}\nSubject: ${subject}\n\nMessage:\n${message}\n\n---\nSent via Aasai Tech AI`);
+  const btn=document.getElementById('contactSendBtn');btn.disabled=true;
+  window.location.href=`mailto:aasaitechproviders@gmail.com?subject=${sub}&body=${body}`;
+  setTimeout(()=>{
+    btn.disabled=false;toast('Email client opened!','success');
+    ['contactName','contactEmail','contactMessage'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('contactSubject').value='';
+  },1500);
 }
 
-function logout() {
-  localStorage.removeItem('freeai_token');
-  localStorage.removeItem('freeai_user');
-  localStorage.removeItem('freeai_avatar');
-  localStorage.setItem('freeai_guest', '1');
-  user = null;
-  isGuest = true;
-  customAvatarData = null;
-  closePanel('profile');
-  renderUIState();
-  toast('Signed out', 'success');
+function updateStats(){
+  const tm=conversations.reduce((a,c)=>a+c.messages.length,0);
+  const tt=conversations.reduce((a,c)=>a+(c.totalTokens||0),0);
+  const today=new Date().toDateString();
+  const td=conversations.filter(c=>new Date(c.createdAt).toDateString()===today).reduce((a,c)=>a+c.messages.filter(m=>m.role==='user').length,0);
+  ['st-msgs','st-tokens','st-chats','st-today'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.textContent=fmtNum([tm,tt,conversations.length,td][i]);});
+  const limit=1000000,pct=Math.min((tt/limit)*100,100).toFixed(1);
+  const bar=document.getElementById('st-bar');if(bar)bar.style.width=pct+'%';
+  const pe=document.getElementById('st-pct');if(pe)pe.textContent=pct+'%';
+  const ue=document.getElementById('st-used-lbl');if(ue)ue.textContent=fmtNum(tt)+' used';
+  ['profileMsgs','profileTokens','profileChats'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.textContent=fmtNum([tm,tt,conversations.length][i]);});
 }
 
-// ═══ PANELS ═══
-function openPanel(name) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('open'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('panel-' + name)?.classList.add('open');
-  document.getElementById('nav-' + name)?.classList.add('active');
-  if (name === 'stats') renderStatsPanel();
-  if (name === 'profile') { renderUIState(); updateStats(); }
-}
-
-function closePanel(name) {
-  document.getElementById('panel-' + name)?.classList.remove('open');
-  document.getElementById('nav-' + name)?.classList.remove('active');
-}
-
-// ═══ STATS ═══
-function updateStats() {
-  const totalMsgs   = conversations.reduce((a,c) => a + c.messages.length, 0);
-  const totalTokens = conversations.reduce((a,c) => a + (c.totalTokens||0), 0);
-  const today = new Date().toDateString();
-  const todayMsgs = conversations
-    .filter(c => new Date(c.createdAt).toDateString() === today)
-    .reduce((a,c) => a + c.messages.filter(m=>m.role==='user').length, 0);
-
-  ['st-msgs','st-tokens','st-chats','st-today'].forEach((id,i) => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = fmtNum([totalMsgs, totalTokens, conversations.length, todayMsgs][i]);
-  });
-
-  const limit = 1000000;
-  const pct = Math.min((totalTokens/limit)*100, 100).toFixed(1);
-  const bar = document.getElementById('st-bar');
-  if (bar) bar.style.width = pct + '%';
-  const pctEl = document.getElementById('st-pct'); if (pctEl) pctEl.textContent = pct + '%';
-  const usedEl = document.getElementById('st-used-lbl'); if (usedEl) usedEl.textContent = fmtNum(totalTokens) + ' used';
-
-  ['profileMsgs','profileTokens','profileChats'].forEach((id,i) => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = fmtNum([totalMsgs, totalTokens, conversations.length][i]);
-  });
-}
-
-function renderStatsPanel() {
+function renderStatsPanel(){
   updateStats();
-  const list = document.getElementById('sessionList');
-  if (!list) return;
-  const recent = [...conversations].slice(0, 8);
-  if (!recent.length) {
-    list.innerHTML = '<div style="font-size:12px;color:var(--text3);text-align:center;padding:10px 0;">No sessions yet</div>';
-    return;
-  }
-  list.innerHTML = recent.map(c => `
-    <div class="info-row">
-      <span class="info-lbl" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:140px">${escHtml(c.title)}</span>
-      <span class="info-val acc">${fmtNum(c.totalTokens||0)} tok</span>
-    </div>`).join('');
+  const list=document.getElementById('sessionList');if(!list)return;
+  const recent=[...conversations].slice(0,8);
+  if(!recent.length){list.innerHTML='<div style="font-size:13.5px;color:var(--text3);text-align:center;padding:12px 0;">No sessions yet</div>';return;}
+  list.innerHTML=recent.map(c=>`<div class="info-row"><span class="info-lbl" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px">${escHtml(c.title)}</span><span class="info-val acc">${fmtNum(c.totalTokens||0)} tok</span></div>`).join('');
 }
 
-// ═══ SETTINGS ═══
-function loadSettings() {
-  applyAccent(settings.accent || '#2c5f8a');
-  document.getElementById('accentPicker').value = settings.accent || '#2c5f8a';
-  document.getElementById('tog-enter').checked = settings.enter !== false;
-  document.getElementById('tog-typing').checked = settings.typing !== false;
-  document.getElementById('tog-highlight').checked = settings.highlight !== false;
-  ['tog-enter','tog-typing','tog-highlight'].forEach(id => {
-    document.getElementById(id).addEventListener('change', saveSettings);
-  });
+function loadSettings(){
+  applyAccent(settings.accent||'#2c5f8a');
+  document.getElementById('accentPicker').value=settings.accent||'#2c5f8a';
+  document.getElementById('tog-enter').checked=settings.enter!==false;
+  document.getElementById('tog-typing').checked=settings.typing!==false;
+  document.getElementById('tog-highlight').checked=settings.highlight!==false;
+  ['tog-enter','tog-typing','tog-highlight'].forEach(id=>document.getElementById(id).addEventListener('change',saveSettings));
+}
+function saveSettings(){
+  settings={accent:document.getElementById('accentPicker').value,enter:document.getElementById('tog-enter').checked,typing:document.getElementById('tog-typing').checked,highlight:document.getElementById('tog-highlight').checked};
+  localStorage.setItem('freeai_settings',JSON.stringify(settings));
+}
+function applyAccent(hex){
+  document.documentElement.style.setProperty('--accent',hex);
+  document.documentElement.style.setProperty('--accent-l',hex+'18');
+  document.documentElement.style.setProperty('--accent-b',hex+'44');
+  const p=document.getElementById('accentPicker');if(p)p.value=hex;
+  document.querySelectorAll('.color-dot').forEach(d=>d.classList.toggle('sel',d.dataset.c===hex));
+  settings.accent=hex;localStorage.setItem('freeai_settings',JSON.stringify(settings));
+}
+function buildColorPresets(){
+  document.getElementById('colorPresets').innerHTML=ACCENT_PRESETS.map(c=>`<div class="color-dot${c===settings.accent?' sel':''}" data-c="${c}" style="background:${c}" onclick="applyAccent('${c}')"></div>`).join('');
+}
+function exportHistory(){
+  const blob=new Blob([JSON.stringify(conversations,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='aasaitech-ai-history.json';a.click();
+  toast('History exported','success');
+}
+function clearAllChats(){
+  if(!confirm('Clear all chat history? This cannot be undone.'))return;
+  conversations=[];currentConvId=null;saveConversations();newChat();closePopup('settings');toast('All chats cleared','success');
 }
 
-function saveSettings() {
-  settings = {
-    accent: document.getElementById('accentPicker').value,
-    enter: document.getElementById('tog-enter').checked,
-    typing: document.getElementById('tog-typing').checked,
-    highlight: document.getElementById('tog-highlight').checked,
-  };
-  localStorage.setItem('freeai_settings', JSON.stringify(settings));
-}
-
-function applyAccent(hex) {
-  document.documentElement.style.setProperty('--accent', hex);
-  document.documentElement.style.setProperty('--accent-l', hex + '18');
-  document.documentElement.style.setProperty('--accent-b', hex + '44');
-  const picker = document.getElementById('accentPicker');
-  if (picker) picker.value = hex;
-  document.querySelectorAll('.color-dot').forEach(d => d.classList.toggle('sel', d.dataset.c === hex));
-  settings.accent = hex;
-  localStorage.setItem('freeai_settings', JSON.stringify(settings));
-}
-
-function buildColorPresets() {
-  const grid = document.getElementById('colorPresets');
-  grid.innerHTML = ACCENT_PRESETS.map(c => `<div class="color-dot${c===settings.accent?' sel':''}" data-c="${c}" style="background:${c}" onclick="applyAccent('${c}')"></div>`).join('');
-}
-
-function exportHistory() {
-  const blob = new Blob([JSON.stringify(conversations, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-  a.download = 'freeai-history.json'; a.click();
-  toast('History exported', 'success');
-}
-
-function clearAllChats() {
-  if (!confirm('Clear all chat history? This cannot be undone.')) return;
-  conversations = []; currentConvId = null;
-  saveConversations(); newChat(); closePanel('settings');
-  toast('All chats cleared', 'success');
-}
-
-// ═══ CHAT ═══
-function showEmptyState() {
-  document.getElementById('chatInner').innerHTML = `
+function showEmptyState(){
+  document.getElementById('chatInner').innerHTML=`
     <div class="empty">
       <div class="empty-logo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        <img src="logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
       </div>
       <div class="empty-title">How can I help?</div>
-      <div class="empty-sub">Your AI assistant, built and powered by <strong style="color:var(--text)">Aasai Tech Providers Pvt. Ltd.</strong>, Tamil Nadu<br><span style="font-size:12px;color:var(--text3)">DPIIT Recognised Startup · NVIDIA Inception Member</span></div>
+      <div class="empty-sub">Your AI assistant, built and powered by <strong>Aasai Tech Providers Pvt. Ltd.</strong>, Tamil Nadu<br><span style="font-size:13.5px;color:var(--text3)">DPIIT Recognised Startup · NVIDIA Inception Member</span></div>
       <div class="suggestions">
         <button class="sug" onclick="useSug(this)"><strong>✍️ Write &amp; Edit</strong>Draft a professional email to a client</button>
         <button class="sug" onclick="useSug(this)"><strong>💻 Code Help</strong>Explain async/await with examples</button>
@@ -1343,226 +784,115 @@ function showEmptyState() {
       </div>
     </div>`;
 }
-
-function newChat() {
-  currentConvId = null;
-  showEmptyState();
-  renderHistory();
-  closeSidebar();
+function newChat(){currentConvId=null;showEmptyState();renderHistory();closeSidebar();}
+function useSug(el){
+  const s=el.querySelector('strong');const text=el.textContent.replace(s.textContent,'').trim();
+  const input=document.getElementById('msgInput');input.value=text;autoResize(input);input.focus();
 }
 
-function useSug(el) {
-  const strong = el.querySelector('strong');
-  const text = el.textContent.replace(strong.textContent, '').trim();
-  const input = document.getElementById('msgInput');
-  input.value = text; autoResize(input); input.focus();
-}
-
-async function sendMessage() {
-  const input = document.getElementById('msgInput');
-  const text = input.value.trim();
-  if (!text || isLoading) return;
-
+async function sendMessage(){
+  const input=document.getElementById('msgInput');const text=input.value.trim();
+  if(!text||isLoading)return;
   document.querySelector('.empty')?.remove();
-  input.value = ''; autoResize(input); setLoading(true);
-
-  if (!currentConvId) {
-    currentConvId = Date.now().toString();
-    conversations.unshift({
-      id: currentConvId,
-      title: text.substring(0, 48) + (text.length > 48 ? '…' : ''),
-      messages: [], totalTokens: 0,
-      createdAt: new Date().toISOString()
-    });
+  input.value='';autoResize(input);setLoading(true);
+  if(!currentConvId){
+    currentConvId=Date.now().toString();
+    conversations.unshift({id:currentConvId,title:text.substring(0,48)+(text.length>48?'…':''),messages:[],totalTokens:0,createdAt:new Date().toISOString()});
     renderHistory();
   }
-
-  const conv = conversations.find(c => c.id === currentConvId);
-  conv.messages.push({ role: 'user', content: text });
-  saveConversations();
-  appendMsg('user', text);
-
-  const aiId = 'ai-' + Date.now();
-  appendAIMsg(aiId);
-
-  try {
-    const token = localStorage.getItem('freeai_token');
-    const res = await fetch(`${CONFIG.API_URL}/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token || ''}` },
-      body: JSON.stringify({ messages: conv.messages.map(m => ({ role: m.role, content: m.content })), conversationId: currentConvId })
-    });
-    if (!res.ok) { const e = await res.json().catch(()=>{}); throw new Error(e?.error || 'HTTP ' + res.status); }
-    const data = await res.json();
-    const content = data.content || '';
-    const tkns = data.tokens_used || estimateTokens(content);
-
-    const el = document.getElementById(aiId);
-    if (el) { el.innerHTML = marked.parse(content); if (settings.highlight) hlCode(el); addMsgActions(el, content); }
-
-    conv.messages.push({ role: 'assistant', content });
-    conv.totalTokens = (conv.totalTokens || 0) + tkns;
-    saveConversations(); updateStats();
-  } catch (err) {
-    const el = document.getElementById(aiId);
-    if (el) el.innerHTML = `<span style="color:var(--red)">⚠ ${escHtml(err.message || 'Could not connect.')}</span>`;
+  const conv=conversations.find(c=>c.id===currentConvId);
+  conv.messages.push({role:'user',content:text});saveConversations();appendMsg('user',text);
+  const aiId='ai-'+Date.now();appendAIMsg(aiId);
+  try{
+    const token=localStorage.getItem('freeai_token');
+    const res=await fetch(`${CONFIG.API_URL}/chat`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token||''}`},body:JSON.stringify({messages:conv.messages.map(m=>({role:m.role,content:m.content})),conversationId:currentConvId})});
+    if(!res.ok){const e=await res.json().catch(()=>{});throw new Error(e?.error||'HTTP '+res.status);}
+    const data=await res.json();const content=data.content||'';const tkns=data.tokens_used||estimateTokens(content);
+    const el=document.getElementById(aiId);
+    if(el){el.innerHTML=marked.parse(content);if(settings.highlight)hlCode(el);addMsgActions(el,content);}
+    conv.messages.push({role:'assistant',content});conv.totalTokens=(conv.totalTokens||0)+tkns;
+    saveConversations();updateStats();
+  }catch(err){
+    const el=document.getElementById(aiId);
+    if(el)el.innerHTML=`<span style="color:var(--red)">⚠ ${escHtml(err.message||'Could not connect.')}</span>`;
   }
-
-  setLoading(false); scrollDown();
+  setLoading(false);scrollDown();
 }
 
-function appendMsg(role, text) {
-  const inner = document.getElementById('chatInner');
-  const isUser = role === 'user';
-  const pic = customAvatarData || user?.picture || null;
-  const initials = user ? (user.name || 'U').charAt(0).toUpperCase() : 'G';
-  const avatarHtml = isUser
-    ? (pic ? `<img src="${pic}" alt=""/>` : `<span>${initials}</span>`)
-    : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`;
-
-  const div = document.createElement('div');
-  div.className = 'message';
-  div.innerHTML = `
-    <div class="msg-avatar ${isUser?'user':'ai'}">${avatarHtml}</div>
-    <div class="msg-body">
-      <div class="msg-name">${isUser?(user?.name||'You'):'FreeAI'}${!isUser?'<span class="msg-tag">Aasai Tech</span>':''}</div>
-      <div class="msg-content">${isUser?escHtml(text).replace(/\n/g,'<br>'):marked.parse(text)}</div>
-    </div>`;
+function appendMsg(role,text){
+  const inner=document.getElementById('chatInner');const isUser=role==='user';
+  const pic=customAvatarData||user?.picture||null;
+  const initials=user?(user.name||'U').charAt(0).toUpperCase():'G';
+  const aiAvatar=`<img src="logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none;width:15px;height:15px;color:white"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`;
+  const avatarHtml=isUser?(pic?`<img src="${pic}" alt=""/>`:`<span>${initials}</span>`):aiAvatar;
+  const div=document.createElement('div');div.className='message';
+  div.innerHTML=`<div class="msg-avatar ${isUser?'user':'ai'}">${avatarHtml}</div><div class="msg-body"><div class="msg-name">${isUser?(user?.name||'You'):'Aasai Tech AI'}${!isUser?'<span class="msg-tag">Aasai Tech</span>':''}</div><div class="msg-content">${isUser?escHtml(text).replace(/\n/g,'<br>'):marked.parse(text)}</div></div>`;
   inner.appendChild(div);
-  if (!isUser) { const c = div.querySelector('.msg-content'); if(settings.highlight) hlCode(c); addMsgActions(c, text); }
+  if(!isUser){const c=div.querySelector('.msg-content');if(settings.highlight)hlCode(c);addMsgActions(c,text);}
   scrollDown();
 }
-
-function appendAIMsg(id) {
-  const inner = document.getElementById('chatInner');
-  const div = document.createElement('div');
-  div.className = 'message';
-  div.innerHTML = `
-    <div class="msg-avatar ai">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-    </div>
-    <div class="msg-body">
-      <div class="msg-name">FreeAI <span class="msg-tag">Aasai Tech</span></div>
-      <div class="msg-content" id="${id}">${settings.typing!==false?'<div class="typing"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>':''}</div>
-    </div>`;
-  inner.appendChild(div); scrollDown();
+function appendAIMsg(id){
+  const inner=document.getElementById('chatInner');const div=document.createElement('div');div.className='message';
+  div.innerHTML=`<div class="msg-avatar ai"><img src="logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none;width:15px;height:15px;color:white"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div><div class="msg-body"><div class="msg-name">Aasai Tech AI <span class="msg-tag">Aasai Tech</span></div><div class="msg-content" id="${id}">${settings.typing!==false?'<div class="typing"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>':''}</div></div>`;
+  inner.appendChild(div);scrollDown();
 }
-
-function addMsgActions(el, content) {
-  const wrap = document.createElement('div');
-  wrap.className = 'msg-actions';
-  const encoded = btoa(unescape(encodeURIComponent(content)));
-  wrap.innerHTML = `<button class="msg-act-btn" onclick="copyMsg(this,'${encoded}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy</button>`;
+function addMsgActions(el,content){
+  const wrap=document.createElement('div');wrap.className='msg-actions';
+  const encoded=btoa(unescape(encodeURIComponent(content)));
+  wrap.innerHTML=`<button class="msg-act-btn" onclick="copyMsg(this,'${encoded}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy</button>`;
   el.after(wrap);
 }
-
-function copyMsg(btn, b64) {
+function copyMsg(btn,b64){
   navigator.clipboard.writeText(decodeURIComponent(escape(atob(b64))));
-  btn.textContent = '✓ Copied';
-  setTimeout(() => btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy', 2000);
+  btn.textContent='✓ Copied';
+  setTimeout(()=>btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy',2000);
 }
-
-function loadConv(id) {
-  currentConvId = id;
-  const conv = conversations.find(c => c.id === id);
-  if (!conv) return;
-  document.getElementById('chatInner').innerHTML = '';
-  conv.messages.forEach(m => appendMsg(m.role, m.content));
-  renderHistory(); closeSidebar();
+function loadConv(id){
+  currentConvId=id;const conv=conversations.find(c=>c.id===id);if(!conv)return;
+  document.getElementById('chatInner').innerHTML='';
+  conv.messages.forEach(m=>appendMsg(m.role,m.content));renderHistory();closeSidebar();
 }
-
-function deleteConv(id, e) {
-  e.stopPropagation();
-  conversations = conversations.filter(c => c.id !== id);
-  saveConversations();
-  if (currentConvId === id) newChat(); else renderHistory();
-  updateStats();
+function deleteConv(id,e){
+  e.stopPropagation();conversations=conversations.filter(c=>c.id!==id);saveConversations();
+  if(currentConvId===id)newChat();else renderHistory();updateStats();
 }
-
-function renderHistory() {
-  const list = document.getElementById('historyList');
-  if (!conversations.length) {
-    list.innerHTML = '<div style="font-size:12px;color:var(--text3);padding:4px 6px;text-align:center">No chats yet</div>';
-    return;
-  }
-  list.innerHTML = conversations.map(c => `
-    <div class="hist-item${c.id===currentConvId?' active':''}" onclick="loadConv('${c.id}')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;flex-shrink:0;opacity:0.4"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      <span>${escHtml(c.title)}</span>
-      <button class="del" onclick="deleteConv('${c.id}',event)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>`).join('');
+function renderHistory(){
+  const list=document.getElementById('historyList');
+  if(!conversations.length){list.innerHTML='<div style="font-size:13px;color:var(--text3);padding:4px 6px;text-align:center">No chats yet</div>';return;}
+  list.innerHTML=conversations.map(c=>`<div class="hist-item${c.id===currentConvId?' active':''}" onclick="loadConv('${c.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;flex-shrink:0;opacity:0.4"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>${escHtml(c.title)}</span><button class="del" onclick="deleteConv('${c.id}',event)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>`).join('');
 }
-
-function saveConversations() {
-  localStorage.setItem('freeai_convs', JSON.stringify(conversations));
-}
-
-// ═══ CODE HIGHLIGHT ═══
-function hlCode(el) {
-  el.querySelectorAll('pre code').forEach(block => {
-    hljs.highlightElement(block);
-    const pre = block.parentElement;
-    if (pre.querySelector('.copy-code-btn')) return;
-    pre.style.position = 'relative';
-    const btn = document.createElement('button');
-    btn.className = 'copy-code-btn'; btn.textContent = 'Copy';
-    btn.onclick = () => { navigator.clipboard.writeText(block.textContent); btn.textContent = 'Copied!'; setTimeout(()=>btn.textContent='Copy',2000); };
+function saveConversations(){localStorage.setItem('freeai_convs',JSON.stringify(conversations));}
+function hlCode(el){
+  el.querySelectorAll('pre code').forEach(block=>{
+    hljs.highlightElement(block);const pre=block.parentElement;
+    if(pre.querySelector('.copy-code-btn'))return;pre.style.position='relative';
+    const btn=document.createElement('button');btn.className='copy-code-btn';btn.textContent='Copy';
+    btn.onclick=()=>{navigator.clipboard.writeText(block.textContent);btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy',2000);};
     pre.appendChild(btn);
   });
 }
-
-// ═══ AVATAR ═══
-function handleAvatarUpload(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (ev) => {
-    customAvatarData = ev.target.result;
-    localStorage.setItem('freeai_avatar', customAvatarData);
-    renderUIState();
-    toast('Profile picture updated', 'success');
-  };
+function handleAvatarUpload(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=(ev)=>{customAvatarData=ev.target.result;localStorage.setItem('freeai_avatar',customAvatarData);renderUIState();toast('Profile picture updated','success');};
   reader.readAsDataURL(file);
 }
-
-// ═══ HELPERS ═══
-function setLoading(v) { isLoading = v; document.getElementById('sendBtn').disabled = v; }
-function scrollDown() { const s = document.getElementById('chatScroll'); s.scrollTop = s.scrollHeight; }
-function handleKey(e) { if (e.key==='Enter' && !e.shiftKey && settings.enter!==false) { e.preventDefault(); sendMessage(); } }
-function autoResize(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,200)+'px'; }
-function escHtml(t) { return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function fmtNum(n) { if(n>=1e6)return(n/1e6).toFixed(1)+'M'; if(n>=1e3)return(n/1e3).toFixed(1)+'K'; return(n||0).toString(); }
-function estimateTokens(t) { return Math.ceil(t.length/4); }
-function parseJwt(token) {
-  const b64 = token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
-  return JSON.parse(decodeURIComponent(atob(b64).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join('')));
-}
-function toast(msg, type='success') {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.className = `toast ${type} show`;
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('sbOverlay').classList.toggle('show');
-}
-function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sbOverlay').classList.remove('show');
-}
-
-document.addEventListener('keydown', e => {
-  if ((e.metaKey||e.ctrlKey) && e.key==='k') { e.preventDefault(); newChat(); }
-  if (e.key === 'Escape') {
-    closeAuthModal();
-    document.querySelectorAll('.panel').forEach(p => p.classList.remove('open'));
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  }
+function setLoading(v){isLoading=v;document.getElementById('sendBtn').disabled=v;}
+function scrollDown(){const s=document.getElementById('chatScroll');s.scrollTop=s.scrollHeight;}
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey&&settings.enter!==false){e.preventDefault();sendMessage();}}
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,200)+'px';}
+function escHtml(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fmtNum(n){if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return(n/1e3).toFixed(1)+'K';return(n||0).toString();}
+function estimateTokens(t){return Math.ceil(t.length/4);}
+function parseJwt(token){const b64=token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');return JSON.parse(decodeURIComponent(atob(b64).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join('')));}
+function toast(msg,type='success'){const t=document.getElementById('toast');t.textContent=msg;t.className=`toast ${type} show`;setTimeout(()=>t.classList.remove('show'),3000);}
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sbOverlay').classList.toggle('show');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sbOverlay').classList.remove('show');}
+document.addEventListener('keydown',e=>{
+  if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();newChat();}
+  if(e.key==='Escape'){closeAuthModal();document.querySelectorAll('.popup-backdrop').forEach(p=>p.classList.remove('show'));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));}
 });
-
-marked.setOptions({ breaks: true, gfm: true });
+marked.setOptions({breaks:true,gfm:true});
 </script>
 </body>
 </html>
