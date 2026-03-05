@@ -892,4 +892,9 @@ function toggleSidebar(){document.getElementById('sidebar').classList.toggle('op
 function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sbOverlay').classList.remove('show');}
 document.addEventListener('keydown',e=>{
   if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();newChat();}
-  if(e.key==='Esc
+  if(e.key==='Escape'){closeAuthModal();document.querySelectorAll('.popup-backdrop').forEach(p=>p.classList.remove('show'));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));}
+});
+marked.setOptions({breaks:true,gfm:true});
+</script>
+</body>
+</html>
