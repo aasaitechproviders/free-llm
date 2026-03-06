@@ -587,11 +587,10 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
   </main>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // ═══ CONFIG ═══
 const CONFIG = {
   CLIENT_ID: '37355855536-n1pdonbkg3lb3s6psq938jk81hgjnebe.apps.googleusercontent.com',
-  // ↓ Updated to Lambda Function URL (streaming)
   API_URL: 'https://oeknom5lapmkh2ftbb5unrv7lq0tcmhv.lambda-url.ap-southeast-2.on.aws'
 };
 const ACCENT_PRESETS = ['#2c5f8a','#1d7a5f','#6366f1','#8b5cf6','#ec4899','#f97316','#0284c7','#b45309','#c0392b','#374151'];
@@ -599,7 +598,7 @@ const ACCENT_PRESETS = ['#2c5f8a','#1d7a5f','#6366f1','#8b5cf6','#ec4899','#f973
 // ═══ STATE ═══
 let conversations    = [];
 let guestMessages    = [];
-let authMessages     = [];   // ← in-memory history for logged-in chat (plain text)
+let authMessages     = [];   // in-memory message history for logged-in users
 let currentConvId    = null;
 let isLoading        = false;
 let user             = null;
@@ -679,15 +678,17 @@ function openPopup(name) {
   if ((name === 'stats' || name === 'profile') && !user) { openAuthModal('login'); return; }
   document.querySelectorAll('.popup-backdrop').forEach(p => p.classList.remove('show'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('popup-' + name)?.classList.add('show');
-  document.getElementById('nav-' + name)?.classList.add('active');
+  document.getElementById('popup-' + name).classList.add('show');
+  const navBtn = document.getElementById('nav-' + name);
+  if (navBtn) navBtn.classList.add('active');
   if (name === 'stats')   renderStatsPanel();
   if (name === 'profile') refreshProfilePopup();
   closeSidebar();
 }
 function closePopup(name) {
-  document.getElementById('popup-' + name)?.classList.remove('show');
-  document.getElementById('nav-' + name)?.classList.remove('active');
+  document.getElementById('popup-' + name).classList.remove('show');
+  const navBtn = document.getElementById('nav-' + name);
+  if (navBtn) navBtn.classList.remove('active');
 }
 function handlePopupBackdropClick(e, name) {
   if (e.target === document.getElementById('popup-' + name)) closePopup(name);
@@ -701,17 +702,24 @@ function openAuthModal(mode) {
   if (!googleBtnInitialized) initGoogleBtn();
 }
 function closeAuthModal() { document.getElementById('authModal').classList.remove('show'); }
-function handleModalBackdropClick(e) { if (e.target === document.getElementById('authModal')) closeAuthModal(); }
+function handleModalBackdropClick(e) {
+  if (e.target === document.getElementById('authModal')) closeAuthModal();
+}
 
 function initGoogleBtn() {
   if (typeof google === 'undefined') { setTimeout(initGoogleBtn, 200); return; }
   try {
     google.accounts.id.initialize({ client_id: CONFIG.CLIENT_ID, callback: handleGoogleSignIn });
-    google.accounts.id.renderButton(document.getElementById('modal-google-btn-wrap'), { theme: 'outline', size: 'large', width: 328, shape: 'rectangular' });
+    google.accounts.id.renderButton(
+      document.getElementById('modal-google-btn-wrap'),
+      { theme: 'outline', size: 'large', width: 328, shape: 'rectangular' }
+    );
     googleBtnInitialized = true;
   } catch(e) { console.warn('Google btn:', e); }
 }
-function triggerGoogleSignIn() { if (typeof google !== 'undefined') google.accounts.id.prompt(); }
+function triggerGoogleSignIn() {
+  if (typeof google !== 'undefined') google.accounts.id.prompt();
+}
 
 async function handleGoogleSignIn(response) {
   closeAuthModal();
@@ -733,30 +741,40 @@ async function handleGoogleSignIn(response) {
     localStorage.setItem('at_user', JSON.stringify(user));
     localStorage.setItem('at_token', 'local-' + Date.now());
   }
-  guestMessages = []; guestChatActive = false;
+  guestMessages = []; authMessages = []; guestChatActive = false;
   document.getElementById('guestNotice').style.display = 'none';
-  renderUIState(); loadConversationsFromServer(); newChat();
-  toast('Welcome, ' + (user.name?.split(' ')[0] || 'there') + '! 👋', 'success');
+  renderUIState();
+  loadConversationsFromServer();
+  newChat();
+  toast('Welcome, ' + (user.name ? user.name.split(' ')[0] : 'there') + '! 👋', 'success');
 }
 
 function logout() {
-  localStorage.removeItem('at_token'); localStorage.removeItem('at_user'); localStorage.removeItem('at_avatar');
-  user = null; customAvatarData = null; conversations = []; guestMessages = [];
+  localStorage.removeItem('at_token');
+  localStorage.removeItem('at_user');
+  localStorage.removeItem('at_avatar');
+  user = null; customAvatarData = null;
+  conversations = []; guestMessages = []; authMessages = [];
   guestChatActive = false; currentConvId = null;
-  closePopup('profile'); renderUIState(); newChat();
+  closePopup('profile');
+  renderUIState();
+  newChat();
   toast('Signed out successfully', 'success');
 }
 
-// ═══ BACKEND CONVERSATIONS ═══
+// ═══ SERVER DATA ═══
 async function loadConversationsFromServer() {
   if (!user) return;
   const token = localStorage.getItem('at_token');
   try {
-    const res = await fetch(`${CONFIG.API_URL}/conversations`, { headers: { 'Authorization': `Bearer ${token}` } });
+    const res = await fetch(`${CONFIG.API_URL}/conversations`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
     if (!res.ok) return;
     const data = await res.json();
     conversations = data.conversations || [];
-    renderHistory(); updateStatsFromServer();
+    renderHistory();
+    updateStatsFromServer();
   } catch(e) { console.warn('Could not load conversations:', e); }
 }
 
@@ -764,37 +782,47 @@ async function updateStatsFromServer() {
   if (!user) return;
   const token = localStorage.getItem('at_token');
   try {
-    const res = await fetch(`${CONFIG.API_URL}/stats`, { headers: { 'Authorization': `Bearer ${token}` } });
+    const res = await fetch(`${CONFIG.API_URL}/stats`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
     if (!res.ok) return;
     const data = await res.json();
-    const set = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = v; };
-    set('st-msgs', fmtNum(data.total_queries || 0));
-    set('st-tokens', fmtNum(data.tokens_used || 0));
-    set('st-chats', fmtNum(data.total_conversations || 0));
-    set('st-today', fmtNum(data.today_queries || 0));
-    set('profileMsgs', fmtNum(data.total_queries || 0));
-    set('profileTokens', fmtNum(data.tokens_used || 0));
-    set('profileChats', fmtNum(data.total_conversations || 0));
-    const limit = data.token_limit || 1000000;
-    const used  = data.tokens_used || 0;
-    const pct   = Math.min((used / limit) * 100, 100).toFixed(1);
-    const bar   = document.getElementById('st-bar');    if(bar)    bar.style.width = pct + '%';
-    const pctEl = document.getElementById('st-pct');    if(pctEl)  pctEl.textContent = pct + '%';
-    const usedEl= document.getElementById('st-used-lbl'); if(usedEl) usedEl.textContent = fmtNum(used) + ' used';
-    const limEl = document.getElementById('st-limit-lbl'); if(limEl)  limEl.textContent = fmtNum(limit) + ' total';
-    const list  = document.getElementById('sessionList');
-    if (list && data.recent_conversations?.length) {
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set('st-msgs',   fmtNum(data.total_queries || 0));
+    set('st-tokens', fmtNum(data.tokens_used   || 0));
+    set('st-chats',  fmtNum(data.total_conversations || 0));
+    set('st-today',  fmtNum(data.today_queries  || 0));
+    set('profileMsgs',   fmtNum(data.total_queries || 0));
+    set('profileTokens', fmtNum(data.tokens_used   || 0));
+    set('profileChats',  fmtNum(data.total_conversations || 0));
+    const limit  = data.token_limit || 1000000;
+    const used   = data.tokens_used || 0;
+    const pct    = Math.min((used / limit) * 100, 100).toFixed(1);
+    const bar    = document.getElementById('st-bar');
+    const pctEl  = document.getElementById('st-pct');
+    const usedEl = document.getElementById('st-used-lbl');
+    const limEl  = document.getElementById('st-limit-lbl');
+    if (bar)    bar.style.width = pct + '%';
+    if (pctEl)  pctEl.textContent = pct + '%';
+    if (usedEl) usedEl.textContent = fmtNum(used) + ' used';
+    if (limEl)  limEl.textContent  = fmtNum(limit) + ' total';
+    const list = document.getElementById('sessionList');
+    if (list && data.recent_conversations && data.recent_conversations.length) {
       list.innerHTML = data.recent_conversations.map(c => `
         <div class="info-row">
-          <span class="info-lbl" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px">${escHtml(c.title||'Chat')}</span>
-          <span class="info-val acc">${fmtNum(c.total_tokens||0)} tok</span>
+          <span class="info-lbl" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px">${escHtml(c.title || 'Chat')}</span>
+          <span class="info-val acc">${fmtNum(c.total_tokens || 0)} tok</span>
         </div>`).join('');
     } else if (list) {
       list.innerHTML = '<div style="font-size:13.5px;color:var(--text3);text-align:center;padding:12px 0;">No sessions yet</div>';
     }
   } catch(e) { console.warn('Stats fetch failed:', e); }
 }
-function renderStatsPanel() { if (!user) return; updateStatsFromServer(); }
+
+function renderStatsPanel() {
+  if (!user) return;
+  updateStatsFromServer();
+}
 
 // ═══ CHAT STATE ═══
 function showEmptyState() {
@@ -818,7 +846,10 @@ function showEmptyState() {
 }
 
 function newChat() {
-  currentConvId = null; guestMessages = []; authMessages = []; guestChatActive = false;
+  currentConvId = null;
+  guestMessages = [];
+  authMessages  = [];
+  guestChatActive = false;
   document.getElementById('guestNotice').style.display = 'none';
   showEmptyState();
   if (user) renderHistory();
@@ -829,7 +860,9 @@ function useSug(el) {
   const s = el.querySelector('strong');
   const text = el.textContent.replace(s.textContent, '').trim();
   const input = document.getElementById('msgInput');
-  input.value = text; autoResize(input); input.focus();
+  input.value = text;
+  autoResize(input);
+  input.focus();
 }
 
 // ═══ SEND MESSAGE ═══
@@ -838,8 +871,10 @@ async function sendMessage() {
   const text  = input.value.trim();
   if (!text || isLoading) return;
 
-  document.querySelector('.empty')?.remove();
-  input.value = ''; autoResize(input); setLoading(true);
+  document.querySelector('.empty') && document.querySelector('.empty').remove();
+  input.value = '';
+  autoResize(input);
+  setLoading(true);
 
   const isGuest = !user;
   if (isGuest && !guestChatActive) {
@@ -851,7 +886,7 @@ async function sendMessage() {
   const aiId = 'ai-' + Date.now();
   appendAIMsg(aiId);
 
-  // ── GUEST: buffered, uses marked.js for markdown ─────────────────────────
+  // ── GUEST: buffered ──────────────────────────────────────────────────────
   if (isGuest) {
     guestMessages.push({ role: 'user', content: text });
     try {
@@ -871,32 +906,36 @@ async function sendMessage() {
           <button onclick="openAuthModal('signup')" style="background:var(--accent);color:white;border:none;border-radius:9px;padding:11px 24px;font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;margin-right:8px;">Sign up free</button>
           <button onclick="openAuthModal('login')" style="background:transparent;color:var(--accent);border:1px solid var(--accent-b);border-radius:9px;padding:11px 20px;font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer;">Log in</button>
         </div>`;
-        guestMessages.pop(); setLoading(false); return;
+        guestMessages.pop();
+        setLoading(false);
+        return;
       }
-      if (!res.ok) throw new Error(data?.error || 'HTTP ' + res.status);
+
+      if (!res.ok) throw new Error(data && data.error ? data.error : 'HTTP ' + res.status);
 
       const content = data.content || '';
       guestMessages.push({ role: 'assistant', content });
       const el = document.getElementById(aiId);
-      // Guest still gets HTML from the AI (system prompt is same), render directly
       if (el) { el.innerHTML = content; addMsgActions(el, content); }
 
-      const remaining = data.messages_remaining ?? null;
+      const remaining = data.messages_remaining != null ? data.messages_remaining : null;
       if (remaining !== null && remaining <= 3 && remaining > 0) {
-        toast(`${remaining} guest message${remaining===1?'':'s'} remaining — sign in for unlimited`, 'info');
+        toast(remaining + ' guest message' + (remaining === 1 ? '' : 's') + ' remaining — sign in for unlimited', 'info');
       }
     } catch(err) {
       const el = document.getElementById(aiId);
-      if (el) el.innerHTML = `<span style="color:var(--red)">⚠ ${escHtml(err.message || 'Could not connect.')}</span>`;
+      if (el) el.innerHTML = `<div style="background:rgba(192,57,43,0.07);border:1px solid rgba(192,57,43,0.25);border-left:4px solid var(--red);border-radius:10px;padding:14px 16px;"><strong style="color:var(--red);font-size:13.5px;">⚠ Could not connect</strong><p style="margin:5px 0 0;font-size:14px;color:var(--text2);">${escHtml(err.message)}</p></div>`;
+      guestMessages.pop();
     }
-    setLoading(false); scrollDown(); return;
+    setLoading(false);
+    scrollDown();
+    return;
   }
 
-  // ── LOGGED IN: streaming ──────────────────────────────────────────────────
+  // ── LOGGED IN: streaming ─────────────────────────────────────────────────
   authMessages.push({ role: 'user', content: text });
 
   if (!currentConvId) {
-    // Optimistically add to history — will be confirmed by stream 'start' event
     currentConvId = 'pending-' + Date.now();
     conversations.unshift({
       conversationId: currentConvId,
@@ -908,37 +947,41 @@ async function sendMessage() {
 
   try {
     const token = localStorage.getItem('at_token');
-    const res   = await fetch(`${CONFIG.API_URL}/chat`, {
+    const convIdToSend = currentConvId.startsWith('pending-') ? null : currentConvId;
+    const res = await fetch(`${CONFIG.API_URL}/chat`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
       body: JSON.stringify({
-        messages: authMessages.slice(-20),  // send last 20 messages max
-        conversationId: currentConvId.startsWith('pending-') ? null : currentConvId
+        messages: authMessages.slice(-20),
+        conversationId: convIdToSend
       })
     });
 
     if (!res.ok) {
       const errText = await res.text();
       let errMsg = 'HTTP ' + res.status;
-      try { errMsg = JSON.parse(errText)?.error || errMsg; } catch(e) {}
+      try { errMsg = JSON.parse(errText).error || errMsg; } catch(e) {}
       throw new Error(errMsg);
     }
 
-    // ── Stream reader ──
     const reader     = res.body.getReader();
     const decoder    = new TextDecoder();
     let buffer       = '';
     let streamedHTML = '';
     const el         = document.getElementById(aiId);
 
-    const processLine = (line) => {
-      if (!line.trim()) return;
+    function processLine(line) {
+      line = line.trim();
+      if (!line) return;
       try {
         const parsed = JSON.parse(line);
 
         if (parsed.type === 'start') {
           const realId = parsed.conversationId;
-          const conv   = conversations.find(c => c.conversationId === currentConvId);
+          const conv   = conversations.find(function(c) { return c.conversationId === currentConvId; });
           if (conv) conv.conversationId = realId;
           currentConvId = realId;
           renderHistory();
@@ -951,71 +994,74 @@ async function sendMessage() {
 
         if (parsed.type === 'done') {
           if (el) addMsgActions(el, streamedHTML);
-          // Store assistant reply in memory (plain text for context)
-          const tmp = document.createElement('div');
+          // Store plain text of AI reply for future context
+          var tmp = document.createElement('div');
           tmp.innerHTML = streamedHTML;
           authMessages.push({ role: 'assistant', content: tmp.innerText || streamedHTML });
-          const conv = conversations.find(c => c.conversationId === currentConvId);
+          var conv = conversations.find(function(c) { return c.conversationId === currentConvId; });
           if (conv) conv.total_tokens = (conv.total_tokens || 0) + (parsed.tokens_used || 0);
         }
 
         if (parsed.type === 'error') {
-          if (el) el.innerHTML = `<div style="background:rgba(192,57,43,0.07);border:1px solid rgba(192,57,43,0.25);border-left:4px solid var(--red);border-radius:10px;padding:14px 16px;">
-            <strong style="color:var(--red);font-size:13.5px;">⚠ Error</strong>
-            <p style="margin:5px 0 0;font-size:14px;color:var(--text2);">${escHtml(parsed.error)}</p>
-          </div>`;
+          if (el) el.innerHTML = `<div style="background:rgba(192,57,43,0.07);border:1px solid rgba(192,57,43,0.25);border-left:4px solid var(--red);border-radius:10px;padding:14px 16px;"><strong style="color:var(--red);font-size:13.5px;">⚠ Error</strong><p style="margin:5px 0 0;font-size:14px;color:var(--text2);">${escHtml(parsed.error)}</p></div>`;
         }
-      } catch(e) { /* incomplete JSON chunk — skip */ }
-    };
+
+      } catch(e) { /* partial JSON — skip */ }
+    }
 
     while (true) {
-      const { done, value } = await reader.read();
+      var result = await reader.read();
+      var done   = result.done;
+      var value  = result.value;
 
       if (done) {
-        // Flush any remaining buffer content
+        // Flush any remaining buffer
         if (buffer.trim()) processLine(buffer);
         break;
       }
 
       buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split('\n');
+      var lines = buffer.split('\n');
       buffer = lines.pop(); // keep last incomplete line
 
-      for (const line of lines) processLine(line);
+      for (var i = 0; i < lines.length; i++) {
+        processLine(lines[i]);
+      }
     }
 
   } catch(err) {
     const el = document.getElementById(aiId);
-    if (el) el.innerHTML = `<div style="background:rgba(192,57,43,0.07);border:1px solid rgba(192,57,43,0.25);border-left:4px solid var(--red);border-radius:10px;padding:14px 16px;">
-      <strong style="color:var(--red);font-size:13.5px;">⚠ Could not connect</strong>
-      <p style="margin:5px 0 0;font-size:14px;color:var(--text2);">${escHtml(err.message)}</p>
-    </div>`;
+    if (el) el.innerHTML = `<div style="background:rgba(192,57,43,0.07);border:1px solid rgba(192,57,43,0.25);border-left:4px solid var(--red);border-radius:10px;padding:14px 16px;"><strong style="color:var(--red);font-size:13.5px;">⚠ Could not connect</strong><p style="margin:5px 0 0;font-size:14px;color:var(--text2);">${escHtml(err.message)}</p></div>`;
     // Remove failed user message from history
-    if (authMessages.length && authMessages[authMessages.length-1].role === 'user') authMessages.pop();
+    if (authMessages.length && authMessages[authMessages.length - 1].role === 'user') {
+      authMessages.pop();
+    }
   }
 
-  setLoading(false); scrollDown();
+  setLoading(false);
+  scrollDown();
 }
 
-
-
+// ═══ CONVERSATION MANAGEMENT ═══
 async function loadConvMessages(convId) {
   currentConvId = convId;
-  authMessages  = [];   // reset; will be rebuilt from loaded messages
+  authMessages  = [];
   document.getElementById('chatInner').innerHTML = '';
   document.getElementById('guestNotice').style.display = 'none';
-  renderHistory(); closeSidebar();
+  renderHistory();
+  closeSidebar();
   if (!user) return;
   const token = localStorage.getItem('at_token');
   try {
-    const res  = await fetch(`${CONFIG.API_URL}/conversations/${convId}/messages`, { headers: { 'Authorization': `Bearer ${token}` } });
+    const res  = await fetch(`${CONFIG.API_URL}/conversations/${convId}/messages`, {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
     if (!res.ok) return;
     const data = await res.json();
-    // Messages stored as HTML — render directly and rebuild authMessages
-    (data.messages || []).forEach(m => {
+    (data.messages || []).forEach(function(m) {
       appendMsg(m.role, m.content);
-      // For history, store plaintext approximation for context
-      const tmp = document.createElement('div');
+      // Rebuild authMessages with plain text for context window
+      var tmp = document.createElement('div');
       tmp.innerHTML = m.content;
       authMessages.push({ role: m.role, content: tmp.innerText || m.content });
     });
@@ -1025,12 +1071,17 @@ async function loadConvMessages(convId) {
 
 async function deleteConv(convId, e) {
   e.stopPropagation();
-  conversations = conversations.filter(c => c.conversationId !== convId);
+  conversations = conversations.filter(function(c) { return c.conversationId !== convId; });
   renderHistory();
   if (currentConvId === convId) newChat();
   if (!user) return;
   const token = localStorage.getItem('at_token');
-  try { await fetch(`${CONFIG.API_URL}/conversations/${convId}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } }); } catch(e) {}
+  try {
+    await fetch(`${CONFIG.API_URL}/conversations/${convId}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+  } catch(e) {}
 }
 
 function renderHistory() {
@@ -1040,41 +1091,43 @@ function renderHistory() {
     list.innerHTML = '<div style="font-size:13px;color:var(--text3);padding:4px 6px;text-align:center">No chats yet</div>';
     return;
   }
-  list.innerHTML = conversations.map(c => `
-    <div class="hist-item${c.conversationId===currentConvId?' active':''}" onclick="loadConvMessages('${c.conversationId}')">
+  list.innerHTML = conversations.map(function(c) {
+    return `<div class="hist-item${c.conversationId === currentConvId ? ' active' : ''}" onclick="loadConvMessages('${c.conversationId}')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;flex-shrink:0;opacity:0.4"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      <span>${escHtml(c.title||'Chat')}</span>
+      <span>${escHtml(c.title || 'Chat')}</span>
       <button class="del" onclick="deleteConv('${c.conversationId}',event)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 // ═══ MESSAGE RENDERING ═══
 function appendMsg(role, content) {
-  const inner   = document.getElementById('chatInner');
-  const isUser  = role === 'user';
-  const pic     = customAvatarData || user?.picture || null;
+  const inner  = document.getElementById('chatInner');
+  const isUser = role === 'user';
+  const pic    = customAvatarData || (user && user.picture) || null;
   const initials = user ? (user.name || 'U').charAt(0).toUpperCase() : 'G';
-  const aiAvatar = `<img src="logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none;width:15px;height:15px;color:white"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`;
-  const avatarHtml = isUser ? (pic ? `<img src="${pic}" alt=""/>` : `<span>${initials}</span>`) : aiAvatar;
+  const aiAvatar = `<img src="logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none;width:15px;height:15px;color:white"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`;
+  const avatarHtml = isUser
+    ? (pic ? `<img src="${pic}" alt=""/>` : `<span>${initials}</span>`)
+    : aiAvatar;
 
-  const div = document.createElement('div');
-  div.className = 'message';
-
-  // User text: escape HTML. AI content: inject directly (it's styled HTML from backend)
   const msgContentHtml = isUser
     ? escHtml(content).replace(/\n/g, '<br>')
     : content;
 
+  const div = document.createElement('div');
+  div.className = 'message';
   div.innerHTML = `
-    <div class="msg-avatar ${isUser?'user':'ai'}">${avatarHtml}</div>
+    <div class="msg-avatar ${isUser ? 'user' : 'ai'}">${avatarHtml}</div>
     <div class="msg-body">
-      <div class="msg-name">${isUser ? (user?.name||'You') : 'Aasai Tech AI'}${!isUser ? '<span class="msg-tag">Aasai Tech</span>' : ''}</div>
-      <div class="msg-content${isUser?' user-text':''}">${msgContentHtml}</div>
+      <div class="msg-name">${isUser ? (user ? user.name : 'You') : 'Aasai Tech AI'}${!isUser ? '<span class="msg-tag">Aasai Tech</span>' : ''}</div>
+      <div class="msg-content${isUser ? ' user-text' : ''}">${msgContentHtml}</div>
     </div>`;
-
   inner.appendChild(div);
+
   if (!isUser) {
     const c = div.querySelector('.msg-content');
     addMsgActions(c, content);
@@ -1093,41 +1146,43 @@ function appendAIMsg(id) {
     </div>
     <div class="msg-body">
       <div class="msg-name">Aasai Tech AI <span class="msg-tag">Aasai Tech</span></div>
-      <div class="msg-content" id="${id}">${settings.typing!==false?'<div class="typing"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>':''}</div>
+      <div class="msg-content" id="${id}">${settings.typing !== false ? '<div class="typing"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>' : ''}</div>
     </div>`;
-  inner.appendChild(div); scrollDown();
+  inner.appendChild(div);
+  scrollDown();
 }
 
 function addMsgActions(el, content) {
-  // Remove existing actions if any (e.g. re-added after stream finishes)
-  el.parentElement?.querySelector('.msg-actions')?.remove();
-  const wrap    = document.createElement('div');
+  var existing = el.parentElement && el.parentElement.querySelector('.msg-actions');
+  if (existing) existing.remove();
+  const wrap = document.createElement('div');
   wrap.className = 'msg-actions';
-  // Store content as base64 for copy
-  const encoded  = btoa(unescape(encodeURIComponent(content)));
+  const encoded = btoa(unescape(encodeURIComponent(content)));
   wrap.innerHTML = `<button class="msg-act-btn" onclick="copyMsg(this,'${encoded}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy</button>`;
   el.after(wrap);
 }
 
 function copyMsg(btn, b64) {
-  // Get plain text from the rendered HTML for copy
-  const temp = document.createElement('div');
-  temp.innerHTML = decodeURIComponent(escape(atob(b64)));
-  const plain = temp.innerText || temp.textContent;
-  navigator.clipboard.writeText(plain);
+  try {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = decodeURIComponent(escape(atob(b64)));
+    const plain = tmp.innerText || tmp.textContent;
+    navigator.clipboard.writeText(plain);
+  } catch(e) {}
   btn.textContent = '✓ Copied';
-  setTimeout(() => { btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy'; }, 2000);
+  setTimeout(function() {
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy';
+  }, 2000);
 }
 
 // ═══ SETTINGS ═══
 function loadSettings() {
   applyAccent(settings.accent || '#2c5f8a');
-  document.getElementById('accentPicker').value = settings.accent || '#2c5f8a';
-  document.getElementById('tog-enter').checked  = settings.enter !== false;
-  document.getElementById('tog-typing').checked = settings.typing !== false;
-  ['tog-enter','tog-typing'].forEach(id => {
-    document.getElementById(id).addEventListener('change', saveSettings);
-  });
+  document.getElementById('accentPicker').value  = settings.accent || '#2c5f8a';
+  document.getElementById('tog-enter').checked   = settings.enter !== false;
+  document.getElementById('tog-typing').checked  = settings.typing !== false;
+  document.getElementById('tog-enter').addEventListener('change', saveSettings);
+  document.getElementById('tog-typing').addEventListener('change', saveSettings);
 }
 function saveSettings() {
   settings = {
@@ -1141,19 +1196,25 @@ function applyAccent(hex) {
   document.documentElement.style.setProperty('--accent',   hex);
   document.documentElement.style.setProperty('--accent-l', hex + '18');
   document.documentElement.style.setProperty('--accent-b', hex + '44');
-  const p = document.getElementById('accentPicker'); if(p) p.value = hex;
-  document.querySelectorAll('.color-dot').forEach(d => d.classList.toggle('sel', d.dataset.c === hex));
+  const p = document.getElementById('accentPicker');
+  if (p) p.value = hex;
+  document.querySelectorAll('.color-dot').forEach(function(d) {
+    d.classList.toggle('sel', d.dataset.c === hex);
+  });
   settings.accent = hex;
   localStorage.setItem('at_settings', JSON.stringify(settings));
 }
 function buildColorPresets() {
-  document.getElementById('colorPresets').innerHTML = ACCENT_PRESETS.map(c =>
-    `<div class="color-dot${c===settings.accent?' sel':''}" data-c="${c}" style="background:${c}" onclick="applyAccent('${c}')"></div>`
-  ).join('');
+  document.getElementById('colorPresets').innerHTML = ACCENT_PRESETS.map(function(c) {
+    return `<div class="color-dot${c === settings.accent ? ' sel' : ''}" data-c="${c}" style="background:${c}" onclick="applyAccent('${c}')"></div>`;
+  }).join('');
 }
 function exportHistory() {
   const blob = new Blob([JSON.stringify(conversations, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'aasaitech-ai-history.json'; a.click();
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'aasaitech-ai-history.json';
+  a.click();
   toast('History exported', 'success');
 }
 function clearAllChats() {
@@ -1171,22 +1232,32 @@ function sendContactEmail() {
   const message = document.getElementById('contactMessage').value.trim();
   if (!name || !email || !subject || !message) { toast('Please fill in all fields', 'error'); return; }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast('Please enter a valid email', 'error'); return; }
-  const sub  = encodeURIComponent(`[Aasai Tech AI] ${subject}`);
-  const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nSubject: ${subject}\n\nMessage:\n${message}\n\n---\nSent via Aasai Tech AI`);
-  const btn  = document.getElementById('contactSendBtn'); btn.disabled = true;
-  window.location.href = `mailto:aasaitechproviders@gmail.com?subject=${sub}&body=${body}`;
-  setTimeout(() => {
-    btn.disabled = false; toast('Email client opened!', 'success');
-    ['contactName','contactEmail','contactMessage'].forEach(id => document.getElementById(id).value = '');
+  const sub  = encodeURIComponent('[Aasai Tech AI] ' + subject);
+  const body = encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\nSubject: ' + subject + '\n\nMessage:\n' + message + '\n\n---\nSent via Aasai Tech AI');
+  const btn  = document.getElementById('contactSendBtn');
+  btn.disabled = true;
+  window.location.href = 'mailto:aasaitechproviders@gmail.com?subject=' + sub + '&body=' + body;
+  setTimeout(function() {
+    btn.disabled = false;
+    toast('Email client opened!', 'success');
+    document.getElementById('contactName').value    = '';
+    document.getElementById('contactEmail').value   = '';
+    document.getElementById('contactMessage').value = '';
     document.getElementById('contactSubject').value = '';
   }, 1500);
 }
 
 // ═══ AVATAR ═══
 function handleAvatarUpload(e) {
-  const file = e.target.files[0]; if (!file) return;
+  const file = e.target.files[0];
+  if (!file) return;
   const reader = new FileReader();
-  reader.onload = (ev) => { customAvatarData = ev.target.result; localStorage.setItem('at_avatar', customAvatarData); renderUIState(); toast('Profile picture updated', 'success'); };
+  reader.onload = function(ev) {
+    customAvatarData = ev.target.result;
+    localStorage.setItem('at_avatar', customAvatarData);
+    renderUIState();
+    toast('Profile picture updated', 'success');
+  };
   reader.readAsDataURL(file);
 }
 
@@ -1196,15 +1267,19 @@ function scrollDown()  { const s = document.getElementById('chatScroll'); s.scro
 function handleKey(e)  { if (e.key === 'Enter' && !e.shiftKey && settings.enter !== false) { e.preventDefault(); sendMessage(); } }
 function autoResize(el){ el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 160) + 'px'; }
 function escHtml(t)    { return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function fmtNum(n)     { if(n>=1e6) return (n/1e6).toFixed(1)+'M'; if(n>=1e3) return (n/1e3).toFixed(1)+'K'; return (n||0).toString(); }
+function fmtNum(n)     { if (n >= 1e6) return (n/1e6).toFixed(1) + 'M'; if (n >= 1e3) return (n/1e3).toFixed(1) + 'K'; return (n || 0).toString(); }
 function parseJwt(token) {
-  const b64 = token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
-  return JSON.parse(decodeURIComponent(atob(b64).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join('')));
+  const b64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+  return JSON.parse(decodeURIComponent(atob(b64).split('').map(function(c) {
+    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join('')));
 }
-function toast(msg, type='success') {
+function toast(msg, type) {
+  type = type || 'success';
   const t = document.getElementById('toast');
-  t.textContent = msg; t.className = `toast ${type} show`;
-  setTimeout(() => t.classList.remove('show'), 3000);
+  t.textContent = msg;
+  t.className = 'toast ' + type + ' show';
+  setTimeout(function() { t.classList.remove('show'); }, 3000);
 }
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
@@ -1215,8 +1290,16 @@ function closeSidebar() {
   document.getElementById('sbOverlay').classList.remove('show');
 }
 
-document.addEventListener('keydown', e => {
+document.addEventListener('keydown', function(e) {
   if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); newChat(); }
   if (e.key === 'Escape') {
     closeAuthModal();
-    document.querySelectorAll('.popup-backdrop').forEach(p => p.classList.remove('show'));
+    document.querySelectorAll('.popup-backdrop').forEach(function(p) { p.classList.remove('show'); });
+    document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
+  }
+});
+
+if (typeof marked !== 'undefined') marked.setOptions({ breaks: true, gfm: true });
+</script>
+</body>
+</html>
