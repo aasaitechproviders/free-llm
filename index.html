@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <title>Aasai Tech AI</title>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
@@ -20,13 +20,15 @@
   --sidebar-w:264px;
   --font:'Plus Jakarta Sans',sans-serif; --mono:'JetBrains Mono',monospace;
   --shadow:0 1px 3px rgba(0,0,0,0.08),0 4px 16px rgba(0,0,0,0.05);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh;display:flex;overflow:hidden;font-size:15px;}
-#appShell{display:flex;width:100%;height:100vh;}
+html, body{height:100%;height:-webkit-fill-available;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh;height:-webkit-fill-available;display:flex;overflow:hidden;font-size:15px;}
+#appShell{display:flex;width:100%;height:100%;height:-webkit-fill-available;}
 
 /* ── SIDEBAR ── */
-.sidebar{width:var(--sidebar-w);background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100vh;flex-shrink:0;transition:transform 0.25s ease;}
+.sidebar{width:var(--sidebar-w);background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100%;flex-shrink:0;transition:transform 0.25s ease;}
 .sb-top{padding:16px 14px 13px;border-bottom:1px solid var(--border);}
 .brand-row{display:flex;align-items:center;gap:10px;padding:4px 6px 12px;}
 .brand-logo{width:32px;height:32px;border-radius:9px;overflow:hidden;flex-shrink:0;background:var(--accent);display:flex;align-items:center;justify-content:center;}
@@ -40,16 +42,13 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
 .new-chat-btn svg{width:14px;height:14px;}
 .new-chat-btn kbd{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--text3);background:var(--surface2);padding:1px 5px;border-radius:3px;border:1px solid var(--border);}
 
-/* NAV — auth-gated items hidden for guests */
 .sb-nav{padding:10px 14px;border-bottom:1px solid var(--border);}
 .nav-btn{width:100%;display:flex;align-items:center;gap:10px;padding:9px 10px;background:transparent;border:none;border-radius:8px;color:var(--text2);font-family:var(--font);font-size:13.5px;cursor:pointer;transition:all 0.12s;text-align:left;margin-bottom:2px;}
 .nav-btn:hover{background:rgba(0,0,0,0.05);color:var(--text);}
 .nav-btn.active{background:var(--accent-l);color:var(--accent);font-weight:600;}
 .nav-btn svg{width:15px;height:15px;flex-shrink:0;}
-/* Items only visible when logged in */
 .auth-only{display:none;}
 
-/* HISTORY — only for logged in */
 .sb-history{flex:1;overflow-y:auto;padding:12px 14px;display:none;}
 .sb-history::-webkit-scrollbar{width:3px;}
 .sb-history::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
@@ -63,10 +62,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
 .hist-item .del:hover{color:var(--red);}
 .hist-item .del svg{width:11px;height:11px;}
 
-/* Guest spacer — fills space when history hidden */
 .sb-spacer{flex:1;}
 
-/* FOOTER */
 .sb-footer{padding:12px 14px;border-top:1px solid var(--border);}
 .sb-footer-guest{padding:14px;border-top:1px solid var(--border);}
 .sb-signin-prompt{background:var(--accent-l);border:1px solid var(--accent-b);border-radius:9px;padding:14px;}
@@ -103,7 +100,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
 .popup-close svg{width:17px;height:17px;}
 .popup-body{padding:24px;}
 
-/* STATS */
 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
 .stat-box{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:18px 16px;}
 .stat-val{font-size:30px;font-weight:800;font-family:var(--mono);color:var(--text);margin-bottom:4px;letter-spacing:-0.04em;}
@@ -124,7 +120,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
 .info-val{font-size:13.5px;font-family:var(--mono);color:var(--text);}
 .info-val.acc{color:var(--accent);}
 
-/* SETTINGS */
 .setting-section{margin-bottom:22px;}
 .setting-row{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;background:var(--surface2);border:1px solid var(--border);border-radius:11px;margin-bottom:7px;}
 .setting-lbl{font-size:14px;color:var(--text);font-weight:600;}
@@ -144,7 +139,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
 .action-btn.danger{color:var(--red);}
 .action-btn.danger:hover{border-color:var(--red);background:rgba(192,57,43,0.06);}
 
-/* PROFILE */
 .profile-hero{display:flex;flex-direction:column;align-items:center;padding:28px 20px;background:linear-gradient(135deg,var(--accent-l),var(--surface2));border:1px solid var(--accent-b);border-radius:16px;margin-bottom:22px;text-align:center;}
 .profile-avatar{width:76px;height:76px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;color:white;overflow:hidden;cursor:pointer;position:relative;margin-bottom:14px;box-shadow:0 4px 20px rgba(44,95,138,0.25);}
 .profile-avatar img{width:100%;height:100%;object-fit:cover;}
@@ -155,13 +149,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
 .profile-email{font-size:13px;color:var(--text3);margin-bottom:9px;}
 .profile-plan{font-size:11px;font-family:var(--mono);background:var(--accent);color:white;padding:3px 12px;border-radius:20px;display:inline-block;}
 
-/* GUEST BANNER inside popup */
 .guest-banner{background:var(--accent-l);border:1px solid var(--accent-b);border-radius:12px;padding:18px;text-align:center;margin-bottom:18px;}
 .guest-banner p{font-size:13.5px;color:var(--accent);line-height:1.6;margin-bottom:12px;font-weight:500;}
 .guest-banner-btn{background:var(--accent);color:white;border:none;border-radius:8px;padding:10px 20px;font-family:var(--font);font-size:13.5px;font-weight:700;cursor:pointer;transition:background 0.15s;}
 .guest-banner-btn:hover{background:#245079;}
 
-/* CONTACT */
 .contact-hero{background:linear-gradient(135deg,#1a3a5c,var(--accent));border-radius:16px;padding:26px;margin-bottom:22px;color:white;position:relative;overflow:hidden;}
 .contact-hero::before{content:'';position:absolute;right:-20px;top:-20px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,0.07);}
 .contact-hero::after{content:'';position:absolute;right:50px;bottom:-30px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,0.05);}
@@ -208,17 +200,33 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
 #modal-google-btn-wrap{display:flex;justify-content:center;margin-bottom:10px;}
 
 /* MAIN CHAT */
-.main{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;min-width:0;}
-.topbar{height:56px;display:flex;align-items:center;padding:0 18px;border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0;gap:10px;z-index:10;}
-.topbar-left{display:flex;align-items:center;gap:10px;}
-.menu-btn{display:none;background:none;border:none;cursor:pointer;color:var(--text2);padding:7px;border-radius:8px;align-items:center;transition:all 0.12s;}
+.main{flex:1;display:flex;flex-direction:column;height:100%;min-width:0;overflow:hidden;}
+
+/* ─── TOPBAR ─── */
+.topbar{
+  height:56px;
+  display:flex;
+  align-items:center;
+  padding:0 16px;
+  border-bottom:1px solid var(--border);
+  background:var(--bg);
+  flex-shrink:0;
+  gap:10px;
+  z-index:10;
+  position:relative;
+}
+.topbar-left{display:flex;align-items:center;gap:8px;}
+.menu-btn{display:none;background:none;border:none;cursor:pointer;color:var(--text2);padding:7px;border-radius:8px;align-items:center;transition:all 0.12s;flex-shrink:0;}
 .menu-btn:hover{background:rgba(0,0,0,0.06);color:var(--text);}
 .menu-btn svg{width:18px;height:18px;}
+
+/* Desktop brand in topbar — hidden by default, shown on mobile */
 .topbar-brand{display:none;align-items:center;gap:9px;}
 .topbar-logo{width:30px;height:30px;border-radius:9px;overflow:hidden;background:var(--accent);display:flex;align-items:center;justify-content:center;}
 .topbar-logo img{width:100%;height:100%;object-fit:cover;}
 .topbar-logo svg{width:15px;height:15px;color:white;}
 .topbar-title{font-size:16px;font-weight:800;letter-spacing:-0.02em;}
+
 .topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
 .btn-login{padding:8px 18px;background:none;border:1px solid var(--border2);border-radius:9px;font-family:var(--font);font-size:14px;font-weight:500;color:var(--text);cursor:pointer;transition:all 0.15s;}
 .btn-login:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-l);}
@@ -231,7 +239,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
 .topbar-uname{font-size:14px;font-weight:700;}
 
 /* CHAT */
-.chat-scroll{flex:1;overflow-y:auto;scroll-behavior:smooth;}
+.chat-scroll{flex:1;overflow-y:auto;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;}
 .chat-scroll::-webkit-scrollbar{width:4px;}
 .chat-scroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
 .chat-inner{max-width:740px;margin:0 auto;padding:28px 28px 10px;}
@@ -293,18 +301,23 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
 .msg-act-btn:hover{background:var(--surface2);color:var(--text2);}
 .msg-act-btn svg{width:12px;height:12px;}
 
-/* INPUT */
-.input-area{padding:12px 28px 20px;}
+/* INPUT AREA */
+.input-area{
+  padding:10px 16px;
+  padding-bottom:calc(12px + var(--safe-bottom));
+  flex-shrink:0;
+  background:var(--bg);
+}
 .input-inner{max-width:740px;margin:0 auto;}
 .input-box{background:var(--surface);border:1px solid var(--border2);border-radius:15px;padding:4px 4px 4px 18px;display:flex;align-items:flex-end;gap:8px;transition:border-color 0.2s,box-shadow 0.2s;box-shadow:var(--shadow);}
 .input-box:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(44,95,138,0.1);}
-#msgInput{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:var(--font);font-size:15.5px;line-height:1.55;resize:none;max-height:200px;padding:12px 0;min-height:48px;}
+#msgInput{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:var(--font);font-size:15.5px;line-height:1.55;resize:none;max-height:160px;padding:10px 0;min-height:44px;}
 #msgInput::placeholder{color:var(--text3);}
 .send-btn{width:40px;height:40px;background:var(--accent);border:none;border-radius:11px;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-bottom:4px;transition:all 0.15s;}
 .send-btn:hover:not(:disabled){background:#245079;}
 .send-btn:disabled{opacity:0.35;cursor:not-allowed;}
 .send-btn svg{width:17px;height:17px;}
-.input-hint{text-align:center;font-size:12px;color:var(--text3);margin-top:9px;}
+.input-hint{text-align:center;font-size:11px;color:var(--text3);margin-top:7px;line-height:1.5;}
 .input-hint a{color:var(--accent);text-decoration:none;}
 
 /* TOAST */
@@ -318,22 +331,83 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
 .sb-overlay.show{display:block;}
 #avatarInput{display:none;}
 
+/* ═══════════════════════════════
+   MOBILE LAYOUT — ≤ 900px
+═══════════════════════════════ */
 @media(max-width:900px){
-  .sidebar{position:fixed;top:0;bottom:0;left:0;transform:translateX(-100%);z-index:200;}
+  /* Sidebar slides in as overlay */
+  .sidebar{
+    position:fixed;
+    top:0;bottom:0;left:0;
+    transform:translateX(-100%);
+    z-index:200;
+    height:100%;
+    height:-webkit-fill-available;
+  }
   .sidebar.open{transform:translateX(0);}
   .sb-overlay.show{display:block;}
+
+  /* Show hamburger & brand in topbar */
   .topbar-brand{display:flex;}
-  .topbar-title{display:block;}
   .menu-btn{display:flex;}
-}
-@media(max-width:600px){
-  .suggestions{grid-template-columns:1fr;}
-  .chat-inner{padding:20px 16px;}
-  .input-area{padding:10px 16px 16px;}
-  .stat-grid{grid-template-columns:1fr;}
-  .auth-modal{padding:32px 22px;}
+
+  /* ── MOBILE TOPBAR LAYOUT ──
+     [☰]  [logo + name (centred)]  [login/signup or nothing]
+     Hide user avatar/name on mobile — move to sidebar only */
+  .topbar{
+    justify-content:space-between;
+    padding:0 14px;
+  }
+
+  /* Centre brand absolutely within topbar */
+  .topbar-brand{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    pointer-events:none; /* so hamburger click-through works */
+  }
+
+  /* Hide the user chip in topbar on mobile (visible in sidebar footer) */
+  #topbarUser{display:none !important;}
+
+  /* Show only login/signup buttons when guest on mobile */
+  #topbarAuth{gap:6px;}
+  #topbarAuth .btn-login{padding:7px 12px;font-size:13px;}
+  #topbarAuth .btn-signup{padding:7px 12px;font-size:13px;}
+
+  /* Chat area padding */
+  .chat-inner{padding:16px 14px 10px;}
+
+  /* Input area — sits flush at bottom with safe-area */
+  .input-area{
+    padding:10px 12px;
+    padding-bottom:calc(10px + var(--safe-bottom));
+    border-top:1px solid var(--border);
+  }
+  #msgInput{font-size:16px;} /* prevent iOS zoom on focus */
+  .input-hint{font-size:10px;}
+
+  /* Empty state: tighter spacing */
+  .empty{padding:24px 16px;min-height:55vh;}
+  .empty-logo{width:56px;height:56px;border-radius:16px;margin-bottom:18px;}
+  .empty-title{font-size:26px;}
+  .empty-sub{font-size:14px;margin-bottom:24px;}
+  .suggestions{grid-template-columns:1fr;gap:8px;max-width:100%;}
+  .sug{padding:14px 16px;font-size:13.5px;}
+
+  /* Popups */
   .popup{max-width:calc(100vw - 32px);}
+  .stat-grid{grid-template-columns:1fr 1fr;}
+  .auth-modal{padding:28px 20px;}
   .contact-info-grid{grid-template-columns:1fr;}
+}
+
+/* Very small phones */
+@media(max-width:380px){
+  #topbarAuth .btn-login{padding:6px 10px;font-size:12px;}
+  #topbarAuth .btn-signup{padding:6px 10px;font-size:12px;}
+  .empty-title{font-size:22px;}
+  .topbar-title{font-size:14px;}
 }
 </style>
 </head>
@@ -537,7 +611,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
       </button>
     </div>
 
-    <!-- NAV: Stats & Profile only for logged-in users -->
     <div class="sb-nav">
       <button class="nav-btn auth-only" id="nav-stats" onclick="openPopup('stats')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>Statistics
@@ -548,22 +621,18 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
       <button class="nav-btn auth-only" id="nav-profile" onclick="openPopup('profile')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile
       </button>
-      <!-- Contact Us always visible -->
       <button class="nav-btn" id="nav-contact" onclick="openPopup('contact')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.81a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.92 16.92z"/></svg>Contact Us
       </button>
     </div>
 
-    <!-- Chat history: logged-in only -->
     <div class="sb-history" id="sbHistory">
       <div class="hist-label">Recent chats</div>
       <div id="historyList"></div>
     </div>
 
-    <!-- Spacer for guest (fills gap where history would be) -->
     <div class="sb-spacer" id="sbSpacer"></div>
 
-    <!-- FOOTER: guest sign-in prompt -->
     <div id="sbFooterGuest" class="sb-footer-guest">
       <div class="sb-signin-prompt">
         <p>Sign in to save history &amp; access stats across sessions.</p>
@@ -578,7 +647,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
       </div>
     </div>
 
-    <!-- FOOTER: logged-in user row -->
     <div id="sbFooterUser" class="sb-footer" style="display:none">
       <div class="user-row" onclick="openPopup('profile')">
         <div class="u-avatar" id="sbAvatar">?</div>
@@ -594,20 +662,27 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
   <main class="main">
     <div class="topbar">
       <div class="topbar-left">
-        <button class="menu-btn" onclick="toggleSidebar()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
-        <div class="topbar-brand">
-          <div class="topbar-logo">
-            <img src="logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-          </div>
-          <span class="topbar-title">Aasai Tech AI</span>
-        </div>
+        <button class="menu-btn" onclick="toggleSidebar()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
       </div>
+
+      <!-- Centred brand — shown on mobile via absolute positioning -->
+      <div class="topbar-brand">
+        <div class="topbar-logo">
+          <img src="logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <span class="topbar-title">Aasai Tech AI</span>
+      </div>
+
       <div class="topbar-right">
+        <!-- Guest: login + signup buttons -->
         <div id="topbarAuth" style="display:flex;align-items:center;gap:8px;">
           <button class="btn-login" onclick="openAuthModal('login')">Log in</button>
           <button class="btn-signup" onclick="openAuthModal('signup')">Sign up</button>
         </div>
+        <!-- Logged-in: user chip (hidden on mobile via CSS) -->
         <div class="topbar-user" id="topbarUser" style="display:none" onclick="openPopup('profile')">
           <div class="topbar-avatar" id="topbarAvatar">?</div>
           <span class="topbar-uname" id="topbarUname">User</span>
@@ -615,9 +690,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
       </div>
     </div>
 
-    <!-- Guest notice strip: shown when guest is actively chatting -->
+    <!-- Guest notice strip -->
     <div class="guest-chat-notice" id="guestNotice" style="display:none">
-      💡 You're chatting as a guest — chats won't be saved. <a onclick="openAuthModal('login')">Sign in</a> to save your history.
+      💡 Chatting as guest — chats won't be saved. <a onclick="openAuthModal('login')">Sign in</a> to save history.
     </div>
 
     <div class="chat-scroll" id="chatScroll">
@@ -632,7 +707,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           </button>
         </div>
-        <div class="input-hint">Aasai Tech AI · <a href="https://aasaitech.in" target="_blank">Aasai Tech Providers Pvt. Ltd.</a> · DPIIT Recognised · NVIDIA Inception · Tamil Nadu, India</div>
+        <div class="input-hint">Aasai Tech AI · <a href="https://aasaitech.in" target="_blank">Aasai Tech Providers Pvt. Ltd.</a> · DPIIT · NVIDIA Inception · Tamil Nadu</div>
       </div>
     </div>
   </main>
@@ -647,16 +722,15 @@ const CONFIG = {
 const ACCENT_PRESETS = ['#2c5f8a','#1d7a5f','#6366f1','#8b5cf6','#ec4899','#f97316','#0284c7','#b45309','#c0392b','#374151'];
 
 // ═══ STATE ═══
-// Logged-in conversations come from backend; guest ones are local only
-let conversations = [];           // shown in sidebar (from backend when logged in)
-let guestMessages = [];           // in-memory only — never persisted for guests
+let conversations = [];
+let guestMessages = [];
 let currentConvId = null;
 let isLoading = false;
-let user = null;                  // null = guest
+let user = null;
 let settings = JSON.parse(localStorage.getItem('at_settings') || '{"accent":"#2c5f8a","enter":true,"typing":true,"highlight":true}');
 let customAvatarData = localStorage.getItem('at_avatar') || null;
 let googleBtnInitialized = false;
-let guestChatActive = false;      // true once guest sends first message
+let guestChatActive = false;
 
 // ═══ INIT ═══
 window.addEventListener('DOMContentLoaded', () => {
@@ -673,28 +747,23 @@ window.addEventListener('DOMContentLoaded', () => {
   showEmptyState();
 });
 
-// ═══ UI STATE — the master function ═══
+// ═══ UI STATE ═══
 function renderUIState() {
   const loggedIn = !!user;
 
-  // Topbar
   document.getElementById('topbarAuth').style.display = loggedIn ? 'none' : 'flex';
+  // On desktop show user chip; on mobile it's hidden via CSS regardless
   document.getElementById('topbarUser').style.display = loggedIn ? 'flex' : 'none';
 
-  // Sidebar auth-gated nav items
   document.querySelectorAll('.auth-only').forEach(el => {
     el.style.display = loggedIn ? 'flex' : 'none';
   });
 
-  // Sidebar history section
   document.getElementById('sbHistory').style.display = loggedIn ? 'block' : 'none';
   document.getElementById('sbSpacer').style.display = loggedIn ? 'none' : 'block';
-
-  // Sidebar footer
   document.getElementById('sbFooterGuest').style.display = loggedIn ? 'none' : 'block';
   document.getElementById('sbFooterUser').style.display = loggedIn ? 'block' : 'none';
 
-  // Profile popup buttons
   const pSignIn = document.getElementById('profileSignInBtn');
   const pSignOut = document.getElementById('profileSignOutBtn');
   if (pSignIn) pSignIn.style.display = loggedIn ? 'none' : 'block';
@@ -702,21 +771,17 @@ function renderUIState() {
 
   if (loggedIn) {
     const name = user.name || 'User';
-    const email = user.email || '';
     const pic = customAvatarData || user.picture || null;
 
-    // Topbar user
     const tAv = document.getElementById('topbarAvatar');
     tAv.innerHTML = pic ? `<img src="${pic}" alt=""/>` : name.charAt(0).toUpperCase();
     document.getElementById('topbarUname').textContent = name.split(' ')[0];
 
-    // Sidebar footer
     const sbAv = document.getElementById('sbAvatar');
     sbAv.innerHTML = pic ? `<img src="${pic}" alt=""/>` : name.charAt(0).toUpperCase();
     document.getElementById('sbName').textContent = name;
-    document.getElementById('sbSub').textContent = email || 'Free plan';
+    document.getElementById('sbSub').textContent = user.email || 'Free plan';
 
-    // Profile popup
     refreshProfilePopup();
   }
 }
@@ -746,17 +811,13 @@ function refreshProfilePopup() {
 
 // ═══ POPUPS ═══
 function openPopup(name) {
-  // Stats and Profile require login
-  if ((name === 'stats' || name === 'profile') && !user) {
-    openAuthModal('login');
-    return;
-  }
+  if ((name === 'stats' || name === 'profile') && !user) { openAuthModal('login'); return; }
   document.querySelectorAll('.popup-backdrop').forEach(p => p.classList.remove('show'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('popup-' + name)?.classList.add('show');
   document.getElementById('nav-' + name)?.classList.add('active');
   if (name === 'stats') renderStatsPanel();
-  if (name === 'profile') { refreshProfilePopup(); }
+  if (name === 'profile') refreshProfilePopup();
   closeSidebar();
 }
 function closePopup(name) {
@@ -804,18 +865,14 @@ async function handleGoogleSignIn(response) {
     localStorage.setItem('at_user', JSON.stringify(data.user));
     user = data.user;
   } catch(err) {
-    // Fallback: use Google JWT data directly
     const ui = parseJwt(response.credential);
     user = { name: ui.name, email: ui.email, picture: ui.picture, plan: 'free' };
     localStorage.setItem('at_user', JSON.stringify(user));
     localStorage.setItem('at_token', 'local-' + Date.now());
   }
-
-  // Clear guest state
   guestMessages = [];
   guestChatActive = false;
   document.getElementById('guestNotice').style.display = 'none';
-
   renderUIState();
   loadConversationsFromServer();
   newChat();
@@ -851,9 +908,7 @@ async function loadConversationsFromServer() {
     conversations = data.conversations || [];
     renderHistory();
     updateStatsFromServer();
-  } catch(e) {
-    console.warn('Could not load conversations:', e);
-  }
+  } catch(e) { console.warn('Could not load conversations:', e); }
 }
 
 async function updateStatsFromServer() {
@@ -865,7 +920,6 @@ async function updateStatsFromServer() {
     });
     if (!res.ok) return;
     const data = await res.json();
-    // Update stats popup fields
     const set = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = v; };
     set('st-msgs', fmtNum(data.total_queries || 0));
     set('st-tokens', fmtNum(data.tokens_used || 0));
@@ -881,8 +935,6 @@ async function updateStatsFromServer() {
     const pctEl = document.getElementById('st-pct'); if(pctEl) pctEl.textContent = pct + '%';
     const usedEl = document.getElementById('st-used-lbl'); if(usedEl) usedEl.textContent = fmtNum(used) + ' used';
     const limEl = document.getElementById('st-limit-lbl'); if(limEl) limEl.textContent = fmtNum(limit) + ' total';
-
-    // Session breakdown
     const list = document.getElementById('sessionList');
     if (list && data.recent_conversations?.length) {
       list.innerHTML = data.recent_conversations.map(c => `
@@ -896,10 +948,7 @@ async function updateStatsFromServer() {
   } catch(e) { console.warn('Stats fetch failed:', e); }
 }
 
-function renderStatsPanel() {
-  if (!user) return;
-  updateStatsFromServer();
-}
+function renderStatsPanel() { if (!user) return; updateStatsFromServer(); }
 
 // ═══ CHAT ═══
 function showEmptyState() {
@@ -911,7 +960,7 @@ function showEmptyState() {
       </div>
       <div class="empty-title">How can I help?</div>
       <div class="empty-sub">Your AI assistant, built and powered by <strong>Aasai Tech Providers Pvt. Ltd.</strong>, Tamil Nadu<br>
-        <span style="font-size:13.5px;color:var(--text3)">DPIIT Recognised Startup · NVIDIA Inception Member</span>
+        <span style="font-size:13px;color:var(--text3)">DPIIT Recognised Startup · NVIDIA Inception Member</span>
       </div>
       <div class="suggestions">
         <button class="sug" onclick="useSug(this)"><strong>✍️ Write &amp; Edit</strong>Draft a professional email to a client</button>
@@ -949,7 +998,6 @@ async function sendMessage() {
 
   const isGuest = !user;
 
-  // Show guest notice strip on first message
   if (isGuest && !guestChatActive) {
     guestChatActive = true;
     document.getElementById('guestNotice').style.display = 'flex';
@@ -960,7 +1008,6 @@ async function sendMessage() {
   appendAIMsg(aiId);
 
   if (isGuest) {
-    // ── GUEST: use /chat/guest — no auth, stateless, limited ──
     guestMessages.push({ role: 'user', content: text });
     try {
       const res = await fetch(`${CONFIG.API_URL}/chat/guest`, {
@@ -968,11 +1015,8 @@ async function sendMessage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: guestMessages })
       });
-
       const data = await res.json();
-
       if (res.status === 429) {
-        // Guest message limit reached
         const el = document.getElementById(aiId);
         if (el) {
           el.innerHTML = `<div style="background:var(--accent-l);border:1px solid var(--accent-b);border-radius:14px;padding:20px;text-align:center;">
@@ -987,35 +1031,26 @@ async function sendMessage() {
         setLoading(false);
         return;
       }
-
       if (!res.ok) throw new Error(data?.error || 'HTTP ' + res.status);
-
       const content = data.content || '';
       guestMessages.push({ role: 'assistant', content });
       const el = document.getElementById(aiId);
       if (el) { el.innerHTML = marked.parse(content); if(settings.highlight) hlCode(el); addMsgActions(el, content); }
-
-      // Show remaining messages hint when running low
       const remaining = data.messages_remaining ?? null;
       if (remaining !== null && remaining <= 3 && remaining > 0) {
         toast(`${remaining} guest message${remaining===1?'':'s'} remaining — sign in for unlimited`, 'info');
       }
-
     } catch(err) {
       const el = document.getElementById(aiId);
       if (el) el.innerHTML = `<span style="color:var(--red)">⚠ ${escHtml(err.message || 'Could not connect.')}</span>`;
     }
   } else {
-    // ── LOGGED IN: send with token, save to backend ──
     if (!currentConvId) {
       currentConvId = Date.now().toString();
       conversations.unshift({ conversationId: currentConvId, title: text.substring(0, 48) + (text.length > 48 ? '…' : ''), total_tokens: 0 });
       renderHistory();
     }
-
-    // Build message history from backend or local
     const msgHistory = buildMsgHistory(text);
-
     try {
       const token = localStorage.getItem('at_token');
       const res = await fetch(`${CONFIG.API_URL}/chat`, {
@@ -1028,8 +1063,6 @@ async function sendMessage() {
       const content = data.content || '';
       const el = document.getElementById(aiId);
       if (el) { el.innerHTML = marked.parse(content); if(settings.highlight) hlCode(el); addMsgActions(el, content); }
-
-      // Update local conversation token count
       const conv = conversations.find(c => c.conversationId === currentConvId);
       if (conv) conv.total_tokens = (conv.total_tokens || 0) + (data.tokens_used || 0);
     } catch(err) {
@@ -1042,8 +1075,6 @@ async function sendMessage() {
   scrollDown();
 }
 
-// Build a running message history for logged-in chat
-// We collect messages visible in the DOM for the current conversation
 function buildMsgHistory(latestUserText) {
   const msgs = [];
   document.querySelectorAll('.message').forEach(el => {
@@ -1051,7 +1082,6 @@ function buildMsgHistory(latestUserText) {
     const content = el.querySelector('.msg-content')?.innerText || '';
     if (content) msgs.push({ role: isUser ? 'user' : 'assistant', content });
   });
-  // Replace last user message with the actual text (avoid duplicate from DOM)
   if (msgs.length && msgs[msgs.length-1].role === 'user') msgs.pop();
   msgs.push({ role: 'user', content: latestUserText });
   return msgs;
@@ -1064,7 +1094,6 @@ async function loadConvMessages(convId) {
   renderHistory();
   closeSidebar();
   if (!user) return;
-
   const token = localStorage.getItem('at_token');
   try {
     const res = await fetch(`${CONFIG.API_URL}/conversations/${convId}/messages`, {
@@ -1232,7 +1261,7 @@ function handleAvatarUpload(e) {
 function setLoading(v) { isLoading = v; document.getElementById('sendBtn').disabled = v; }
 function scrollDown() { const s = document.getElementById('chatScroll'); s.scrollTop = s.scrollHeight; }
 function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey && settings.enter !== false) { e.preventDefault(); sendMessage(); } }
-function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 200) + 'px'; }
+function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 160) + 'px'; }
 function escHtml(t) { return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function fmtNum(n) { if(n>=1e6) return (n/1e6).toFixed(1)+'M'; if(n>=1e3) return (n/1e3).toFixed(1)+'K'; return (n||0).toString(); }
 function parseJwt(token) {
@@ -1244,8 +1273,14 @@ function toast(msg, type='success') {
   t.textContent = msg; t.className = `toast ${type} show`;
   setTimeout(() => t.classList.remove('show'), 3000);
 }
-function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sbOverlay').classList.toggle('show'); }
-function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sbOverlay').classList.remove('show'); }
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sbOverlay').classList.toggle('show');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sbOverlay').classList.remove('show');
+}
 function hlCode(el) {
   el.querySelectorAll('pre code').forEach(block => {
     hljs.highlightElement(block);
