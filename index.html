@@ -869,41 +869,91 @@ async function updateStatsFromServer() {
     });
     if (!res.ok) return;
     var data = await res.json();
+
     var set = function(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; };
+
+    // Show exact numbers in stat boxes — fmtNum for display, raw in title tooltip
     set('st-msgs',   fmtNum(data.total_queries || 0));
     set('st-tokens', fmtNum(data.tokens_used   || 0));
     set('st-chats',  fmtNum(data.total_conversations || 0));
     set('st-today',  fmtNum(data.today_queries  || 0));
+
+    // Add exact-number tooltip to token box
+    var tokBox = document.getElementById('st-tokens');
+    if (tokBox) tokBox.title = (data.tokens_used || 0).toLocaleString() + ' tokens';
+
+    // Sync profile popup too
     set('profileMsgs',   fmtNum(data.total_queries || 0));
     set('profileTokens', fmtNum(data.tokens_used   || 0));
     set('profileChats',  fmtNum(data.total_conversations || 0));
-    var limit  = data.token_limit || 1000000;
+
+    // FIX: handle token_limit correctly
+    // Backend sends -1 for pro (unlimited), positive number for free cap
+    var isPro  = data.plan === 'pro' || data.token_limit === -1;
+    var limit  = isPro ? null : (data.token_limit || 1000000);
     var used   = data.tokens_used || 0;
-    var pct    = Math.min((used / limit) * 100, 100).toFixed(1);
+
     var bar    = document.getElementById('st-bar');
     var pctEl  = document.getElementById('st-pct');
     var usedEl = document.getElementById('st-used-lbl');
     var limEl  = document.getElementById('st-limit-lbl');
-    if (bar)    bar.style.width = pct + '%';
-    if (pctEl)  pctEl.textContent = pct + '%';
-    if (usedEl) usedEl.textContent = fmtNum(used) + ' used';
-    if (limEl)  limEl.textContent  = fmtNum(limit) + ' total';
+    var quotaBox = document.querySelector('.quota-box');
+
+    if (isPro) {
+      // Pro: show "Unlimited" and full bar
+      if (bar)    { bar.style.width = '100%'; bar.style.background = 'linear-gradient(90deg,var(--green),var(--accent))'; }
+      if (pctEl)  pctEl.textContent = '∞';
+      if (usedEl) usedEl.textContent = fmtNum(used) + ' used';
+      if (limEl)  limEl.textContent  = 'Unlimited';
+    } else {
+      var pct = limit > 0 ? Math.min((used / limit) * 100, 100) : 0;
+      if (bar)    { bar.style.width = pct.toFixed(1) + '%'; bar.style.background = ''; }
+      if (pctEl)  pctEl.textContent = pct.toFixed(1) + '%';
+      if (usedEl) usedEl.textContent = fmtNum(used) + ' used';
+      if (limEl)  limEl.textContent  = fmtNum(limit) + ' total';
+    }
+
+    // Session list
     var list = document.getElementById('sessionList');
     if (list && data.recent_conversations && data.recent_conversations.length) {
       list.innerHTML = data.recent_conversations.map(function(c) {
-        return '<div class="info-row"><span class="info-lbl" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px">' + escHtml(c.title || 'Chat') + '</span><span class="info-val acc">' + fmtNum(c.total_tokens || 0) + ' tok</span></div>';
+        return '<div class="info-row">' +
+          '<span class="info-lbl" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px">' + escHtml(c.title || 'Chat') + '</span>' +
+          '<span class="info-val acc" title="' + (c.total_tokens || 0).toLocaleString() + ' tokens">' + fmtNum(c.total_tokens || 0) + ' tok</span>' +
+        '</div>';
       }).join('');
     } else if (list) {
       list.innerHTML = '<div style="font-size:13.5px;color:var(--text3);text-align:center;padding:12px 0;">No sessions yet</div>';
     }
-  } catch(e) { console.warn('Stats fetch failed:', e); }
+  } catch(e) {
+    console.warn('Stats fetch failed:', e);
+    // Show error state in session list
+    var list = document.getElementById('sessionList');
+    if (list) list.innerHTML = '<div style="font-size:13px;color:var(--red);text-align:center;padding:12px 0;">Could not load stats</div>';
+  }
 }
 
 function renderStatsPanel() {
   if (!user) return;
+  // Show loading placeholders immediately so user sees activity
+  var ids = ['st-msgs','st-tokens','st-chats','st-today'];
+  ids.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.innerHTML = '<span style="opacity:0.4;font-size:18px;">…</span>';
+  });
+  var pctEl  = document.getElementById('st-pct');
+  var barEl  = document.getElementById('st-bar');
+  var usedEl = document.getElementById('st-used-lbl');
+  var limEl  = document.getElementById('st-limit-lbl');
+  var listEl = document.getElementById('sessionList');
+  if (pctEl)  pctEl.textContent  = '…';
+  if (barEl)  barEl.style.width  = '0%';
+  if (usedEl) usedEl.textContent = '…';
+  if (limEl)  limEl.textContent  = '…';
+  if (listEl) listEl.innerHTML   = '<div style="font-size:13px;color:var(--text3);text-align:center;padding:12px 0;display:flex;align-items:center;justify-content:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Loading\u2026</div>';
+  // Always fetch fresh data from server
   updateStatsFromServer();
 }
-
 // ═══ CHAT STATE ═══
 function showEmptyState() {
   document.getElementById('chatInner').innerHTML =
@@ -1081,6 +1131,9 @@ async function sendMessage() {
           authMessages.push({ role: 'assistant', content: tmp.innerText || streamedHTML });
           var conv = conversations.find(function(c) { return c.conversationId === currentConvId; });
           if (conv) conv.total_tokens = (conv.total_tokens || 0) + (parsed.tokens_used || 0);
+          // FIX: refresh stats silently in background after every reply
+          // so the next time the user opens Statistics it shows fresh numbers
+          updateStatsFromServer();
         }
 
         if (parsed.type === 'error') {
